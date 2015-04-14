@@ -1,0 +1,194 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('text_home')}</a> <a>{:L('text_setting')}</a> <a href="{:U('Setting/menuList')}" class="current">{:L('text_title_group_list')}</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>{:L('text_group_list')}</h5>
+	            <span class="label label-info">
+	            	<a data-toggle="modal" href="#modal-add-group" id="modal_show"><i class="icon-plus icon-white"></i>{:L('btn_add_group')}</a>
+	            </span>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                  <th>{:L('text_group_module')}</th>
+	                  <th>{:L('text_group_title')}</th>
+	                  <th>{:L('text_group_status')}</th>
+	                  <th>{:L('text_setting_action')}</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td>{$item.module}</td>
+	                  <td>{$item.title}</td>
+	                  <td>
+	                  	<eq name="item.status" value="1">
+	                  		<span class="label label-success">{:L('text_enable')}</span>
+	                  	<else/>
+							<span class="label label-danger">{:L('text_disable')}</span>
+	                  	</eq>
+	                  </td>
+	                  <td id="status_{$item.id}">
+	                  	<input type="button" class="btn btn-danger" name="" value="{:L('btn_suemail_del')}" onclick="delGroup('{$item.id}');return false;"/>
+	                  	<input type="button" class="btn btn-info" name="" value="{:L('btn_menu_edit')}" onclick="getGroupDetail('{$item.id}');return false;"/>
+	                  </td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+			<div class="pagination alternate" style="float:right;">
+				{$page_show}
+			</div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal hide" id="modal-add-group">
+	<form action="" method="post" id="addGroupForm">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" id="close_modal_btn">×</button>
+	  <h3>{:L('btn_add_group')}</h3>
+	</div>
+	<div class="modal-body">
+
+		<p>{:L('text_group_module')}</p>
+		<p>
+			<input type="text" name="module" value="" placeholder="{:L('input_group_module')}" />
+		</p> 
+
+		<p>{:L('text_group_title')}</p>
+		<p>
+			<input type="text" name="title" value="" placeholder="{:L('input_group_title')}" />
+		</p>
+
+		<p>{:L('text_group_status')}</p>
+		<p>
+			<select name="status" style="width:100px;">
+				<option value="1">{:L('text_enable')}</option>
+				<option value="0">{:L('text_disable')}</option>
+			</select>
+		</p> 
+		
+		<p>{:L('text_group_rule')}<input type="checkbox" value="" id="checkAll" />{:L('text_all_check')}</p>
+		
+		<volist name="rules" id="item">
+			<p><b>{$item.title}/{$item.module}</b></p>
+			<p>
+			<volist name="item.list" id="v">
+				&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="rules[]" value="{$v.rid}" />{$v.title}
+			</volist>
+			</p>
+		</volist>
+		
+
+		<input type="hidden" name="id" value="" />
+	</div>
+	<div class="modal-footer"> 
+		<a href="#" class="btn" data-dismiss="modal" id="dismiss_modal">{:L('btn_cancel')}</a> <a href="#" id="add-group-submit" class="btn btn-primary">{:L('btn_submit')}</a>
+	</div>
+	</form>
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$("#add-group-submit").click(function(){
+		subForm();
+	});
+
+	$("#checkAll").click(function(){
+		if ($("#checkAll").attr("checked")) {
+			$("input[name='rules[]']").attr("checked", true);
+		}else{
+			$("input[name='rules[]']").attr("checked", false);
+		}
+	});
+
+	$("#close_modal_btn").click(function(){
+		$("input[name='id']").val("");
+		$("input[name='rules[]']").attr("checked", false);
+		$('#addGroupForm')[0].reset();
+	});
+	
+	$("#modal_show").click(function(event, isNew){
+		if (!isNew) {
+			$("input[name='id']").val("");
+			$('#addMenuForm')[0].reset();
+		}
+	});
+
+});
+
+function getGroupDetail(rid){
+		$.ajax({
+		type:"POST",
+		url:"{:U('Setting/getGroupDetail')}",
+		data:{rid:rid},
+		success:function(data){
+			if (data.status) {
+				$('#addGroupForm')[0].reset();
+				$('input[name=module]').val(data.info['module']);
+				$('input[name=title]').val(data.info['title']);
+				$('input[name=id]').val(data.info['id']);
+				$("input[name='rules[]']").attr("checked", false);
+				$.each(data.info['rules'], function(k, v){
+					$('input[type=checkbox][value='+ v +']').attr("checked", true);
+				});
+				$("#modal_show").trigger("click", [1]);
+			}else{
+				alert(data.msg);
+			}
+		}	
+	});
+}
+
+function subForm(){
+	$.ajax({
+		type:"POST",
+		url:"{:U('Setting/setGroupForm')}",
+		data:$('#addGroupForm').serialize(),
+		success:function(data){
+			show_error(data.msg, data.status);
+			if (data.status) {
+				setTimeout('$("#dismiss_modal").trigger("click");', 2000);
+				location.reload();
+			}
+		}	
+	});
+}
+
+function delGroup(gid){
+	if (confirm("{:L('text_group_del_confirm')}")) {
+		$.ajax({
+			type:"POST",
+			url:"{:U('Setting/delGroup')}",
+			data:{gid:gid},
+			success:function(data){
+				location.reload();
+			}	
+		});
+	}
+}
+
+function show_error(info, type){
+
+	var color = type == 1 ? '#51a351' : '#f00';
+
+	$('#modal-error').remove();
+	$('<div style="border-radius: 5px; top: 70px; font-size:14px; left: 50%; margin-left: -70px; position: absolute;width: 150px; background-color: '+ color +'; text-align: center; padding: 5px; color: #ffffff;" id="modal-error">'+ info +'</div>').appendTo('#modal-add-group .modal-body');
+	$('#modal-error').delay('1500').fadeOut(700,function() {
+		$(this).remove();
+	});
+}
+</script>
+<include file="Public:footer" />

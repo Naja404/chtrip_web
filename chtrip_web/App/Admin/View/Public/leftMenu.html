@@ -1,0 +1,14 @@
+  <div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-th"></i>Tables</a>
+    <ul>
+      <volist name="_adminLeftMenu" id="item">
+      <li class="submenu <eq name="CONTROLLER_NAME" value="$item['module']">active open</eq>">
+        <a href="#"><i class="icon icon-th"></i> <span>{$item.title}</span></a>
+        <ul>
+          <volist name="item.list" id="v">
+          <li><a href="{:U($v['url'])}">{$v.title}</a></li>
+          </volist>
+        </ul>
+      </li>
+      </volist>
+    </ul>
+  </div>

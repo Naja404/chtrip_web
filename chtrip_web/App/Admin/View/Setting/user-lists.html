@@ -1,0 +1,171 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('text_home')}</a> <a>{:L('text_setting')}</a> <a href="{:U('Setting/menuList')}" class="current">{:L('text_title_user_list')}</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>{:L('text_user_list')}</h5>
+	            <span class="label label-info">
+	            	<a data-toggle="modal" href="#modal-add-user" id="modal_show"><i class="icon-plus icon-white"></i>{:L('btn_add_user')}</a>
+	            </span>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                  <th>{:L('text_user_name_email')}</th>
+	                  <th>{:L('text_user_group')}</th>
+	                  <th>{:L('text_user_create')}</th>
+	                  <th>{:L('text_setting_action')}</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td><span style="">{$item.name}</span> / {$item.email}</td>
+	                  <td>{$item.title}</td>
+	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
+	                  <td id="status_{$item.id}">
+	                  	<input type="button" class="btn btn-danger" name="" value="{:L('btn_suemail_del')}" onclick="delUser('{$item.uid}');return false;"/>
+	                  	<input type="button" class="btn btn-info" name="" value="{:L('btn_menu_edit')}" onclick="getUserDetail('{$item.uid}');return false;"/>
+	                  </td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+			<div class="pagination alternate" style="float:right;">
+				{$page_show}
+			</div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal hide" id="modal-add-user">
+	<form action="" method="post" id="addUserForm">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" id="close_modal_btn">×</button>
+	  <h3>{:L('btn_add_user')}</h3>
+	</div>
+	<div class="modal-body">
+
+		<p>{:L('text_user_name')}</p>
+		<p>
+			<input type="text" name="name" value="" placeholder="{:L('input_user_name')}" />
+		</p> 
+
+		<p>{:L('text_user_password')}</p>
+		<p>
+			<input type="password" name="password" value="" placeholder="{:L('input_user_password')}" />
+		</p>
+
+		<p>{:L('text_user_email')}</p>
+		<p>
+			<input type="text" name="email" value="" placeholder="{:L('input_user_email')}" />
+		</p> 
+
+		<p>{:L('text_user_type')}</p>
+		<p>
+			<select name="group_id" style="width:100px;">
+				<volist name="group_list" id="item">
+				<option value="{$item.id}">{$item.title}</option>
+				</volist>
+			</select>
+		</p> 
+
+		<input type="hidden" name="uid" value="" />
+	</div>
+	<div class="modal-footer"> 
+		<a href="#" class="btn" data-dismiss="modal" id="dismiss_modal">{:L('btn_cancel')}</a> <a href="#" id="add-user-submit" class="btn btn-primary">{:L('btn_submit')}</a>
+	</div>
+	</form>
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$("#add-user-submit").click(function(){
+		subForm();
+	});
+
+	$("#close_modal_btn").click(function(){
+		$("input[name='uid']").val("");
+		$('#addUserForm')[0].reset();
+	});
+
+	$("#modal_show").click(function(event, isNew){
+		if (!isNew) {
+			$("input[name='id']").val("");
+			$('#addMenuForm')[0].reset();
+		}
+	});
+
+});
+
+function getUserDetail(uid){
+	$.ajax({
+		type:"POST",
+		url:"{:U('Setting/getUserDetail')}",
+		data:{uid:uid},
+		success:function(data){
+			if (data.status) {
+				$('#addUserForm')[0].reset();
+				$('input[name=name]').val(data.info['name']);
+				$('input[name=email]').val(data.info['email']);
+				$('input[name=group_id]').val(data.info['is_display']);
+				$('input[name=uid]').val(data.info['uid']);
+				$("#modal_show").trigger("click", [1]);
+			}else{
+				alert(data.msg);
+			}
+		}	
+	});
+}
+
+function subForm(){
+	$.ajax({
+		type:"POST",
+		url:"{:U('Setting/setUserForm')}",
+		data:$('#addUserForm').serialize(),
+		success:function(data){
+			show_error(data.msg, data.status);
+			if (data.status) {
+				setTimeout('$("#dismiss_modal").trigger("click");', 2000);
+				location.reload();
+				// $('#addUserForm')[0].reset();
+			}
+		}	
+	});
+}
+
+function delUser(uid){
+	if (confirm("{:L('text_user_del_confirm')}")) {
+		$.ajax({
+			type:"POST",
+			url:"{:U('Setting/delUser')}",
+			data:{uid:uid},
+			success:function(data){
+				location.reload();
+			}	
+		});
+	}
+}
+
+function show_error(info, type){
+
+	var color = type == 1 ? '#51a351' : '#f00';
+
+	$('#modal-error').remove();
+	$('<div style="border-radius: 5px; top: 70px; font-size:14px; left: 50%; margin-left: -70px; position: absolute;width: 150px; background-color: '+ color +'; text-align: center; padding: 5px; color: #ffffff;" id="modal-error">'+ info +'</div>').appendTo('#modal-add-user .modal-body');
+	$('#modal-error').delay('1500').fadeOut(700,function() {
+		$(this).remove();
+	});
+}
+</script>
+<include file="Public:footer" />

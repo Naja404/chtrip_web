@@ -1,0 +1,27 @@
+.clear { clear:both;}
+
+.choose-user-box .title { font-size:18px; height:30px;}
+.choose-user-box .start { float:left; width:350px;}
+.choose-user-box .end { float:left; width:350px;}
+.choose-user-box, .choose-user-list, .choose-user-nolist { display:none;}
+.choose-user-list tr td { text-align:center;}
+
+.star { font-weight: bold; color: #FF0000; text-decoration: none; position: relative; top: 3px; padding-right: 2px;}
+.row-getui { margin-bottom:30px; }
+.row-getui .warring { text-align:right; width:565px;}
+.row-getui label { display:inline; margin-right:10px;}
+.row-getui input.text { resize:none; width:255px;}
+.row-getui textarea { resize: none; width: 255px; margin-bottom:0;}
+.row-getui .select2-container{ width:160px;}
+ .error { font-size:14px; color:#ff0000;}
+ .row-radio input { margin:0 3px 0 5px;}
+
+ .pop-area { padding:40px 0; color:#000;}
+.pop-con-title { font-size:17px; color:#000; text-align:center; font-weight:bold;}
+.pop-con { margin-left:60px; margin-right:50px;}
+.pop-con .label_diva { display: block; margin-top: 10px; width: 100%;}
+.pop-con .t { display: inline-block; width: 300px; word-wrap: break-word;}
+.pop-con .label_name{ display:inline-block;width:130px;text-align:right;font-weight:bold;font-size:14px;}
+.btn-area { margin-top:30px; text-align:center;}
+.pop-att { margin-top:40px; color:#ff0000;}
+.btn-send { margin:0 0 20px 20px;}

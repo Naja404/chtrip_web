@@ -1,0 +1,176 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('text_home')}</a> <a>{:L('text_setting')}</a> <a href="{:U('Setting/menuList')}" class="current">{:L('text_setting_menu')}</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>{:L('text_setting_menu_list')}</h5>
+	            <span class="label label-info">
+	            	<a data-toggle="modal" href="#modal-add-menu" id="modal_show"><i class="icon-plus icon-white"></i>{:L('btn_add_menu')}</a>
+	            </span>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                  <th>{:L('text_menu_module')}</th>
+	                  <th>{:L('text_menu_title')}</th>
+	                  <th>{:L('text_menu_url')}</th>
+	                  <th>{:L('text_setting_action')}</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td>{$item.menu_module}－{$item.menu_title}</td>
+	                  <td>{$item.title} / {:L('text_menu_display_'.$item['is_display'])}</td>
+	                  <td>{$item.name}</td>
+	                  <td id="status_{$item.id}">
+	                  	<input type="button" class="btn btn-danger" name="" value="{:L('btn_suemail_del')}" onclick="delMenu('{$item.id}');return false;"/>
+	                  	<input type="button" class="btn btn-info" name="" value="{:L('btn_menu_edit')}" onclick="getMenuDetail('{$item.id}');return false;"/>
+	                  </td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+			<div class="pagination alternate" style="float:right;">
+				{$page_show}
+			</div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal hide" id="modal-add-menu">
+	<form action="" method="post" id="addMenuForm">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" id="close_modal_btn">×</button>
+	  <h3>{:L('text_add_menu')}</h3>
+	</div>
+	<div class="modal-body">
+
+		<p>{:L('text_menu_module_title')}</p>
+		<p>
+			<input type="text" name="menu_module" value="" placeholder="{:L('text_note_module')}" />
+		</p> 
+
+		<p>{:L('text_menu_module')}</p>
+		<p>
+			<input type="text" name="menu_title" value="" placeholder="{:L('text_note_module_title')}" />
+		</p>
+
+		<p>{:L('text_menu_url')}</p>
+		<p>
+			<input type="text" name="name" value="" placeholder="{:L('text_note_url')}" />
+		</p> 
+
+		<p>{:L('text_menu_url_title')}</p>
+		<p>
+			<input type="text" name="title" value="" placeholder="{:L('text_note_title')}" />
+		</p> 
+
+		<p>{:L('text_menu_display')}</p>
+		<p>
+			<select name="is_display" style="width:100px;">
+				<option value="1">{:L('text_menu_display_1')}</option>
+				<option value="0">{:L('text_menu_display_0')}</option>
+			</select>
+		</p> 
+
+		<input type="hidden" name="id" value="" />
+	</div>
+	<div class="modal-footer"> 
+		<a href="#" class="btn" data-dismiss="modal" id="dismiss_modal">{:L('btn_cancel')}</a> <a href="#" id="add-menu-submit" class="btn btn-primary">{:L('btn_submit')}</a>
+	</div>
+	</form>
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$("#add-menu-submit").click(function(){
+		subForm();
+	});
+
+	$("#close_modal_btn").click(function(){
+		$("input[name='id']").val("");
+		$('#addMenuForm')[0].reset();
+	});
+
+	$("#modal_show").click(function(event, isNew){
+		if (!isNew) {
+			$("input[name='id']").val("");
+			$('#addMenuForm')[0].reset();
+		}
+	});
+});
+
+function getMenuDetail(rid){
+	$.ajax({
+		type:"POST",
+		url:"{:U('Setting/getMenuDetail')}",
+		data:{rid:rid},
+		success:function(data){
+			if (data.status) {
+				$('#addMenuForm')[0].reset();
+				$('input[name=menu_module]').val(data.info['menu_module']);
+				$('input[name=menu_title]').val(data.info['menu_title']);
+				$('input[name=name]').val(data.info['name']);
+				$('input[name=title]').val(data.info['title']);
+				$('input[name=id]').val(data.info['id']);
+				$('input[name=is_display]').val(data.info['is_display']);
+				$("#modal_show").trigger("click", [1]);
+			}else{
+				alert(data.msg);
+			}
+		}	
+	});
+}
+
+function subForm(){
+	$.ajax({
+		type:"POST",
+		url:"{:U('Setting/setMenuForm')}",
+		data:$('#addMenuForm').serialize(),
+		success:function(data){
+			show_error(data.msg, data.status);
+			if (data.status) {
+				setTimeout('$("#dismiss_modal").trigger("click");', 2000);
+				location.reload();
+				// $('#addMenuForm')[0].reset();
+			}
+		}	
+	});
+}
+
+function delMenu(rid){
+	if (confirm("{:L('text_menu_del_confirm')}")) {
+		$.ajax({
+			type:"POST",
+			url:"{:U('Setting/delMenu')}",
+			data:{rid:rid},
+			success:function(data){
+				location.reload();
+			}	
+		});
+	}
+}
+
+function show_error(info, type){
+
+	var color = type == 1 ? '#51a351' : '#f00';
+
+	$('#modal-error').remove();
+	$('<div style="border-radius: 5px; top: 70px; font-size:14px; left: 50%; margin-left: -70px; position: absolute;width: 150px; background-color: '+ color +'; text-align: center; padding: 5px; color: #ffffff;" id="modal-error">'+ info +'</div>').appendTo('#modal-add-menu .modal-body');
+	$('#modal-error').delay('1500').fadeOut(700,function() {
+		$(this).remove();
+	});
+}
+</script>
+<include file="Public:footer" />
