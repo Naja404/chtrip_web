@@ -9,12 +9,14 @@ use Think\Controller;
 class IndexController extends Controller {
 
     protected function _initialize(){
-
+    	$this->response = array(
+    			'state' => 0,
+    			'data' => '',
+    		);
     }
 
     public function index(){
-    	
-    	json_msg(L('ERROR_DEFAULT'), 1);
+    	$this->ajaxReturn($this->response);
     }
 
 }

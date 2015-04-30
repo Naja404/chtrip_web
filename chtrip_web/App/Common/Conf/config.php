@@ -57,7 +57,7 @@ return  array(
 	'COOKIE_PREFIX'         =>  'ch',      // Cookie前缀 避免冲突
 		
 	/* Redis设置*/
-	'REDIS_HOST'      =>  '192.168.1.215',
+	'REDIS_HOST'      =>  '127.0.0.1',
 	'REDIS_PORT'	  =>  '6379',
     
     'REDIS_CTYPE'           => 1, //连接类型 1:普通连接 2:长连接  
@@ -69,7 +69,7 @@ return  array(
     'DATA_CACHE_PREFIX'     => '',     // 缓存前缀
     'DATA_CACHE_TYPE'       => 'Redis',  // 数据缓存类型,
 
-    'API_WEBSITE' => 'http://api.bj.com',
+    'API_WEBSITE' => 'http://admin.atniwo.com',
 
     /* 分页设置 */
     'PAGE_LIMIT'                => 15,
@@ -82,5 +82,17 @@ return  array(
 			'PRODUCT_DETAIL' => 'ch_Product:product_detail:',
 			'UTIL_TOKEN'     => 'ch_Util:device_token:',
     	),
+
+	/*邮件配置*/	
+	'THINK_EMAIL' => array(
+			'SMTP_HOST'   => 'smtp.qq.com', //SMTP服务器
+			'SMTP_PORT'   => '465', //SMTP服务器端口
+			'SMTP_USER'   => '2768524738@qq.com', //SMTP服务器用户名
+			'SMTP_PASS'   => '1q2w3e4r', //SMTP服务器密码
+			'FROM_EMAIL'  => '2768524738@qq.com', //发件人EMAIL
+			'FROM_NAME'   => '伴旅测试账号', //发件人名称
+			'REPLY_EMAIL' => '', //回复EMAIL（留空则为发件人EMAIL）
+			'REPLY_NAME'  => '', //回复名称（留空则为发件人名称）
+	),
 
 );

@@ -114,14 +114,14 @@ class ProductModel extends Model{
 	 */
 	public function getShipType(){
 
-		// if (cache(C('CACHE_ADMIN_PRODUCT_SHIPTYP'))) {
-		// 	return cache(C('CACHE_ADMIN_PRODUCT_SHIPTYP'));
-		// }
+		if (cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'))) {
+			return cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'));
+		}
 
 		$queryRes = $this->table(tname('product_shipping'))->field('id,name')->select();
 
 		if (count($queryRes) && is_array($queryRes)) {
-			// cache(C('CACHE_ADMIN_PRODUCT_SHIPTYP'), $queryRes);
+			cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'), $queryRes);
 		}
 
 		return $queryRes;
@@ -133,9 +133,9 @@ class ProductModel extends Model{
 	 */
 	public function getSaler(){
 		
-		// if (cache(C('CACHE_ADMIN_PRODUCT_SALE'))) {
-		// 	return cache(C('CACHE_ADMIN_PRODUCT_SALE'));
-		// }
+		if (cache(C('CACHE.ADMIN_PRODUCT_SALE'))) {
+			return cache(C('CACHE.ADMIN_PRODUCT_SALE'));
+		}
 
 		$where = array(
 				'status' => 1,
@@ -144,7 +144,7 @@ class ProductModel extends Model{
 		$queryRes = $this->table(tname('saler'))->field('saler_id, name')->where($where)->select();
 
 		if (count($queryRes) && is_array($queryRes)) {
-			// cache(C('CACHE_ADMIN_PRODUCT_SALE'), $queryRes);
+			cache(C('CACHE.ADMIN_PRODUCT_SALE'), $queryRes);
 		}
 
 		return $queryRes;
@@ -156,14 +156,14 @@ class ProductModel extends Model{
 	 */
 	public function getTags(){
 
-		// if(cache(C('CACHE_ADMIN_PRODUCT_TAG'))){
-		// 	return cache(C('CACHE_ADMIN_PRODUCT_TAG'));
-		// }
+		if(cache(C('CACHE.ADMIN_PRODUCT_TAG'))){
+			return cache(C('CACHE.ADMIN_PRODUCT_TAG'));
+		}
 
 		$queryRes = $this->table(tname('product_tag'))->field('tid,name')->select();
 
 		if (count($queryRes) && is_array($queryRes)) {
-			// cache(C('CACHE_ADMIN_PRODUCT_TAG'), $queryRes);
+			cache(C('CACHE.ADMIN_PRODUCT_TAG'), $queryRes);
 		}
 
 		return $queryRes;

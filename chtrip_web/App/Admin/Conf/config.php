@@ -55,7 +55,7 @@ return array(
     			'__PUBLIC__' => '/Public/admin/',
     	),
 
-    'ADMIN_WEBSITE' => 'http://admin.bj.com',
+    'ADMIN_WEBSITE' => 'http://admin.atniwo.com',
 
     /* AUTH 设定 */
     'AUTH_CONFIG'   => array(
@@ -71,7 +71,11 @@ return array(
 
 
     /* cache 名称定义 */
-    'CACHE_ADMIN_PRODUCT_SHIPTYP' => 'ch_Admin:Product:shiptype',
-    'CACHE_ADMIN_PRODUCT_SALE' => 'ch_Admin:Product:sale',
-    'CACHE_ADMIN_PRODUCT_TAG' => 'ch_Admin:Product:tag',
+    'CACHE' => array(
+            'ADMIN_HEADER'           => 'ch_Admin:HeaderList',
+            'ADMIN_LEFT_MENU'        => 'ch_Admin:LeftMenuByGid:',
+            'ADMIN_PROFUCT_SHIPTYPE' => 'ch_Admin:Product:shiptype',
+            'ADMIN_PRODUCT_SALE'     => 'ch_Admin:Product:sale',
+            'ADMIN_PRODUCT_TAG'      => 'ch_Admin:Product:tag',
+        ),
 );

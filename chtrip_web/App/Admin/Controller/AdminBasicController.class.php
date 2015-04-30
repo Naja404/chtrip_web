@@ -16,7 +16,7 @@ class AdminBasicController extends Controller {
      * 后台控制器初始化
      */
     protected function _initialize(){
-
+        
         if (!$this->Auth) {
             $this->Auth = new \Think\Auth();
         }

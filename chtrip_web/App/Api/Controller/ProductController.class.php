@@ -1,7 +1,6 @@
 <?php
 /**
  * api Product 产品模块
- * @author Hisoka <hisoka.2pac@gmail.com>
  */
 namespace Api\Controller;
 use Think\Controller;

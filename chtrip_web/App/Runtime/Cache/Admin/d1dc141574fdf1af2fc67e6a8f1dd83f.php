@@ -78,78 +78,81 @@
 		<div class="row-fluid">
 			<div class="span8">
 		      <div class="widget-box">
+		         <form action="<?php echo U('Product/addProduct');?>" method="post" class="form-horizontal" id="addProduct_form" enctype="multipart/form-data">
 		        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
 		          <h5><?php echo L('TITLE_ADD_PRODUCT');?></h5>
+		          <button class="btn btn-inverse btn-mini" onclick="selectForm('zh');return false;" id="zhSelectFormBtn"><?php echo L('TEXT_LANGUAGE_ZH');?></button>
+		          <button class="btn btn-mini" onclick="selectForm('jp');return false;" id="jpSelectFormBtn"><?php echo L('TEXT_LANGUAGE_JP');?></button>
 		        </div>
-		        <div class="widget-content nopadding">
-		          <form action="<?php echo U('Product/addProduct');?>" method="post" class="form-horizontal" id="addProduct_form" enctype="multipart/form-data">
+		        <div class="widget-content nopadding" id="zhAddProForm" style="display:block;">
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_TITLE');?></label>
 		              <div class="controls">
-		                <input type="text" name="title" id="title" placeholder="<?php echo L('INPUT_ADD_PRODUCT_TITLE');?>" class="span11">
+		                <input type="text" name="titleZH" id="title" placeholder="<?php echo L('INPUT_ADD_PRODUCT_TITLE');?>" class="span11">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_PRICE');?></label>
 		              <div class="controls">
-		                <input type="text" name="price" placeholder="<?php echo L('INPUT_ADD_PRODUCT_PRICE');?>" class="span11">
+		                <input type="text" name="priceZH" placeholder="<?php echo L('INPUT_ADD_PRODUCT_PRICE');?>" class="span11">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SHIPPING');?></label>
 		              <div class="controls">
-		                <select name="shipping_type">
+		                <select name="shippingTypeZH">
 		                <?php if(is_array($shipping_list)): $i = 0; $__LIST__ = $shipping_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><option value="<?php echo ($item["id"]); ?>"><?php echo ($item["name"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
 		                </select>
 		              </div>
 		            </div>
-
-		            <div class="control-group">
+		            <!-- 评论数 -->
+<!-- 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_COMMENTS');?></label>
 		              <div class="controls">
 		                <input type="text" name="comments" value="<?php echo rand(800, 1200);?>" class="span11">
 		              </div>
-		            </div>
-
-		            <div class="control-group">
+		            </div> -->
+		            <!-- 销量数 -->
+<!-- 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SALES');?></label>
 		              <div class="controls">
 		                <input type="text" name="sales" value="<?php echo rand(800, 1200);?>" class="span11">
 		              </div>
-		            </div>
+		            </div> -->
 
-		            <div class="control-group">
+		            <!-- 浏览量 -->
+<!-- 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_VIEWS');?></label>
 		              <div class="controls">
 		                <input type="text" name="views" value="<?php echo rand(800, 1200);?>" class="span11">
 		              </div>
-		            </div>
-
-		            <div class="control-group">
+		            </div> -->
+		            <!-- 店铺 -->
+<!-- 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SALER');?></label>
 		              <div class="controls">
 		                <select name="saler_id">
 		                <?php if(is_array($saler_list)): $i = 0; $__LIST__ = $saler_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><option value="<?php echo ($item["saler_id"]); ?>"><?php echo ($item["name"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
 		                </select>
 		              </div>
-		            </div>
-
+		            </div> -->
+		            <!-- 购买链接 -->
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_BUY_URL');?></label>
 		              <div class="controls">
-		                <input type="text" name="buy_url" id="url" placeholder="<?php echo L('INPUT_ADD_PRODUCT_BUY_URL');?>" class="span11">
+		                <input type="text" name="buy_urlZH" id="url" placeholder="<?php echo L('INPUT_ADD_PRODUCT_BUY_URL');?>" class="span11">
 		              </div>
 		            </div>
-
+		            <!-- 是否推荐 -->
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_RECOMMEND');?></label>
 		              <div class="controls">
 		                <input type="checkbox" name="recommend" class="span11">
 		              </div>
 		            </div>
-
+		            <!-- 排序 -->
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SORT');?></label>
 		              <div class="controls">
@@ -175,7 +178,110 @@
 		            <div class="control-group">
 		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_DESCRIPTION');?></label>
 		              <div class="controls">
-		              	<textarea name="description"></textarea>
+		              	<textarea name="descriptionZH"></textarea>
+		              </div>
+		            </div>
+
+		            <div class="form-actions">
+		              <button type="submit" class="btn btn-success">Save</button>
+		            </div>
+		        </div>
+
+		        <div class="widget-content nopadding" id="jpAddProForm" style="display:none;">
+		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_TITLE_JP');?></label>
+		              <div class="controls">
+		                <input type="text" name="titleJP" id="titleJP" placeholder="<?php echo L('INPUT_ADD_PRODUCT_TITLE');?>" class="span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_PRICE_JP');?></label>
+		              <div class="controls">
+		                <input type="text" name="priceJP" placeholder="<?php echo L('INPUT_ADD_PRODUCT_PRICE');?>" class="span11">
+		              </div>
+		            </div>
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SHIPPING');?></label>
+		              <div class="controls">
+		                <select name="shipping_type">
+		                <?php if(is_array($shipping_list)): $i = 0; $__LIST__ = $shipping_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><option value="<?php echo ($item["id"]); ?>"><?php echo ($item["name"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+		                </select>
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_COMMENTS');?></label>
+		              <div class="controls">
+		                <input type="text" name="comments" value="<?php echo rand(800, 1200);?>" class="span11">
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SALES');?></label>
+		              <div class="controls">
+		                <input type="text" name="sales" value="<?php echo rand(800, 1200);?>" class="span11">
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_VIEWS');?></label>
+		              <div class="controls">
+		                <input type="text" name="views" value="<?php echo rand(800, 1200);?>" class="span11">
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SALER');?></label>
+		              <div class="controls">
+		                <select name="saler_id">
+		                <?php if(is_array($saler_list)): $i = 0; $__LIST__ = $saler_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><option value="<?php echo ($item["saler_id"]); ?>"><?php echo ($item["name"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+		                </select>
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_BUY_URL');?></label>
+		              <div class="controls">
+		                <input type="text" name="buy_url" id="url" placeholder="<?php echo L('INPUT_ADD_PRODUCT_BUY_URL');?>" class="span11">
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_RECOMMEND');?></label>
+		              <div class="controls">
+		                <input type="checkbox" name="recommend" class="span11">
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_SORT');?></label>
+		              <div class="controls">
+		                <input type="input" name="sort" placeholder="<?php echo L('INPUT_ADD_PRODUCT_SORT');?>" class="span11">
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_TAG');?></label>
+		              <div class="controls">
+		                <select multiple name="tag[]">
+		                <?php if(is_array($tag_list)): $i = 0; $__LIST__ = $tag_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><option value="<?php echo ($item["tid"]); ?>"><?php echo ($item["name"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+		                </select>
+		              </div>
+		            </div> -->
+
+<!-- 		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_IMAGE');?></label>
+		              <div class="controls">
+		                <input type="file" name="image" />
+		              </div>
+		            </div> -->
+
+		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_ADD_PRODUCT_DESCRIPTION_JP');?></label>
+		              <div class="controls">
+		              	<textarea name="descriptionJP"></textarea>
 		              </div>
 		            </div>
 
@@ -184,6 +290,7 @@
 		            </div>
 		          </form>
 		        </div>
+		    	</form>
 		      </div>
 			</div>
 		</div>
@@ -193,9 +300,37 @@
 <script charset="utf-8" src="<?php echo C('ADMIN_WEBSITE');?>/Public/admin/kindeditor/kindeditor-min.js"></script>
 <script charset="utf-8" src="<?php echo C('ADMIN_WEBSITE');?>/Public/admin/kindeditor/lang/zh_CN.js"></script>
 <script type="text/javascript">
-	var editor;
+	function selectForm(selectForm){
+		if (selectForm == 'zh') {
+			$('#zhAddProForm').show();
+			$('#jpAddProForm').hide();
+			$('#zhSelectFormBtn').attr('class', 'btn btn-inverse btn-mini');
+			$('#jpSelectFormBtn').attr('class', 'btn btn-mini');
+		}else{
+			$('#zhAddProForm').hide();
+			$('#jpAddProForm').show();
+			$('#zhSelectFormBtn').attr('class', 'btn btn-mini');
+			$('#jpSelectFormBtn').attr('class', 'btn btn-inverse btn-mini');
+		}
+	}
+	var editorZH, editorJP;
 	KindEditor.ready(function(K) {
-		editor = K.create('textarea[name="description"]', {
+		editorZH = K.create('textarea[name="descriptionZH"]', {
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			allowImageUpload : true,
+			uploadJson: "<?php echo C('ADMIN_WEBSITE').U('Product/uploadIMG');?>",
+			items : [
+				'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+				'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+		});
+
+		$('.ke-container').width('400px');
+	});
+
+	KindEditor.ready(function(K) {
+		editorJP = K.create('textarea[name="descriptionJP"]', {
 			resizeType : 1,
 			allowPreviewEmoticons : false,
 			allowImageUpload : true,

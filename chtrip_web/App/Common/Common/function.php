@@ -42,7 +42,7 @@ function json_msg($msg = '',$status = 0){
  * @param  mixed $options 缓存参数
  * @return mixed
  */
-function cache($name,$value = '',$options = array()){
+function cache($name, $value = '', $options = array()){
 	
 	static $cache   =   '';
 
@@ -65,7 +65,7 @@ function cache($name,$value = '',$options = array()){
 		else
 			$expire = is_numeric($options)	?	$options	  : '';
 
-		return $cache->set($name,$value,$expire);
+		return $cache->set($name, $value, $expire);
 	}
 }
 
@@ -185,6 +185,77 @@ function get_header_info($void = false){
 	}
 
 	return $headers;
+}
+
+/**
+ * 发邮件
+ * @param string $to 收信地址
+ * @param string $subject 邮件主题
+ * @param string $body 邮件内容
+ * @param string $attachment 附件
+ * @param string $cc 抄送地址
+ */
+function send_mail($to,$subject, $body, $attachment = null,$cc = null){
+	$config = C('THINK_EMAIL');
+	vendor('PHPMailer.class#phpmailer');//导入PHPMailer类
+
+	$mail             = new PHPMailer(true); //PHPMailer对象
+	$mail->CharSet    = 'UTF-8'; //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
+	$mail->IsSMTP();  // 设定使用SMTP服务
+	$mail->SMTPDebug  = 0;                     // 关闭SMTP调试功能   0 close 、1 errors and messages 、2 messages only
+	$mail->SMTPAuth   = true;                  // 启用 SMTP 验证功能
+
+	if ($config['SMTP_PORT'] == 465)
+		$mail->SMTPSecure = 'ssl';                 // 使用安全协议
+
+	$mail->Host       = $config['SMTP_HOST'];  // SMTP 服务器
+	$mail->Port       = $config['SMTP_PORT'];  // SMTP服务器的端口号
+	$mail->Username   = $config['SMTP_USER'];  // SMTP服务器用户名
+	$mail->Password   = $config['SMTP_PASS'];  // SMTP服务器密码
+
+	$mail->SetFrom($config['FROM_EMAIL'], $config['FROM_NAME']);
+
+	$replyEmail       = $config['REPLY_EMAIL']?$config['REPLY_EMAIL']:$config['FROM_EMAIL'];
+	$replyName        = $config['REPLY_NAME']?$config['REPLY_NAME']:$config['FROM_NAME'];
+
+	$mail->AddReplyTo($replyEmail, $replyName);
+	$mail->FromName   = $replyName;
+	$mail->Subject    = $subject;
+	$mail->WordWrap   = 80;
+	$mail->MsgHTML($body);
+
+	// 判断收件人是否为数组,是数组则遍历添加 Hisoka 2014-7-30
+	if (is_array($to)) {
+		foreach ($to as $k => $v) {
+			$mail->AddAddress($v);
+		}
+	}else{
+		$mail->AddAddress($to);
+	}
+	
+	//添加抄送
+	if($cc){
+		if(is_array($cc)){
+			foreach ($cc as $_cc){
+				$mail->AddCC($_cc);
+			}
+		}
+	}
+
+	if(is_array($attachment)){ // 添加附件
+		foreach ($attachment as $file){
+			is_file($file) && $mail->AddAttachment($file);
+		}
+	}else{
+		if(file_exists($attachment)){
+			$mail->AddAttachment($attachment);
+		}
+	}
+	try{
+		$mail->Send();
+	}catch (Exception $e){
+		return $e->getMessage();
+	}
 }
 
 ?> 
