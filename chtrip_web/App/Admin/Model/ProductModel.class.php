@@ -82,7 +82,7 @@ class ProductModel extends Model{
 			return false;
 		}
 
-		$this->_getBuyUrlIMG($imageId, $_REQUEST['buy_url']);
+		// $this->_getBuyUrlIMG($imageId, $_REQUEST['buy_url']);
 
 		return $pid;
 
@@ -180,19 +180,22 @@ class ProductModel extends Model{
 		}
 
 		$addDetail = array(
-				'pid'           => $pid,
-				'title'         => trim(I('post.title')),
-				'description'   => I('post.description', '', 'htmlspecialchars'),
-				'price'         => trim(I('post.price')),
-				'shipping_type' => I('post.shipping_type'),
-				'comments'      => I('post.comments'),
-				'sales'         => I('post.sales'),
-				'views'         => I('post.views'),
-				'buy_url'       => trim(I('post.buy_url')),
-				'created'       => NOW_TIME,
+				'pid'            => $pid,
+				'title_zh'       => trim(I('post.titleZH')),
+				'title_jp'       => trim(I('post.titleJP')),
+				'description_zh' => I('post.descriptionZH', '', 'htmlspecialchars'),
+				'description_jp' => I('post.descriptionJP', '', 'htmlspecialchars'),
+				'price_zh'       => trim(I('post.priceZH')),
+				'price_jp'       => trim(I('post.priceJP')),
+				'shipping_type'  => I('post.shippingTypeZH'),
+				'comments'       => I('post.comments'),
+				'sales'          => I('post.sales'),
+				'views'          => I('post.views'),
+				'buy_url'        => trim(I('post.buy_urlZH')),
+				'created'        => NOW_TIME,
 			);
 
-		$detailID = $this->table(tname('product_detail'))->add($addDetail);
+		$detailID = $this->table(tname('product_detail_copy'))->add($addDetail);
 
 		if (!$detailID) {
 			return false;
