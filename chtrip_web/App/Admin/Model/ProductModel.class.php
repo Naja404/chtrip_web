@@ -12,7 +12,7 @@ class ProductModel extends Model{
 	 *
 	 */
 	public function getProductCount(){
-		return $this->table(tname('products'))->where(array('status' => 1))->count();
+		return $this->table(tname('products_copy'))->where(array('status' => 1))->count();
 	}
 
 	/**
@@ -26,7 +26,7 @@ class ProductModel extends Model{
 			);
 		
 		$join = array(
-				tname('product_detail').' AS b ON b.pid = a.pid',
+				tname('product_detail_copy').' AS b ON b.pid = a.pid',
 				tname('product_image').' AS c ON c.gid = a.image_id',
 				tname('product_shipping').' AS d ON d.id = b.shipping_type',
 				// tname('product_tag').' AS e ON e.tid IN (a.tag)',
@@ -35,11 +35,22 @@ class ProductModel extends Model{
 
 		$queryTag = "SELECT GROUP_CONCAT(name) FROM ".tname('product_tag')." WHERE FIND_IN_SET(tid, a.tag) ";
 
-		$field = 'a.pid, b.title, b.price, b.comments, b.sales, b.views, b.buy_url, c.path, d.name AS shipping_name, ('.$queryTag.') AS tag_name, f.name AS sale_name, f.sale_url, a.created';
+		$field = 'a.pid, 
+					b.title_zh, 
+					b.title_jp, 
+					b.price_zh, 
+					b.price_jp,
+					b.buy_url, 
+					c.path, 
+					d.name AS shipping_name, 
+					('.$queryTag.') AS tag_name, 
+					f.name AS sale_name, 
+					f.sale_url, 
+					a.created';
 
 		$order = ' a.created DESC ';
 
-		$queryRes = $this->table(tname('products').' AS a')
+		$queryRes = $this->table(tname('products_copy').' AS a')
 				->field($field)
 				->where($where)
 				->join($join)
@@ -63,11 +74,11 @@ class ProductModel extends Model{
 				'sort'      => intval(I('post.sort', 0)),
 				'recommend' => I('post.recommend', 0) ? 1 : 0,
 				'image_id'  => intval($imageId),
-				'saler_id'  => intval(I('post.saler_id', 0)),
+				'saler_id'  => intval(I('post.saler_id', 1)),
 				'created'   => NOW_TIME,
 			);
 
-		$pid = $this->table(tname('products'))->add($addData);
+		$pid = $this->table(tname('products_copy'))->add($addData);
 
 		if (!$pid) {
 			return false;
@@ -77,7 +88,7 @@ class ProductModel extends Model{
 
 		if (!$detailID) {
 			
-			$this->table(tname('products'))->where(array('pid' => $pid))->delete();
+			$this->table(tname('products_copy'))->where(array('pid' => $pid))->delete();
 
 			return false;
 		}
@@ -114,15 +125,15 @@ class ProductModel extends Model{
 	 */
 	public function getShipType(){
 
-		if (cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'))) {
-			return cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'));
-		}
+		// if (cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'))) {
+		// 	return cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'));
+		// }
 
 		$queryRes = $this->table(tname('product_shipping'))->field('id,name')->select();
 
-		if (count($queryRes) && is_array($queryRes)) {
-			cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'), $queryRes);
-		}
+		// if (count($queryRes) && is_array($queryRes)) {
+		// 	cache(C('CACHE.ADMIN_PRODUCT_SHIPTYPE'), $queryRes);
+		// }
 
 		return $queryRes;
 	}
@@ -133,9 +144,9 @@ class ProductModel extends Model{
 	 */
 	public function getSaler(){
 		
-		if (cache(C('CACHE.ADMIN_PRODUCT_SALE'))) {
-			return cache(C('CACHE.ADMIN_PRODUCT_SALE'));
-		}
+		// if (cache(C('CACHE.ADMIN_PRODUCT_SALE'))) {
+		// 	return cache(C('CACHE.ADMIN_PRODUCT_SALE'));
+		// }
 
 		$where = array(
 				'status' => 1,
@@ -144,7 +155,7 @@ class ProductModel extends Model{
 		$queryRes = $this->table(tname('saler'))->field('saler_id, name')->where($where)->select();
 
 		if (count($queryRes) && is_array($queryRes)) {
-			cache(C('CACHE.ADMIN_PRODUCT_SALE'), $queryRes);
+			// cache(C('CACHE.ADMIN_PRODUCT_SALE'), $queryRes);
 		}
 
 		return $queryRes;
@@ -156,14 +167,14 @@ class ProductModel extends Model{
 	 */
 	public function getTags(){
 
-		if(cache(C('CACHE.ADMIN_PRODUCT_TAG'))){
-			return cache(C('CACHE.ADMIN_PRODUCT_TAG'));
-		}
+		// if(cache(C('CACHE.ADMIN_PRODUCT_TAG'))){
+		// 	return cache(C('CACHE.ADMIN_PRODUCT_TAG'));
+		// }
 
 		$queryRes = $this->table(tname('product_tag'))->field('tid,name')->select();
 
 		if (count($queryRes) && is_array($queryRes)) {
-			cache(C('CACHE.ADMIN_PRODUCT_TAG'), $queryRes);
+			// cache(C('CACHE.ADMIN_PRODUCT_TAG'), $queryRes);
 		}
 
 		return $queryRes;

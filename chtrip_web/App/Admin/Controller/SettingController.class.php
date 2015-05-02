@@ -56,7 +56,7 @@ class SettingController extends AdminBasicController {
         $result = $this->settingModel->setMenuForm(I('post.'));
 
         // 清空redis中缓存内容
-        rm_all_cache('bjy_Admin:*');
+        // rm_all_cache('bjy_Admin:*');
 
         $this->ajaxReturn($result);
     }
@@ -91,7 +91,7 @@ class SettingController extends AdminBasicController {
         $result = $this->settingModel->delMenu(intval($rid));
 
         // 清空redis中缓存内容
-        rm_all_cache('bjy_Admin:*');
+        // rm_all_cache('bjy_Admin:*');
 
         $this->ajaxReturn($result);
     }
@@ -198,9 +198,9 @@ class SettingController extends AdminBasicController {
      *
      */
     private function _getRules(){
-        if (cache('bjy_Admin:Rules:list')) {
-            return unserialize(cache('bjy_Admin:Rules:list'));
-        }
+        // if (cache('bjy_Admin:Rules:list')) {
+        //     return unserialize(cache('bjy_Admin:Rules:list'));
+        // }
 
         $result = $this->settingModel->getMenus();
 
@@ -222,7 +222,7 @@ class SettingController extends AdminBasicController {
         }
 
         if (count($menuArr)) {
-            cache('bjy_Admin:Rules:list', serialize($menuArr), 3600);
+            // cache('bjy_Admin:Rules:list', serialize($menuArr), 3600);
         }
 
         return $menuArr;
@@ -240,7 +240,7 @@ class SettingController extends AdminBasicController {
 
         $result = $this->settingModel->setGroupForm(I('post.'));
 
-        rm_all_cache('bjy_Admin:*');
+        // rm_all_cache('bjy_Admin:*');
 
         $this->ajaxReturn($result);
     }

@@ -35,14 +35,14 @@ class ProductModel extends Model{
 		$subQueryTag = "";
 
 		if ($tag) {
-			$subQueryTag = " AND (SELECT COUNT(*) FROM ".tname('products')." WHERE (".$tag.") > 0)";
+			$subQueryTag = " AND (SELECT COUNT(*) FROM ".tname('products_copy')." WHERE (".$tag.") > 0)";
 		}
 		
 
 		$where = "a.status = 1 ".$subQueryTag;
 		
 		$join = array(
-				tname('product_detail').' AS b ON b.pid = a.pid',
+				tname('product_detail_copy').' AS b ON b.pid = a.pid',
 				tname('product_image').' AS c ON c.gid = a.image_id',
 				tname('product_shipping').' AS d ON d.id = b.shipping_type',
 				// tname('product_tag').' AS e ON e.tid IN (a.tag)',
@@ -53,12 +53,11 @@ class ProductModel extends Model{
 
 
 		$field = "a.pid, 
-				  b.title, 
-				  b.price, 
-				  b.comments, 
-				  b.sales, 
-				  b.views, 
-				  b.buy_url, 
+					b.title_zh, 
+					b.title_jp, 
+					b.price_zh, 
+					b.price_jp,
+					b.buy_url, 
 				  CONCAT('".C('API_WEBSITE')."', c.path) AS path,
 				  CONCAT('".C('API_WEBSITE')."', REPLACE(c.path, '.', '_100_100.')) AS thumb,
 				  d.name AS shipping_name, 

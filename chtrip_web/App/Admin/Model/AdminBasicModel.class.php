@@ -16,9 +16,9 @@ class AdminBasicModel extends Model{
 			$this->error(L('error_auth'), U('Login/login'));
 		}
 
-		if (cache(C('CACHE.ADMIN_LEFT_MENU').cookie('admin_group'))) {
-			return cache(C('CACHE.ADMIN_LEFT_MENU').cookie('admin_group'));
-		}
+		// if (cache(C('CACHE.ADMIN_LEFT_MENU').cookie('admin_group'))) {
+		// 	return cache(C('CACHE.ADMIN_LEFT_MENU').cookie('admin_group'));
+		// }
 
 		$sql = "SELECT a.rules FROM ".tname('admin_auth_group')." AS a 
 					LEFT JOIN ".tname('admin_auth_group_access')." AS b 
@@ -44,7 +44,7 @@ class AdminBasicModel extends Model{
 				);
 		}
 
-		cache(C('CACHE.ADMIN_LEFT_MENU').cookie('admin_group'), $menuArr, 3600);
+		// cache(C('CACHE.ADMIN_LEFT_MENU').cookie('admin_group'), $menuArr, 3600);
 
 		return $menuArr;
 	}
@@ -74,9 +74,9 @@ class AdminBasicModel extends Model{
 	 *
 	 */
 	public function getHeaderList(){
-		if (cache(C('CACHE.ADMIN_HEADER'))) {
-			return cache(C('CACHE.ADMIN_HEADER'));
-		}
+		// if (cache(C('CACHE.ADMIN_HEADER'))) {
+		// 	return cache(C('CACHE.ADMIN_HEADER'));
+		// }
 
 		// $queryRes = $this->table(tname('admin_auth_rule'))->field('menu_module')->group('menu_module')->select();
 
@@ -95,7 +95,7 @@ class AdminBasicModel extends Model{
 			return false;
 		}
 
-		cache(C('CACHE.ADMIN_HEADER'), $queryRes[0]['list']);
+		// cache(C('CACHE.ADMIN_HEADER'), $queryRes[0]['list']);
 
 		return $queryRes[0]['list'];
 

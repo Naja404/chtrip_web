@@ -46,12 +46,12 @@ class ProductController extends ApiBasicController {
 
         $count = $this->productModel->getProductCount($queryData);
 
-        if ($count == cache(C('CACHE_LIST.PRODUCT_COUNT')) && cache(C('CACHE_LIST.PRODUCT_LIST').$this->reqURI)) {
-            $outPut = cache(C('CACHE_LIST.PRODUCT_LIST').$this->reqURI);
-            json_msg($outPut);
-        }
+        // if ($count == cache(C('CACHE_LIST.PRODUCT_COUNT')) && cache(C('CACHE_LIST.PRODUCT_LIST').$this->reqURI)) {
+        //     $outPut = cache(C('CACHE_LIST.PRODUCT_LIST').$this->reqURI);
+        //     json_msg($outPut);
+        // }
 
-        cache(C('CACHE_LIST.PRODUCT_COUNT'), $count);
+        // cache(C('CACHE_LIST.PRODUCT_COUNT'), $count);
 
         $queryRes = $this->productModel->getProductList($queryData);
 
@@ -67,7 +67,7 @@ class ProductController extends ApiBasicController {
                 'hasMore' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
             );
 
-        cache(C('CACHE_LIST.PRODUCT_LIST').$reqURI, $outPut, 3600);
+        // cache(C('CACHE_LIST.PRODUCT_LIST').$reqURI, $outPut, 3600);
 
         json_msg($outPut);
     }
@@ -114,10 +114,10 @@ class ProductController extends ApiBasicController {
 
         $gid = I('request.gid');
 
-        if (cache(C('CACHE_LIST.PRODUCT_IMG').$this->reqURI)) {
-            $outPut = cache(C('CACHE_LIST.PRODUCT_IMG').$this->reqURI);
-            json_msg($outPut);
-        }
+        // if (cache(C('CACHE_LIST.PRODUCT_IMG').$this->reqURI)) {
+        //     $outPut = cache(C('CACHE_LIST.PRODUCT_IMG').$this->reqURI);
+        //     json_msg($outPut);
+        // }
 
         $queryRes = $this->productModel->getIMGByGid($gid);
 
@@ -134,7 +134,7 @@ class ProductController extends ApiBasicController {
             );
 
         if (count($queryArr) > 0) {
-            cache(C('CACHE_LIST.PRODUCT_IMG').$this->reqURI, $outPut, 3600);
+            // cache(C('CACHE_LIST.PRODUCT_IMG').$this->reqURI, $outPut, 3600);
         }
 
         json_msg($outPut);
