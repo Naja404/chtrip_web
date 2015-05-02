@@ -23,8 +23,8 @@ function json_msg($msg = '',$status = 0){
 	
 	// 返回JSON数据格式到客户端 包含状态信息
 	header('Content-Type:application/json; charset=utf-8');
-	header('userId', $this->userId);
-	header('UUID', $this->uuid);
+	// header('userId', $this->userId);
+	// header('UUID', $this->uuid);
 	
 	$data = array('status' => (string)$status);
 	

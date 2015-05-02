@@ -19,7 +19,7 @@ class ProductController extends ApiBasicController {
 
     protected function _initialize(){
 
-        parent::_initialize();
+        // parent::_initialize();
 
         $this->productModel = D('Product');
 
