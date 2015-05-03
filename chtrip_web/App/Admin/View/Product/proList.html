@@ -28,14 +28,14 @@
 	              <tbody>
 	              	<volist name="list" id="item">
 	                <tr class="odd gradeX">
-	                  <td><a href="{$item.buy_url}" target="_blank" >{$item.title}</a></td>
+	                  <td>{$item.title_zh}<br/>{$item.title_jp}</td>
 	                  <td><img src="{:show_image($item['path'], '100_100')}" /></td>
-	                  <td>{$item.price}/{$item.shipping_name}</td>
+	                  <td>￥{$item.price_zh}/{$item.price_jp}/{$item.shipping_name}</td>
 	                  <td>{$item.tag_name}</td>
-	                  <td><a href="{$item.sale_url}" target="_blank" >{$item.sale_name}</a></td>
+	                  <td>{$item.sale_name}</td>
 	                  <td>{$item.comments}/{$item.sales}/{$item.views}</td>
 	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
-	                  <td>action</td>
+	                  <td>{:L('TEXT_DELETE')}</td>
 	                </tr>
 	            	</volist>
 	              </tbody>

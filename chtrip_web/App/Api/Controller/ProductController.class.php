@@ -84,15 +84,16 @@ class ProductController extends ApiBasicController {
             json_msg(L('ERROR_PARAM'), 1);
         }
 
-        if (cache(C('CACHE_LIST.PRODUCT_DETAIL').$this->reqURI)) {
-            $outPut = cache(C('CACHE_LIST.PRODUCT_DETAIL').$this->reqURI);
-            json_msg($outPut);
-        }
+        // if (cache(C('CACHE_LIST.PRODUCT_DETAIL').$this->reqURI)) {
+        //     $outPut = cache(C('CACHE_LIST.PRODUCT_DETAIL').$this->reqURI);
+        //     json_msg($outPut);
+        // }
 
         $queryRes = $this->productModel->getProductDetail($pid);
 
         if (is_array($queryRes) && count($queryRes)) {
-            $queryRes['description'] = htmlspecialchars_decode($queryRes['description']);
+            $queryRes['description_zh'] = htmlspecialchars_decode($queryRes['description_zh']);
+            $queryRes['description_jp'] = htmlspecialchars_decode($queryRes['description_jp']);
             $queryRes['tag_name']    = explode(',', $queryRes['tag_name']);
         }
 
@@ -100,7 +101,7 @@ class ProductController extends ApiBasicController {
                 'proDetail' => $queryRes,
             );
 
-        cache(C('CACHE_LIST.PRODUCT_DETAIL').$this->reqURI, $outPut, 3600);
+        // cache(C('CACHE_LIST.PRODUCT_DETAIL').$this->reqURI, $outPut, 3600);
 
         json_msg($outPut);
     }

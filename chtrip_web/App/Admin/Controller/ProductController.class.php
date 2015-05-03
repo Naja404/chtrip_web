@@ -68,7 +68,17 @@ class ProductController extends AdminBasicController {
         $this->assign('page_show', $page->showAdmin());
         $this->assign('list', $this->productModel->getProductList($data));
 
+        $this->_assignText();
+
         $this->display();
+    }
+
+    /**
+     * 产品删除
+     *
+     */
+    public function proDel(){
+        
     }
 
     /**
@@ -109,7 +119,7 @@ class ProductController extends AdminBasicController {
      */
     private function _assignText(){
 
-        $this->assign('title', L('TITLE_'.ACTION_NAME));
+        $this->assign('title', L('TITLE_'.ACTION_NAME).L('TITLE_SUFFIX'));
 
         if (in_array(ACTION_NAME, array('addProduct'))) {
             $this->assign('shipping_list', $this->productModel->getShipType());

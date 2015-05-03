@@ -97,14 +97,14 @@
 	              </thead>
 	              <tbody>
 	              	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><tr class="odd gradeX">
-	                  <td><a href="<?php echo ($item["buy_url"]); ?>" target="_blank" ><?php echo ($item["title"]); ?></a></td>
+	                  <td><?php echo ($item["title_zh"]); ?><br/><?php echo ($item["title_jp"]); ?></td>
 	                  <td><img src="<?php echo show_image($item['path'], '100_100');?>" /></td>
-	                  <td><?php echo ($item["price"]); ?>/<?php echo ($item["shipping_name"]); ?></td>
+	                  <td>￥<?php echo ($item["price_zh"]); ?>/<?php echo ($item["price_jp"]); ?>/<?php echo ($item["shipping_name"]); ?></td>
 	                  <td><?php echo ($item["tag_name"]); ?></td>
-	                  <td><a href="<?php echo ($item["sale_url"]); ?>" target="_blank" ><?php echo ($item["sale_name"]); ?></a></td>
+	                  <td><?php echo ($item["sale_name"]); ?></td>
 	                  <td><?php echo ($item["comments"]); ?>/<?php echo ($item["sales"]); ?>/<?php echo ($item["views"]); ?></td>
 	                  <td><?php echo (date("Y-m-d H:i:s",$item["created"])); ?></td>
-	                  <td>action</td>
+	                  <td><?php echo L('TEXT_DELETE');?></td>
 	                </tr><?php endforeach; endif; else: echo "" ;endif; ?>
 	              </tbody>
 	            </table>

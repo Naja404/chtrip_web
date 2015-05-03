@@ -13,6 +13,7 @@ return array(
 		'text_setting'				 => '设置',
 		'text_home'					 => '首页',
 		'text_goto_home'			 => '回到首页',
+		'TEXT_DELETE'				 => '删除',
 		
 		//input
 		'login_username_input'       => '用户名',
