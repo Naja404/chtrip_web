@@ -58,6 +58,9 @@ class ProductController extends ApiBasicController {
         $queryArr = array();
         foreach ($queryRes as $k => $v) {
             $v['tag_name'] = explode(',', $v['tag_name']);
+            $v['path']     = explode(',', $v['path']);
+            $v['description_zh'] = htmlspecialchars_decode($v['description_zh']);
+            $v['description_jp'] = htmlspecialchars_decode($v['description_jp']);
 
             $queryArr[] = $v;
         }

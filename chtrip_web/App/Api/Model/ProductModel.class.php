@@ -59,6 +59,8 @@ class ProductModel extends Model{
 					b.price_zh, 
 					b.price_jp,
 					b.buy_url, 
+					b.description_zh,
+					b.description_jp,
 				  (".$queryImage.") AS path,
 				  CONCAT('".C('API_WEBSITE')."', REPLACE(c.path, '.', '_100_100.')) AS thumb,
 				  d.name AS shipping_name, 
