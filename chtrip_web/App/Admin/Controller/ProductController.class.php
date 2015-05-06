@@ -78,7 +78,11 @@ class ProductController extends AdminBasicController {
      *
      */
     public function proDel(){
-        
+        $pid = I('get.pid');
+
+        $this->productModel->delProduct($pid);
+
+        $this->redirect('Product/proList');
     }
 
     /**
