@@ -50,6 +50,7 @@ class ProductModel extends Model{
 			);
 
 		$queryTag = "SELECT GROUP_CONCAT(name) FROM ".tname('product_tag')." WHERE FIND_IN_SET(tid, a.tag) ";
+		$queryImage = "SELECT GROUP_CONCAT(CONCAT('".C('API_WEBSITE')."', path)) FROM ".tname('product_image')." WHERE FIND_IN_SET(parent_id, a.image_id) OR gid = a.image_id";
 
 
 		$field = "a.pid, 
@@ -58,7 +59,7 @@ class ProductModel extends Model{
 					b.price_zh, 
 					b.price_jp,
 					b.buy_url, 
-				  CONCAT('".C('API_WEBSITE')."', c.path) AS path,
+				  (".$queryImage.") AS path,
 				  CONCAT('".C('API_WEBSITE')."', REPLACE(c.path, '.', '_100_100.')) AS thumb,
 				  d.name AS shipping_name, 
 				  (".$queryTag.") AS tag_name, 
