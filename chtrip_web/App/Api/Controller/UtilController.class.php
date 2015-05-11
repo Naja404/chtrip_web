@@ -48,4 +48,21 @@ class UtilController extends ApiBasicController {
     	json_msg();
     }
 
+    /**
+     * 发送用户反馈
+     *
+     */
+    public function feedback(){
+        $content = I('get.content', 'htmlspecialchars');
+
+        $to = array(
+                '326101710@qq.com',
+            );
+        $subject = 'NijiGo FeedBack';
+
+        send_mail($to, $subject, $content);
+
+        json_msg();
+    }
+
 }

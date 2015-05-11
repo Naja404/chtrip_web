@@ -4,14 +4,14 @@ defined('THINK_PATH') or exit();
 
 return  array(
 	'APP_GROUP_LIST'		=> 'Home,Api,Admin',
-	'MODULE_ALLOW_LIST'     => array('Home','Api','Admin'), // 配置你原来的分组列表	
+	'MODULE_ALLOW_LIST'     => array('Home','Api','Admin'), // 配置你原来的分组列表
 	'DEFAULT_GROUP'			=> 'Home',
 	'APP_GROUP_MODE'		=> 1,
-		
+
 	/* URL设置 */
 	'URL_CASE_INSENSITIVE'  =>  true,   // 默认false 表示URL区分大小写 true则表示不区分大小写
 	'URL_MODEL'             =>  0,       // URL访问模式,可选参数0、1、2、3,代表以下四种模式：
-	
+
 	'APP_SUB_DOMAIN_DEPLOY' =>1, // 开启子域名配置
 
 	'APP_SUB_DOMAIN_RULES'  => array(
@@ -19,13 +19,13 @@ return  array(
 			'local-admin' => array('Admin/'),   // admin域名指向Admin分组
 			'local-api'   => array('Api/'),		// api域名指向Api分组
 	),
-		
+
 	/* 路由设置 */
 	'URL_ROUTER_ON' => true,			// 开启路由
 	'URL_ROUTE_RULES' => array(			//路由定义
 
-	), 		
-		
+	),
+
     /* 默认设定 */
 	'LANG_SWITCH_ON'		=>	true,	 //开启语言包功能
     'DEFAULT_LANG'          =>  'zh-cn', // 默认语言
@@ -38,7 +38,7 @@ return  array(
     'DEFAULT_ACTION'        =>  'index', // 默认操作名称
     'DEFAULT_CHARSET'       =>  'utf-8', // 默认输出编码
     'DEFAULT_TIMEZONE'      =>  'PRC',	// 默认时区
-    
+
 	/*数据库设置 */
 	'DB_TYPE'               =>  'mysql',     	// 数据库类型
 	'DB_HOST'               =>  '127.0.0.1',    // 服务器地址
@@ -47,21 +47,21 @@ return  array(
 	'DB_PWD'                =>  '',        		// 密码
 	'DB_PORT'               =>  '3306',         // 端口
 	'DB_PREFIX'             =>  'ch_',         // 数据库表前缀
-	'DB_SUFFIX'             => '',             // 数据库表后缀 
+	'DB_SUFFIX'             => '',             // 数据库表后缀
 
-    
+
 	/* Cookie设置 */
 	'COOKIE_EXPIRE'         =>  0,    // Cookie有效期
 	'COOKIE_DOMAIN'         =>  '',      // Cookie有效域名
 	'COOKIE_PATH'           =>  '/',     // Cookie路径
 	'COOKIE_PREFIX'         =>  'ch',      // Cookie前缀 避免冲突
-		
+
 	/* Redis设置*/
 	'REDIS_HOST'      =>  '127.0.0.1',
 	'REDIS_PORT'	  =>  '6379',
-    
-    'REDIS_CTYPE'           => 1, //连接类型 1:普通连接 2:长连接  
-    'REDIS_TIMEOUT'         => 0, //连接超时时间(S) 0:永不超时 
+
+    'REDIS_CTYPE'           => 1, //连接类型 1:普通连接 2:长连接
+    'REDIS_TIMEOUT'         => 0, //连接超时时间(S) 0:永不超时
 
     'DATA_CACHE_TIME'       => 0,      // 数据缓存有效期 0表示永久缓存
     'DATA_CACHE_COMPRESS'   => false,   // 数据缓存是否压缩缓存
@@ -83,14 +83,14 @@ return  array(
 			'UTIL_TOKEN'     => 'ch_Util:device_token:',
     	),
 
-	/*邮件配置*/	
+	/*邮件配置*/
 	'THINK_EMAIL' => array(
 			'SMTP_HOST'   => 'smtp.qq.com', //SMTP服务器
 			'SMTP_PORT'   => '465', //SMTP服务器端口
 			'SMTP_USER'   => '2768524738@qq.com', //SMTP服务器用户名
 			'SMTP_PASS'   => '1q2w3e4r', //SMTP服务器密码
 			'FROM_EMAIL'  => '2768524738@qq.com', //发件人EMAIL
-			'FROM_NAME'   => '伴旅测试账号', //发件人名称
+			'FROM_NAME'   => 'NijiGo', //发件人名称
 			'REPLY_EMAIL' => '', //回复EMAIL（留空则为发件人EMAIL）
 			'REPLY_NAME'  => '', //回复名称（留空则为发件人名称）
 	),
