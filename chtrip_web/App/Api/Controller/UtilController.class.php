@@ -54,6 +54,7 @@ class UtilController extends ApiBasicController {
      */
     public function feedback(){
         $content = I('get.content', 'htmlspecialchars');
+        $content .= '<br/>DeviceToken:'.I('get.token');
 
         $to = array(
                 '326101710@qq.com',
