@@ -23,29 +23,18 @@ class UtilController extends ApiBasicController {
      */
     public function setToken(){
 
-    	if (!I('request.token') || !I('request.type')) {
+    	if (!I('request.token')) {
     		json_msg(L('ERROR_PARAM'), 1);
     	}
+        
+        $status = $this->utilModel->setToken(I('request.token'));
 
-    	$setData = array(
-					'token'      => I('request.token'),
-					'type'       => I('request.type'),
-					'version'    => I('request.version'),
-					'user_agent' => I('request.user_agent'),
-					'created'	 => NOW_TIME,
-    		);
+        if (!$status) {
+            json_msg(L('ERROR_SET_TOKEN'), 1);
+        }
 
-    	$cacheName = md5(implode('', $setData));
+        json_msg();
 
-    	// $this->utilModel->setToken($setData);
-
-    	if (cache(C('CACHE_LIST.UTIL_TOKEN').$cacheName)) {
-    		json_msg();
-    	}
-
-    	cache(C('CACHE_LIST.UTIL_TOKEN').$cacheName, $setData);
-
-    	json_msg();
     }
 
     /**

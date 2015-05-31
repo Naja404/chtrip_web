@@ -971,6 +971,7 @@ function S($name,$value='',$options=null) {
  * @return mixed
  */
 function F($name, $value='', $path=DATA_PATH) {
+    echo $name;exit;
     static $_cache  =   array();
     $filename       =   $path . $name . '.php';
     if ('' !== $value) {

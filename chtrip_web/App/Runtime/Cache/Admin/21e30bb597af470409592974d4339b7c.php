@@ -104,7 +104,7 @@
 	                  <td><?php echo ($item["sale_name"]); ?></td>
 	                  <td><?php echo ($item["comments"]); ?>/<?php echo ($item["sales"]); ?>/<?php echo ($item["views"]); ?></td>
 	                  <td><?php echo (date("Y-m-d H:i:s",$item["created"])); ?></td>
-	                  <td><?php echo L('TEXT_DELETE');?></td>
+	                  <td><button class="btn btn-inverse btn-mini" onclick="window.location.href('<?php echo U('Product/proDel', array('pid' => $item.pid));?>');"><?php echo L('TEXT_DELETE');?></button></td>
 	                </tr><?php endforeach; endif; else: echo "" ;endif; ?>
 	              </tbody>
 	            </table>

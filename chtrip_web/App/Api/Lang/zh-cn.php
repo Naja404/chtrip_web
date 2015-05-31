@@ -6,5 +6,6 @@ return array(
 
 	'ERROR_PARAM' => '参数错误',
 	'ERROR_DEFAULT' => 'Hello Moto (Default Msg)',
+	'ERROR_SET_TOKEN' => 'Token设置失败',
 
 );
