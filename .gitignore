@@ -1,4 +1,5 @@
 *.DS_Store
 chtrip_web/App/Runtime/*
 chtrip_web/www/Public/uploads/*
-
+WebSite.sublime-project
+WebSite.sublime-workspace

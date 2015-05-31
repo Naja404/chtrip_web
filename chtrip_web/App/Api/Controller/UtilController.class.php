@@ -14,7 +14,7 @@ class UtilController extends ApiBasicController {
 	public $utilModel;
 
     protected function _initialize(){
-    	$this->utilModel = D('util');
+        $this->utilModel = D('util');
     }
 
     /**
@@ -33,7 +33,11 @@ class UtilController extends ApiBasicController {
             json_msg(L('ERROR_SET_TOKEN'), 1);
         }
 
-        json_msg();
+        $data = array(
+                'ssid' => $this->utilModel->getSSID(I('request.token')),
+            );
+
+        json_msg($data);
 
     }
 
