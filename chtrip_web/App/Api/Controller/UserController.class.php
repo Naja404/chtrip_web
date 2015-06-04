@@ -24,8 +24,8 @@ class UserController extends ApiBasicController {
      * 获取扫货清单
      */
     public function getBuyList(){
-        
-        $returnRes = $this->userModel->addBuyList(I('request.ssid'));
+
+        $returnRes = $this->userModel->getBuyList(I('request.ssid'));
 
         if (count($returnRes) > 0) {
             json_msg($returnRes);

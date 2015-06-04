@@ -22,6 +22,12 @@ class UtilModel extends Model{
 				'token'           => $this->_spliceToken(htmlspecialchars_decode($token)),
 			);
 
+		$hasUserID = $this->table(tname('user'))->where(array('token' => $data['token']))->getField('user_id');
+
+		if (!empty($hasUserID)) {
+			return $hasUserID;
+		}
+
 		$queryRes = $this->table(tname('user'))->add($data);
 
 		return $queryRes > 0 ? $data['user_id'] : false;
@@ -29,11 +35,13 @@ class UtilModel extends Model{
 
 	/**
 	 * 获取用户id
+	 * @param string $userID 用户id
 	 * @param string $token 设备token
 	 */
-	public function getSSID($token = false){
+	public function getSSID($userID = false, $token = false){
 		$where = array(
-				'token' => $this->_spliceToken(htmlspecialchars_decode($token)),
+				'user_id' => $userID,
+				'token'   => $this->_spliceToken(htmlspecialchars_decode($token)),
 			);
 		return $this->table(tname('user'))->where($where)->getField('user_id');
 	}

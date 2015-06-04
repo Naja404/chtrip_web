@@ -34,7 +34,7 @@ class UtilController extends ApiBasicController {
         }
 
         $data = array(
-                'ssid' => $this->utilModel->getSSID(I('request.token')),
+                'ssid' => $this->utilModel->getSSID($status, I('request.token')),
             );
 
         json_msg($data);

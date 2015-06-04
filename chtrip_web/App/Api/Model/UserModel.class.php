@@ -34,6 +34,10 @@ class UserModel extends Model{
 
 		array_push($userProID, $proData['pid']);
 
+		if (count($userProID) <= 0) {
+			return true;
+		}
+
 		// $queryRes = $this->table(tname('user_buylist'))->where($where)->save('product_id = '.json_encode($userProID));
 		$queryRes = $this->query("UPDATE `ch_user_buylist` SET product_id = '".json_encode($userProID)."' WHERE ( `user_id` = '".$proData['ssid']."' )");
 
@@ -88,9 +92,9 @@ class UserModel extends Model{
 		}
 
 		$returnRes = array(
-				'list' => $queryRes,
-				'price_jp_total' => $priceJP,
-				'price_zh_total' => $priceZH,
+				'list' => is_array($queryRes) ? $queryRes : array(),
+				'price_jp_total' => $priceJP ? $priceJP : '0.00',
+				'price_zh_total' => $priceZH ? $priceZH : '0.00',
 			);
 
 		return $returnRes;
