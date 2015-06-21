@@ -25,8 +25,16 @@ return array(
 		'login_login_btn'            => '登录',
 		'login_back_login_btn'       => '<< 返回登录',
 		'login_password_recover_btn' => '发送',
-
+		
 		//error
-		'error_auth'				 => '权限错误,请重新登录',
-		'error_login'				 =>  '登录失败,用户名或密码不正确',
+		'error_auth'                 => '权限错误,请重新登录',
+		'error_login'                =>  '登录失败,用户名或密码不正确',
+		
+		//shop 
+		'TEXT_SALER'                 => '商家',
+		'TEXT_IMAGE'                 => '图片',
+		'TEXT_ADDRESS'               => '地址',
+		'TEXT_STATUS'                => '状态',
+		'TEXT_CREATED'               => '创建时间',
+		'TEXT_ACTION'                => '操作',
 );

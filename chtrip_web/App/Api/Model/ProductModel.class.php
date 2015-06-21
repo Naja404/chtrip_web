@@ -164,6 +164,22 @@ class ProductModel extends Model{
 	}
 
 	/**
+	 * 获取商家总数
+	 * @param array $queryData 查询条件数组
+	 */
+	public function getShopCount($queryData = array()){
+		return $this->table(tname('saler'))->where(array('status' => 1))->count();
+	}
+
+	/**
+	 * 获取商家列表
+	 * @param array $queryData 查询条件数组
+	 */
+	public function getShopList($queryData = array()){
+		return $this->table(tname('saler'))->where(array('status' => 1))->order('created DESC')->page($queryData['page'])->select();
+	}
+
+	/**
 	 * 格式化tag到sql
 	 * @param array $tag tag数组
 	 */

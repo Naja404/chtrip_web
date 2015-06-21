@@ -1,0 +1,49 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Shop/shopList')}" >{:L('TITLE_SHOP')}</a> <a class="current">{:L('TITLE_SHOP_LIST')}</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>{:L('TITLE_SHOP_LIST')}</h5>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                  <th>{:L('TEXT_SALER')}</th>
+	                  <th>{:L('TEXT_IMAGE')}</th>
+	                  <th>{:L('TEXT_ADDRESS')}</th>
+	                  <th>{:L('TEXT_STATUS')}</th>
+	                  <th>{:L('TEXT_CREATED')}</th>
+	                  <th>{:L('TEXT_ACTION')}</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td><a href="{$item.sale_url}">{$item.name}</a></td>
+	                  <td><img src="{:show_image($item['img_url'], '100_100')}" /></td>
+	                  <td>{$item.address}</td>
+	                  <td>{$item.status}</td>
+	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
+	                  <td><button class="btn btn-inverse btn-mini" onclick="window.location.href('{:U('Shop/delShop', array('id' => $item.id))}');">{:L('TEXT_DELETE')}</button></td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+			<div class="pagination alternate" style="float:right;">
+				{$page_show}
+			</div>
+	    </div>
+	  </div>
+	</div>
+
+<include file="Public:footer" />

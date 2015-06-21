@@ -143,4 +143,35 @@ class ProductController extends ApiBasicController {
 
         json_msg($outPut);
     }
+
+    /**
+     * 商家列表
+     */
+    public function shopList(){
+        $pageSize = I('request.pageSize', C('PAGE_LIMIT'));
+        $pageNum  = I('request.pageNum', 1);
+
+        $queryData = array(
+                'page'  => make_page($pageNum, $pageSize),
+                'order' => '',
+            );
+
+        $count = $this->productModel->getShopCount($queryData);
+        $queryRes = $this->productModel->getShopList($queryData);
+
+        $queryArr = array();
+
+        foreach ($queryRes as $k => $v) {
+            $v['description'] = htmlspecialchars_decode($v['description']);
+            $queryArr[] = $v;
+        }
+
+        $outPut = array(
+                'shopList' => $queryArr,
+                'hasMore' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
+            );
+
+        json_msg($outPut);
+
+    }
 }

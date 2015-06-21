@@ -1,0 +1,83 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Shop/shopList')}" >{:L('TITLE_SHOP')}</a> <a class="current">{:L('TITLE_ADD_SHOP')}</a> </div>
+	  </div>
+	  <div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span8">
+		      <div class="widget-box">
+		         <form action="{:U('Shop/addShop')}" method="post" class="form-horizontal" id="addShopForm" enctype="multipart/form-data">
+		        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+		          <h5>{:L('TITLE_ADD_SHOP')}</h5>
+		        </div>
+		        <div class="widget-content nopadding">
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHOP_TITLE')}</label>
+		              <div class="controls">
+		                <input type="text" name="title" placeholder="{:L('INPUT_ADD_SHOP_TITLE')}" class="span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHOP_URL')}</label>
+		              <div class="controls">
+		                <input type="text" name="sale_url" placeholder="{:L('INPUT_SHOP_URL')}" class="span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHOP_ADDRESS')}</label>
+		              <div class="controls">
+		              	<input type="text" name="address" placeholder="{:L('INPUT_SHOP_ADDRESS')}" class="span11" />
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHOP_IMAGE')}</label>
+		              <div class="controls">
+		                <input type="file" name="image" />
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHOP_DESCRIPTION')}</label>
+		              <div class="controls">
+		              	<textarea name="shopDescription"></textarea>
+		              </div>
+		            </div>
+
+		            <div class="form-actions">
+		              <button type="submit" class="btn btn-success">Save</button>
+		            </div>
+		        </div>
+
+		    	</form>
+		      </div>
+			</div>
+		</div>
+	  </div>
+	</div>
+<link rel="stylesheet" href="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript">
+
+	var editorZH, editorJP;
+	KindEditor.ready(function(K) {
+		editorZH = K.create('textarea[name="shopDescription"]', {
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			allowImageUpload : true,
+			uploadJson: "<?php echo C('ADMIN_WEBSITE').U('Product/uploadIMG');?>",
+			items : [
+				'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+				'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+		});
+
+		$('.ke-container').width('400px');
+	});
+</script>
+<include file="Public:footer" />
