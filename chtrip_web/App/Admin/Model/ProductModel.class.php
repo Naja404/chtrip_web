@@ -100,26 +100,6 @@ class ProductModel extends Model{
 	}
 
 	/**
-	 * 删除产品
-	 * @param int $pid 产品id
-	 */
-	public function delProduct($pid = 0){
-		if (!is_numeric($pid)) {
-			return false;
-		}
-
-		$where = array(
-				'pid' => $pid,
-			);
-
-		$save = array(
-				'status' => 0,
-			);
-
-		return $this->table(tname('products_copy'))->where($where)->save($save);
-	}
-
-	/**
 	 * 添加图片 
 	 * @param string $imgPath
 	 */

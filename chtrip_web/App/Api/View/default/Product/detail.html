@@ -1,0 +1,104 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta id="vp" name="viewport" content="width=device-width, user-scalable=no,maximum-scale=1.0,initial-scale=1">
+	<title>{$detail.title_zh}|{$detail.title_jp}</title>
+	<script type="text/javascript" src="http://api.atniwo.com/Public/html/js/jquery.js"></script>
+	<script type="text/javascript" src="http://api.atniwo.com/Public/html/js/swipe.js"></script>
+	<link type="text/css" rel="stylesheet" href="http://api.atniwo.com/Public/html/css/swiper.css">
+	<link type="text/css" rel="stylesheet" href="http://api.atniwo.com/Public/html/css/style.css">
+</head>
+<body>
+
+<div class="product">
+<!--   <div class="navHeader">
+    <h4><center>{$detail.title_zh}</center></h4>
+    <a class="backBTN" id="backBTN"><img src="/images/arrowLeft@2x.png" /></a>
+  </div> -->
+  <div class="proImg">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="{$detail.path}" />
+            </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+  </div>
+  <div class="titleHeader">
+    <p>{$detail.title_zh}</p>
+    <p style="color:red;">{$detail.title_jp}</p>
+    <br>
+    <br>
+    <p>
+        {$detail.description_zh}
+    </p>
+
+    <br>
+    <br>
+    <p>
+        {$detail.description_jp}
+    </p>
+  </div>
+
+<!--   <div class="priceFooter">
+    <div class="priceText">
+        <span>参考价格</span>
+        <span><img src="/images/jpImg.png" width="5%"/></span>
+        <span>{$detail.price_jp}JPY</span>
+        <span><img src="/images/zhImg.png" width="5%"></span>
+        <span>{$detail.price_zh}RMB</span>
+    </div>
+    <div class="addCart">加入扫货清单</div>
+  </div> -->
+
+  <div class="clearFooter">
+  </div>
+</div>
+    <script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+    });
+
+    function connectWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+            callback(WebViewJavascriptBridge)
+        } else {
+            document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                callback(WebViewJavascriptBridge)
+            }, false)
+        }
+    }
+
+    connectWebViewJavascriptBridge(function(bridge) {
+
+        /* Init your app here */
+
+        bridge.init(function(message, responseCallback) {
+            alert('Received message: ' + message)   
+            if (responseCallback) {
+                responseCallback("Right back atcha")
+            }
+        })
+        bridge.send('Hello from the javascript')
+        bridge.send('Please respond to this', function responseCallback(responseData) {
+            console.log("Javascript got its response", responseData)
+        })
+
+        var backBTN = document.getElementById('backBTN');
+            backBTN.onclick = function(e){
+                bridge.send('backBTN', function(responseData){
+                  
+                })
+            }
+    })
+    </script>
+</body>
+</html>

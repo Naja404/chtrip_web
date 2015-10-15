@@ -72,7 +72,7 @@ return  array(
     'API_WEBSITE' => 'http://admin.atniwo.com',
 
     /* 分页设置 */
-    'PAGE_LIMIT'                => 15,
+    'PAGE_LIMIT'                => 30,
 
     /* CACHE_LIST */
     'CACHE_LIST' => array(

@@ -1,0 +1,132 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Album/listAlbum')}" >专辑</a> <a class="current">编辑专辑</a> </div>
+	  </div>
+	  <div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span8">
+		      <div class="widget-box">
+		         <form action="{:U('Album/editAlbum', array('aid' => $detail['id']))}" method="post" class="form-horizontal" enctype="multipart/form-data">
+		        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+		          <h5>编辑专辑</h5>
+		        </div>
+
+		        <div class="widget-content nopadding">
+		            <div class="control-group">
+		              <label class="control-label">专辑名称</label>
+		              <div class="controls">
+		                <input type="text" name="title" id="title" placeholder="请填写专辑名称" value="{$detail.title}" class="span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">专辑类型</label>
+		              <div class="controls">
+		                <select name="type">
+		                <volist name="type" id="item" >
+		                  <option value="{$item.id}" <?php echo $item['id'] == $detail['type'] ? 'selected' : '';?>>{$item.name}</option>
+		                 </volist>
+		                </select>
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">专辑封面图</label>
+		              <div class="controls">
+		              		<img src="{:show_image($detail['path'], '100_100')}" >
+		              </div>
+		              <div class="controls">
+		              	<input type="file" name="image" />
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">开始时间</label>
+		              <div class="controls">
+		              	<input type="text" name="start_time" data-date="2015-08-28" data-date-format="yyyy-mm-dd" value="<?php echo date('Y-m-d', $detail['start_time']);?>" class="datepicker span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">结束时间</label>
+		              <div class="controls">
+		              	<input type="text" name="end_time" data-date="2015-08-28" data-date-format="yyyy-mm-dd" value="<?php echo date('Y-m-d', $detail['end_time']);?>" class="datepicker span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">位置</label>
+		              <div class="controls">
+		              	<input type="text" name="address_title" value="{$detail.address_title}" class="span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">排序</label>
+		              <div class="controls">
+		              	<input type="text" name="sort" value="" placeholder="数值越大越靠前" value="{$detail.sort}" class="span11">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">是否推荐置顶</label>
+		              <div class="controls">
+		              	<input type="checkbox" name="recommend" value="1" <?php echo $detail['recommend'] == 1 ? 'checked' : '';?>>
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">专辑内容</label>
+		              <div class="controls">
+		              	<textarea name="content">{$detail.content}</textarea>
+		              </div>
+		            </div>
+		            <input type="hidden" name="aid" value="{$detail.id}">
+		            <div class="form-actions">
+		              <button type="submit" class="btn btn-success">保存</button>
+		            </div>
+		          </form>
+		        </div>
+		    	</form>
+		      </div>
+			</div>
+		</div>
+	  </div>
+	</div>
+<link rel="stylesheet" href="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript">
+	function selectForm(selectForm){
+		if (selectForm == 'zh') {
+			$('#zhAddProForm').show();
+			$('#jpAddProForm').hide();
+			$('#zhSelectFormBtn').attr('class', 'btn btn-inverse btn-mini');
+			$('#jpSelectFormBtn').attr('class', 'btn btn-mini');
+		}else{
+			$('#zhAddProForm').hide();
+			$('#jpAddProForm').show();
+			$('#zhSelectFormBtn').attr('class', 'btn btn-mini');
+			$('#jpSelectFormBtn').attr('class', 'btn btn-inverse btn-mini');
+		}
+	}
+	var albumContent;
+	KindEditor.ready(function(K) {
+		albumContent = K.create('textarea[name="content"]', {
+			resizeType : 1,
+			allowPreviewEmoticons : false,
+			allowImageUpload : true,
+			uploadJson: "<?php echo C('ADMIN_WEBSITE').U('Product/uploadIMG');?>",
+			items : [
+				'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+				'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+		});
+
+		$('.ke-container').width('600px');
+	});
+
+</script>
+<include file="Public:footer" />

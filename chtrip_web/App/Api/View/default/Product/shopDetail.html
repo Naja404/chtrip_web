@@ -1,0 +1,47 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta id="vp" name="viewport" content="width=device-width, user-scalable=no,maximum-scale=1.0,initial-scale=1">
+	<title>{$detail.name}</title>
+	<script type="text/javascript" src="http://api.atniwo.com/Public/html/js/jquery.js"></script>
+	<link type="text/css" rel="stylesheet" href="http://api.atniwo.com/Public/html/css/style.css">
+</head>
+<body>
+
+<div class="shop">
+    <div class="kvImg">
+        <img src="{$detail.pic_url}">
+    </div>
+    <div class="shopContent">
+        <?php if(count($detail['tag_name']) > 0){?>
+        <div class="tagText">
+            <?php foreach ($detail['tag_name'] as $k => $v) {?>
+            <span><?php echo $v;?></span>
+            <?php }?>
+        </div>
+        <?php } ?>
+        <div class="shopText">
+            <p>{$detail.description}</p>
+            <?php if(!empty($detail['open_time'])){?>
+            <p>营业时间：<?php echo $detail['open_time'];?></p>
+            <?php }?>
+            <?php if(!empty($detail['tel'])){?>
+            <p>电话：<?php echo $detail['tel'];?></p>
+            <?php }?>
+            <p>地址：{$detail.address}</p>
+            <!-- <p>地图信息</p> -->
+        </div>
+    </div>
+<!--     <div class="willGo">
+        <span>我想去</span>
+    </div> -->
+    <div class="clearFooter">
+    </div>
+</div>
+</body>
+</html>

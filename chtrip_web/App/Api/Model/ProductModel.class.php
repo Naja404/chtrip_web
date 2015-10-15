@@ -8,6 +8,23 @@ use Think\Model;
 class ProductModel extends Model{
 
 	/**
+	 * 获取城市列表
+	 */
+	public function getCityList(){
+		$queryRes = $this->table(tname('saler'))->where("area != ''")->group('area')->select();
+
+		$cityList = array();
+
+		foreach ($queryRes as $k => $v) {
+			if (!in_array($v['area'], $cityList)) {
+				$cityList[] = $v['area'];
+			}
+		}
+
+		return $cityList;
+	}
+
+	/**
 	 * 获取产品总量
 	 *
 	 */
@@ -17,12 +34,16 @@ class ProductModel extends Model{
 		$subQueryTag = "";
 
 		if ($tag) {
-			$subQueryTag = " AND (SELECT COUNT(*) FROM ".tname('products')." WHERE (".$tag.") > 0)";
+			$subQueryTag = " AND (SELECT COUNT(*) FROM ".tname('products_copy')." WHERE (".$tag.") > 0)";
 		}
 
-		$where = $where = "a.status = 1 ".$subQueryTag;
+		$where = "a.status = 1 ".$subQueryTag.$queryData['where'];
+		
+		$join = array(
+				tname('product_detail_copy').' AS b ON b.pid = a.pid',
+			);
 
-		return $this->table(tname('products')." AS a")->where($where)->count();
+		return $this->table(tname('products_copy')." AS a")->join($join)->where($where)->count();
 	}
 
 	/**
@@ -39,7 +60,7 @@ class ProductModel extends Model{
 		}
 		
 
-		$where = "a.status = 1 ".$subQueryTag;
+		$where = "a.status = 1 ".$subQueryTag.$queryData['where'];
 		
 		$join = array(
 				tname('product_detail_copy').' AS b ON b.pid = a.pid',
@@ -55,20 +76,9 @@ class ProductModel extends Model{
 
 		$field = "a.pid, 
 					b.title_zh, 
-					b.title_jp, 
+					b.summary_zh,
 					b.price_zh, 
-					b.price_jp,
-					b.buy_url, 
-					b.description_zh,
-					b.description_jp,
-				  (".$queryImage.") AS path,
 				  CONCAT('".C('API_WEBSITE')."', REPLACE(c.path, '.', '_100_100.')) AS thumb,
-				  d.name AS shipping_name, 
-				  (".$queryTag.") AS tag_name, 
-				  f.name AS sale_name, 
-				  f.sale_url, 
-				  a.created, 
-				  a.sort, 
 				  a.recommend ";
 
 		$order = ' a.sort DESC, a.recommend DESC, a.created DESC ';
@@ -77,7 +87,7 @@ class ProductModel extends Model{
 							->field($field)
 							->where($where)
 							->join($join)
-							->page($queryData['page'])
+							->limit($queryData['page'])
 							->order($order)
 							->select();
 
@@ -176,7 +186,15 @@ class ProductModel extends Model{
 	 * @param array $queryData 查询条件数组
 	 */
 	public function getShopList($queryData = array()){
-		return $this->table(tname('saler'))->where(array('status' => 1))->order('created DESC')->page($queryData['page'])->select();
+		return $this->table(tname('saler'))->field('saler_id, name, pic_url, avg_price, avg_rating, category, area')->where($queryData['where'])->order('created DESC')->limit($queryData['page'])->select();
+	}
+
+	/**
+	 * 获取商家详情
+	 * @param int $sid 商家id
+	 */
+	public function getShopDetail($sid = 0){
+		return $this->table(tname('saler'))->where(array('saler_id' => (int)$sid))->find();
 	}
 
 	/**
@@ -203,5 +221,44 @@ class ProductModel extends Model{
 
 		return $tagRes;
 	}
+
+	/**
+	 * 获取专辑详细内容
+	 * @param int $aid 专辑id
+	 */
+	public function getAlbumDetail($aid = 0){
+		$sql = "SELECT a.*, b.name AS type_name, c.path  FROM ch_album AS a
+						LEFT JOIN ch_album_type AS b ON b.id = a.type
+						LEFT JOIN ch_product_image AS c ON c.gid = a.gid
+						WHERE a.id = %s LIMIT 1";
+		$queryRes = $this->query(sprintf($sql, $aid));
+
+		$queryRes[0]['content'] = htmlspecialchars_decode($queryRes[0]['content']);
+		
+		return $queryRes[0];
+	}
+
+	/**
+	 * 获取专辑总数
+	 * @param array $queryData 查询条件
+	 */
+	public function getAlbumCount($queryData = array()){
+		return $this->table(tname('album'))->where($queryData['where'])->count();
+	}
+
+	/**
+	 * 获取专辑列表
+	 * @param array $queryData 查询条件
+	 */
+	 public function getAlbumList($queryData = array()) {
+
+	 	$sql = "SELECT a.id AS aid, a.title, a.address_title, b.name AS type_name, c.path  FROM ch_album AS a
+						LEFT JOIN ch_album_type AS b ON b.id = a.type
+						LEFT JOIN ch_product_image AS c ON c.gid = a.gid WHERE a.status = 1 ORDER BY a.id DESC LIMIT %s";
+	 	
+	 	$queryRes = $this->query(sprintf($sql, $queryData['page']));
+
+	 	return $queryRes;
+	 }
 
 }

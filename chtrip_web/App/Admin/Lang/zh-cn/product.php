@@ -4,11 +4,9 @@
 		*/
 		return array(
 		//title
-		'TITLE_SUFFIX'                   => '|彩虹Go - 产品',
 		'TITLE_PRODUCT'                   => '产品',
 		'TITLE_PRODUCT_LIST'              => '产品列表',
-		'TITLE_PROLIST'                   => '产品列表',
-		'TITLE_ADDPRODUCT'                => '添加产品',
+		'TITLE_ADDPRODUCT'                => '添加产品|彩虹Go - 产品',
 		'TITLE_ADD_PRODUCT'               => '添加产品',
 		
 		//text

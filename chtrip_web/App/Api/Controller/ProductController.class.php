@@ -23,7 +23,113 @@ class ProductController extends ApiBasicController {
 
         $this->productModel = D('Product');
 
+        $this->adModel = D('Ad');
+
         $this->reqURI = md5($_SERVER['REQUEST_URI']);
+    }
+
+    /**
+     * 城市列表
+     */
+    public function cityList(){
+        $cityList = $this->productModel->getCityList();
+
+        $outPut = array(
+                'cityList' => $cityList,
+                'hasNew'   => '0',
+            );
+
+        json_msg($outPut);
+    }
+
+    /**
+     * 搜索canting
+     * @param string name
+     */
+    public function searchResturant(){
+        
+        $reqData = array(
+                'name' => I('request.name', 'tok'),
+                'lang' => I('request.lang'),
+            );
+
+        $json =  file_get_contents("http://api.gnavi.co.jp/ForeignRestSearchAPI/20150630/?keyid=5aeef30c300c1575ebf4226f6ff336f6&format=json&lang=".$reqData['lang']."&name=".$reqData['name']);
+        // $json =  file_get_contents("http://api.gnavi.co.jp/ForeignRestSearchAPI/20150630/?keyid=5aeef30c300c1575ebf4226f6ff336f6&format=json&&name=".$reqData['name']);
+
+        echo '<pre>';
+        print_r(json_decode($json, true));exit();
+    }
+
+    /**
+     * 专辑列表
+     * @param int $pageSize 每页数据内容
+     * @param int $pageNum 页数
+     */
+    public function albumList(){
+
+        $pageSize = I('request.pageSize', C('PAGE_LIMIT'));
+        $pageNum  = I('request.pageNum', 1);
+
+        $queryData = array(
+                'page'  => make_page($pageNum, $pageSize),
+                'where' => array('status' => 1),
+            );
+
+        $count = $this->productModel->getAlbumCount($queryData);
+
+
+        $queryRes = $this->productModel->getAlbumList($queryData);
+
+        $queryArr = array();
+
+        $i = 0;
+
+        foreach ($queryRes as $k => $v) {
+            $i++;
+            $v['path'] = C('API_WEBSITE').$v['path'];
+            $v['colorNum'] = (string)($i);
+            $queryArr[] = $v;
+
+            if ($i == 4) $i = 0;
+
+        }
+
+        $adSql = "select 
+                    a.type,
+                    a.title,
+                    concat('http://api.atniwo.com', b.path) as path,
+                    a.url,
+                    a.url_id as pid,
+                    c.price_zh 
+                     from ch_ad as a
+                    left join ch_product_image as b on b.gid = a.image_id 
+                    left join ch_product_detail_copy as c on c.pid = a.url_id
+                    ";
+                    
+        $adList = $this->adModel->query($adSql);
+
+        $outPut = array(
+                'adList'      => $adList,
+                'albumList'   => $queryArr,
+                'hasMore'     => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
+                'nextPageNum' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? (string)++$pageNum : '1',
+            );
+
+        json_msg($outPut);
+
+
+    }
+    /**
+     * 专辑显示
+     * @param int aid 专辑id
+     */
+    public function showAlbum(){
+
+        $aid = I('request.aid', 0);
+
+        $this->assign('detail', $this->productModel->getAlbumDetail($aid));
+
+        $this->display('Product/albumDetail');
     }
 
     /**
@@ -39,6 +145,7 @@ class ProductController extends ApiBasicController {
         $pageNum  = I('request.pageNum', 1);
 
         $queryData = array(
+                'where' => $this->_getProListWhere(),
                 'page' => make_page($pageNum, $pageSize),
                 'tag' => $tag,
                 'order' => '',
@@ -57,10 +164,7 @@ class ProductController extends ApiBasicController {
 
         $queryArr = array();
         foreach ($queryRes as $k => $v) {
-            $v['tag_name'] = explode(',', $v['tag_name']);
-            $v['path']     = explode(',', $v['path']);
-            $v['description_zh'] = htmlspecialchars_decode($v['description_zh']);
-            $v['description_jp'] = htmlspecialchars_decode($v['description_jp']);
+            $v['price_zh'] = $v['price_zh'].' RMB';
 
             $queryArr[] = $v;
         }
@@ -68,11 +172,33 @@ class ProductController extends ApiBasicController {
         $outPut = array(
                 'proList' => $queryArr,
                 'hasMore' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
+                'nextPageNum' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? (string)++$pageNum : '1',
             );
 
         // cache(C('CACHE_LIST.PRODUCT_LIST').$reqURI, $outPut, 3600);
 
         json_msg($outPut);
+    }
+
+    /**
+     * 显示产品详细页介绍
+     * @param int $pid 产品id
+     */
+    public function showProDetail(){
+
+        $pid = I('request.pid', false);
+
+        $queryRes = $this->productModel->getProductDetail($pid);
+
+        if (is_array($queryRes) && count($queryRes)) {
+            $queryRes['description_zh'] = htmlspecialchars_decode($queryRes['description_zh']);
+            $queryRes['description_jp'] = htmlspecialchars_decode($queryRes['description_jp']);
+            $queryRes['tag_name']    = explode(',', $queryRes['tag_name']);
+        }
+
+        $this->assign('detail', $queryRes);
+        $this->display('Product/detail');
+
     }
 
     /**
@@ -150,11 +276,16 @@ class ProductController extends ApiBasicController {
     public function shopList(){
         $pageSize = I('request.pageSize', C('PAGE_LIMIT'));
         $pageNum  = I('request.pageNum', 1);
+        $shopType = I('request.shopType', 1);
+        $cityName = I('request.cityName', 'all');
 
         $queryData = array(
                 'page'  => make_page($pageNum, $pageSize),
+                'where' => array('type' => (int)$shopType, 'status' => 1),
                 'order' => '',
             );
+
+        if ($cityName != 'all') $queryData['where']['area'] = array('LIKE', "%".$cityName."%");
 
         $count = $this->productModel->getShopCount($queryData);
         $queryRes = $this->productModel->getShopList($queryData);
@@ -162,16 +293,73 @@ class ProductController extends ApiBasicController {
         $queryArr = array();
 
         foreach ($queryRes as $k => $v) {
-            $v['description'] = htmlspecialchars_decode($v['description']);
+            $v['avg_rating'] = (string)10*$v['avg_rating'];
             $queryArr[] = $v;
         }
 
         $outPut = array(
-                'shopList' => $queryArr,
-                'hasMore' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
+                'shopList'    => $queryArr,
+                'hasMore'     => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
+                'nextPageNum' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? (string)++$pageNum : '1',
             );
 
         json_msg($outPut);
 
+    }
+
+    /**
+     * 商户详情
+     * @param int $sid 商户id
+     */
+    public function showShopDetail(){
+        $sid = I('request.sid', false);
+
+        $queryRes = $this->productModel->getShopDetail($sid);
+
+        if (is_array($queryRes) && count($queryRes)) {
+            $queryRes['tag_name']    = explode(',', $queryRes['tag_name']);
+            if (empty($queryRes['tag_name'][0])) {
+                $queryRes['tag_name'] = array();
+            }
+        }
+
+        $this->assign('detail', $queryRes);
+        $this->display('Product/shopDetail');
+    }
+
+    /**
+     * 关于我们
+     */
+    public function aboutme(){
+        $this->display('Product/aboutme');
+    }
+
+    /**
+     * 获取品牌列表查询条件
+     */
+    private function _getProListWhere(){
+        $brand    = I('request.brand');
+        $cate     = I('request.cate');
+        $sort     = I('request.sort');
+        $priceRange = array(
+            "200以下"     => "<= 200", 
+            "200-500"    => " BETWEEN 200 AND 500 ", 
+            "1000-2000" => " BETWEEN 1000 AND 2000 ", 
+            "2000-5000"  => " BETWEEN 2000 AND 5000 ", 
+            "5000-10000" => " BETWEEN 5000 AND 10000 ",
+            "1万以上"     => " >= 10000",
+            );
+
+        if (!empty($cate) && !in_array($cate, array('类别'))) $where[] = " AND b.category ＝ '".$cate."'";
+
+        if (!empty($brand) && !in_array($brand, array('品牌'))) $where[] = " AND b.brand LIKE '%".$brand."%'";
+
+        if (!empty($sort) && in_array($sort, array_keys($priceRange)) ) $where[] = " AND b.price_zh ".$priceRange[$sort];
+
+        if (count($where) <= 0) return NULL;
+
+        $whereStr = implode('', $where);
+
+        return $whereStr;
     }
 }
