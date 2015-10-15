@@ -37,7 +37,7 @@ class ProductModel extends Model{
 					b.category,
 					b.price_zh,
 					b.price_jp,
-					REPLACE(c.path, '.', '_100_100.') AS path,
+					c.path,
 					a.created";
 
 		$order = ' a.created DESC ';

@@ -5,6 +5,7 @@
 
 namespace Api\Controller;
 use Think\Controller;
+use Think\Upload;
 
 class ExcelController extends Controller {
     
@@ -15,10 +16,116 @@ class ExcelController extends Controller {
 
     public $fetch;
 
+    public $upload;
+
     public function _initialize(){  
         $this->salerModel = D('Saler');
     }
 
+    /**
+     * 初始化上传模块  
+     */
+    public function _initUpload(){
+
+        $config = array(
+            'maxSize'    =>    1024*1024*10,
+            'rootPath'   =>    'Public/uploads/',
+            'savePath'   =>    '',
+            'saveName'   =>    array('uniqid',''),
+            'exts'       =>    array('xls', 'xlsx'),
+            'autoSub'    =>    true,
+            'subName'    =>    array('date','Ymd'),
+        );
+        
+        $this->upload = new \Think\Upload($config);// 实例化上传类
+
+        // 上传文件 
+        $info   =   array_values($this->upload->upload());
+
+        if(!$info) {// 上传错误提示错误信息
+            $this->error($this->upload->getError());
+        }
+
+        $info = $info[0];
+
+        $info['realpath'] = './'.$config['rootPath'].$info['savepath'].$info['savename'];
+
+        return $info;
+    }
+
+    /**
+     * 上传excel 文件
+     */
+    public function upload(){
+
+        if (IS_POST) {
+            $fileInfo = $this->_initUpload();
+
+            $excelConf = array(
+                    'sheet'    => 1,
+                    'filePath' => $fileInfo['realpath'],
+                );
+            $excelInfo = $this->getExcelInfo($excelConf);
+
+            echo '<pre>';
+            print_r($excelInfo);exit();
+
+        }
+
+        $this->display('Excel/upload');
+    }
+
+    /**
+     * 读取excel内容
+     * @param array $Conf excel配置信息
+     */
+    public function getExcelInfo($Conf = array()){
+        import('Extend.PHPExcel');
+
+        $filePath = $Conf['filePath'];
+
+        $PHPExcel = new\PHPExcel_Reader_Excel2007();
+
+        if(!$PHPExcel->canRead($filePath)){  
+            $PHPExcel = new\PHPExcel_Reader_Excel5();  
+            if(!$PHPExcel->canRead($filePath)){  
+                echo 'no Excel';  
+                return ;  
+            }  
+        } 
+
+        $phpreader = $PHPExcel->load($filePath);
+
+        $currentSheet = $phpreader->getSheet($Conf['sheet']);  
+
+        /**取得最大的列号*/  
+        $allColumn_s = $currentSheet->getHighestColumn();  
+
+        /**取得一共有多少行*/  
+        $allRow = $currentSheet->getHighestRow(); 
+
+
+        for($rowIndex=1;$rowIndex <= $allRow;$rowIndex++){  
+
+            $colIndex = ord('A');
+            $allColumn = ord($allColumn_s);
+
+            for($colIndex; $colIndex<=$allColumn;$colIndex++){  
+                $addr = chr($colIndex).$rowIndex;  
+
+                $cell = $currentSheet->getCell($addr)->getValue();  
+                if($cell instanceof PHPExcel_RichText)
+                    $cell = $cell->__toString();  
+                      
+                $rowInfo[$rowIndex][$addr] = $cell;
+              
+            }
+
+            // cacheList('new_shop', $rowInfo[$rowIndex]);
+        }    
+
+        return $rowInfo;
+    }
 
     /**
      * 读取excel内容
