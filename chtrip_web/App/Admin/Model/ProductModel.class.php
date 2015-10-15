@@ -27,26 +27,18 @@ class ProductModel extends Model{
 		
 		$join = array(
 				tname('product_detail_copy').' AS b ON b.pid = a.pid',
-				tname('product_image').' AS c ON c.gid = a.image_id',
-				tname('product_shipping').' AS d ON d.id = b.shipping_type',
-				// tname('product_tag').' AS e ON e.tid IN (a.tag)',
-				tname('saler').' AS f ON f.saler_id = a.saler_id',
+				tname('product_image').' AS c ON c.gid = a.image_id ',
 			);
 
-		$queryTag = "SELECT GROUP_CONCAT(name) FROM ".tname('product_tag')." WHERE FIND_IN_SET(tid, a.tag) ";
-
-		$field = 'a.pid, 
-					b.title_zh, 
-					b.title_jp, 
-					b.price_zh, 
+		$field = "b.pid,
+					b.title_zh,
+					b.summary_zh,
+					b.brand,
+					b.category,
+					b.price_zh,
 					b.price_jp,
-					b.buy_url, 
-					c.path, 
-					d.name AS shipping_name, 
-					('.$queryTag.') AS tag_name, 
-					f.name AS sale_name, 
-					f.sale_url, 
-					a.created';
+					REPLACE(c.path, '.', '_100_100.') AS path,
+					a.created";
 
 		$order = ' a.created DESC ';
 
@@ -97,6 +89,24 @@ class ProductModel extends Model{
 
 		return $pid;
 
+	}
+
+	/**
+	 * 删除产品	
+	 * @param intval $pid 产品id
+	 */
+	public function delPro($pid = 0){
+
+		$where = array(
+				'pid' => (int)$pid,
+			);
+		$save = array(
+				'status' => 0,
+			);
+
+		$queryRes = $this->table(tname('products_copy'))->where($where)->save($save);
+
+		return $queryRes ? true : false;
 	}
 
 	/**

@@ -17,11 +17,18 @@ class ProductController extends AdminBasicController {
 
     public $uploadModel;
 
+    public $ajaxRes;
+
     public function _initialize(){
         parent::_initialize();
         
         $this->uploadModel   = D('Upload');
         $this->productModel = D('Product');
+
+        $this->ajaxRes = array(
+                'status' => 1,
+                'msg'    => L('error_operation'),
+            );
     }
 
     /**
@@ -69,6 +76,24 @@ class ProductController extends AdminBasicController {
         $this->assign('list', $this->productModel->getProductList($data));
 
         $this->display();
+    }
+
+    /**
+     * 删除产品
+     * @param int $pid 产品id
+     */
+    public function delPro(){
+        
+        if (!IS_AJAX) $this->ajaxReturn($this->ajaxRes);
+
+        $pid = I('request.pid');
+
+        $status = $this->productModel->delPro($pid);
+
+        if ($status === true) $this->ajaxRes = array('status' => '0');
+
+        $this->ajaxReturn($this->ajaxRes);
+
     }
 
     /**

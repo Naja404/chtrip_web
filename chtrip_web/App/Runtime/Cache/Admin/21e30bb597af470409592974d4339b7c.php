@@ -88,9 +88,6 @@
 	                  <th><?php echo L('TEXT_TITLE');?></th>
 	                  <th><?php echo L('TEXT_IMAGE');?></th>
 	                  <th><?php echo L('TEXT_PRICE');?></th>
-	                  <th><?php echo L('TEXT_TAG');?></th>
-	                  <th><?php echo L('TEXT_SALER');?></th>
-	                  <th><?php echo L('TEXT_COMMENT_INFO');?></th>
 	                  <th><?php echo L('TEXT_CREATED');?></th>
 	                  <th><?php echo L('TEXT_ACTION');?></th>
 	                </tr>
@@ -99,12 +96,18 @@
 	              	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><tr class="odd gradeX">
 	                  <td><?php echo ($item["title_zh"]); ?><br/><?php echo ($item["title_jp"]); ?></td>
 	                  <td><img src="<?php echo show_image($item['path'], '100_100');?>" /></td>
-	                  <td>￥<?php echo ($item["price_zh"]); ?>/<?php echo ($item["price_jp"]); ?>/<?php echo ($item["shipping_name"]); ?></td>
-	                  <td><?php echo ($item["tag_name"]); ?></td>
-	                  <td><?php echo ($item["sale_name"]); ?></td>
-	                  <td><?php echo ($item["comments"]); ?>/<?php echo ($item["sales"]); ?>/<?php echo ($item["views"]); ?></td>
+	                  <td>
+	                  	人名币：<?php echo ($item["price_zh"]); ?>
+	                  	<br>
+	                  	<?php if($item['price_jp']){?>
+	                  	日元：{$item.price_jp}
+	                  	<?php }?>
+	                  </td>
 	                  <td><?php echo (date("Y-m-d H:i:s",$item["created"])); ?></td>
-	                  <td><button class="btn btn-inverse btn-mini" onclick="window.location.href('<?php echo U('Product/proDel', array('pid' => $item.pid));?>');"><?php echo L('TEXT_DELETE');?></button></td>
+	                  <td>
+	                  	<button>编辑</button>
+	                  	<button onclick="delPro('<?php echo ($item["pid"]); ?>');">删除</button>
+	                  </td>
 	                </tr><?php endforeach; endif; else: echo "" ;endif; ?>
 	              </tbody>
 	            </table>
@@ -117,7 +120,25 @@
 	    </div>
 	  </div>
 	</div>
+<script type="text/javascript">
+	function delPro(pid){
+		if (!confirm('是否确认删除该条数据?')) return false;
 
+		$.ajax({
+			type:"POST",
+			url:"<?php echo U('Product/delPro');?>",
+			data:{pid:pid},
+			success:function(data){
+				if (data.status == '0') {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+				
+			}
+		});
+	}
+</script>
 <script src="<?php echo C('ADMIN_WEBSITE');?>/Public/admin/js/jquery.ui.custom.js"></script> 
 <script src="<?php echo C('ADMIN_WEBSITE');?>/Public/admin/js/bootstrap.min.js"></script> 
 <script src="<?php echo C('ADMIN_WEBSITE');?>/Public/admin/js/bootstrap-colorpicker.js"></script> 

@@ -17,21 +17,21 @@ function tname($tablename) {
 /**
  * json 输出
  * @param mixed $msg 消息内容
- * @param bool $status 
+ * @param bool $status
  */
 function json_msg($msg = '',$status = 0){
-	
+
 	// 返回JSON数据格式到客户端 包含状态信息
 	header('Content-Type:application/json; charset=utf-8');
 	// header('userId', $this->userId);
 	// header('UUID', $this->uuid);
-	
+
 	$data = array('status' => (string)$status);
-	
+
 	if($msg) {
 		is_array($msg) ? $data = array_merge($data, array('data' => $msg)) : $data['error'] = (string)$msg;
 	}
-	
+
 	exit(json_encode($data));
 }
 
@@ -43,7 +43,7 @@ function json_msg($msg = '',$status = 0){
  * @return mixed
  */
 function cache($name, $value = '', $options = array()){
-	
+
 	static $cache   =   '';
 
 	if(empty($cache)){
@@ -51,7 +51,7 @@ function cache($name, $value = '', $options = array()){
 		$type       =   isset($options['type']) ? $options['type']:'Redis';
 		$cache 	    =   Think\Cache::getInstance($type);
 	}
-	
+
 	//获取缓存
 	if($value === ''){
 		return $cache->get($name);
@@ -76,7 +76,7 @@ function cache($name, $value = '', $options = array()){
  * @return bool
  */
 function rm_all_cache($keys = false, $options = array()){
-	
+
 	static $all_cache   =   '';
 
 	if(empty($all_cache)){
@@ -108,6 +108,8 @@ function show_image($path = false, $size = false){
 		return $path;
 	}
 
+	if (!$size) return C('API_WEBSITE').$path;
+
 	$extension = substr(strrchr($path, '.'), 1);
 
 	$new_path = str_replace('.'.$extension, '_'.$size.'.'.$extension, $path);
@@ -126,7 +128,7 @@ function show_image($path = false, $size = false){
  * @param string or array $param	GET参数名
  */
 function url_fetch_get_param($url, $param) {
-	
+
 	$params = is_array($param) ? $param : array($param);
 	$result = array();
 	$arr = explode('?', $url);
@@ -141,7 +143,7 @@ function url_fetch_get_param($url, $param) {
 			}
 		}
 	}
-	
+
 	return !empty($result) ? (is_array($param) ? $result : $result[$param]) : '';
 }
 
@@ -165,10 +167,10 @@ function make_page($pageNum = 0, $pageSize = 0, $returnNum = false){
 
 /**
  * 获取header所有信息
- * @param string $void 
+ * @param string $void
  */
 function get_header_info($void = false){
-	
+
 	$headers = array();
 
 	foreach($_SERVER as $key => $value) {
@@ -232,7 +234,7 @@ function send_mail($to,$subject, $body, $attachment = null,$cc = null){
 	}else{
 		$mail->AddAddress($to);
 	}
-	
+
 	//添加抄送
 	if($cc){
 		if(is_array($cc)){
@@ -258,4 +260,22 @@ function send_mail($to,$subject, $body, $attachment = null,$cc = null){
 	}
 }
 
-?> 
+/**
+ * limit 计算
+ * @param int $page 当前页
+ * @param int $count 页面条数
+ */
+function page($page = 1, $count = 25){
+	$page = $page <= 0 ? 1 : $page;
+	return ($page - 1)*$count.','.$count;
+}
+
+/**
+ * 显示专辑类型
+ * @param int $type 专辑类型
+ */
+function show_album_type($type = 0){
+	
+
+}
+?>

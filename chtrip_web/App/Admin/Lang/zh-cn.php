@@ -29,6 +29,7 @@ return array(
 		//error
 		'error_auth'                 => '权限错误,请重新登录',
 		'error_login'                =>  '登录失败,用户名或密码不正确',
+		'error_operation'            => '操作失败,请刷新后重试',
 		
 		//shop 
 		'TEXT_SALER'                 => '商家',

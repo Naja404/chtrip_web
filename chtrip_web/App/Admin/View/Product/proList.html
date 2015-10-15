@@ -18,9 +18,6 @@
 	                  <th>{:L('TEXT_TITLE')}</th>
 	                  <th>{:L('TEXT_IMAGE')}</th>
 	                  <th>{:L('TEXT_PRICE')}</th>
-	                  <th>{:L('TEXT_TAG')}</th>
-	                  <th>{:L('TEXT_SALER')}</th>
-	                  <th>{:L('TEXT_COMMENT_INFO')}</th>
 	                  <th>{:L('TEXT_CREATED')}</th>
 	                  <th>{:L('TEXT_ACTION')}</th>
 	                </tr>
@@ -30,12 +27,18 @@
 	                <tr class="odd gradeX">
 	                  <td>{$item.title_zh}<br/>{$item.title_jp}</td>
 	                  <td><img src="{:show_image($item['path'], '100_100')}" /></td>
-	                  <td>￥{$item.price_zh}/{$item.price_jp}/{$item.shipping_name}</td>
-	                  <td>{$item.tag_name}</td>
-	                  <td>{$item.sale_name}</td>
-	                  <td>{$item.comments}/{$item.sales}/{$item.views}</td>
+	                  <td>
+	                  	人名币：{$item.price_zh}
+	                  	<br>
+	                  	<?php if($item['price_jp']){?>
+	                  	日元：{$item.price_jp}
+	                  	<?php }?>
+	                  </td>
 	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
-	                  <td>action</td>
+	                  <td>
+	                  	<button>编辑</button>
+	                  	<button onclick="delPro('{$item.pid}');">删除</button>
+	                  </td>
 	                </tr>
 	            	</volist>
 	              </tbody>
@@ -49,5 +52,23 @@
 	    </div>
 	  </div>
 	</div>
+<script type="text/javascript">
+	function delPro(pid){
+		if (!confirm('是否确认删除该条数据?')) return false;
 
+		$.ajax({
+			type:"POST",
+			url:"{:U('Product/delPro')}",
+			data:{pid:pid},
+			success:function(data){
+				if (data.status == '0') {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+				
+			}
+		});
+	}
+</script>
 <include file="Public:footer" />
