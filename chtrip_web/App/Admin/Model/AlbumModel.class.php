@@ -110,8 +110,8 @@ class AlbumModel extends Model{
 				LEFT JOIN ch_product_image AS b ON b.gid = a.gid 
 				LEFT JOIN ch_album_type AS c ON c.id = a.type 
 				WHERE a.status = 1 
-				LIMIT ".page($date['page'], 15);
-		
+				LIMIT ".page($data['page'], 15);
+
 		$queryRes = $this->query($sql);
 
 		return $queryRes;

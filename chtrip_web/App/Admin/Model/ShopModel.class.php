@@ -19,7 +19,7 @@ class ShopModel extends Model{
 	 * @param array $data 查询数组
 	 */
 	public function getShopList($data = array()){
-		return $this->table(tname('saler'))->where(array('status' => 1))->page($data['page'])->select();
+		return $this->table(tname('saler'))->where(array('status' => 1))->page($data['page'])->order('created DESC')->select();
 	}
 
 	/**

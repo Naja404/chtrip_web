@@ -1,0 +1,57 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a >数据</a> <a class="current">数据列表</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>{$title}</h5>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                	<volist name="listTitle" id="item">
+	                	<th>{$item}</th>
+	                	</volist>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td>{$item.shop_name}</td>
+	                  <td>{$item.title_zh}</td>
+	                  <td>{$item.title_jp}</td>
+	                  <td>{$item.description_zh}</td>
+	                  <td>{$item.description_jp}</td>
+	                  <td>{$item.summary_zh}</td>
+	                  <td>{$item.summary_jp}</td>
+	                  <td>{$item.brand}</td>
+	                  <td>{$item.category}</td>
+	                  <td>{$item.price_zh}</td>
+	                  <td>{$item.price_jp}</td>
+	                  <td>{$item.image_url}</td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+	      <form action="{:U('Excel/insertProData')}" method="post">
+	      	<input type="hidden" name="dataPath" value="{$dataPath}">
+            <div class="form-actions">
+              <button type="submit" class="btn btn-success">保存</button>
+            </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+<script type="text/javascript">
+
+</script>
+<include file="Public:footer" />

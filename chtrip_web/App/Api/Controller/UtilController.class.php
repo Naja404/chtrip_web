@@ -18,6 +18,47 @@ class UtilController extends ApiBasicController {
     }
 
     /**
+     * 下载图片并裁剪
+     */
+    public function downloadImg(){
+        // $imgList = $this->utilModel->query("select * from ch_product_image where path like '%http%' and gid >= 1389");
+
+        foreach ($imgList as $k => $v) {
+            $tmpPath = 'Public/uploads/20151019/'.$v['gid'].'.jpg';
+            downloadImage($v['path'], $tmpPath);
+
+            $tmpImg = getimagesize($tmpPath);
+
+            if ($tmpImg['0'] > 0 && $tmpImg['1'] > 0)  {
+                $this->utilModel->query("UPDATE ch_product_image SET path = '".$tmpPath."' WHERE gid = '".$v['gid']."' ");
+            }
+            echo $v['gid']."\r\n";
+        }
+    }
+
+    /**
+     * 处理图片
+     */
+    public function resizeImg(){
+        
+        $imgList = $this->utilModel->query("select * from ch_product_image where path like '%Public%' and gid >= 1389");
+
+        foreach ($imgList as $k => $v) {
+
+            $v['path'] = str_replace('/Public/uploads/images/', 'Public/uploads/', $v['path']);
+            if (!file_exists($v['path'])) continue;
+
+            $img = resizeImg($v['path'], 180, 132, false);
+
+            $newPath = str_replace('.jpg', '_100_100.jpg', $v['path']);
+
+            imagejpeg($img, $newPath);
+        }
+
+
+    }
+
+    /**
      * 设置token内容
      *
      */

@@ -17,9 +17,11 @@
 	                <tr>
 	                  <th>{:L('TEXT_SALER')}</th>
 	                  <th>{:L('TEXT_IMAGE')}</th>
+	                  <th>电话</th>
+	                  <th>营业时间</th>
 	                  <th>{:L('TEXT_ADDRESS')}</th>
-	                  <th>{:L('TEXT_STATUS')}</th>
 	                  <th>{:L('TEXT_CREATED')}</th>
+	                  <th>{:L('TEXT_STATUS')}</th>
 	                  <th>{:L('TEXT_ACTION')}</th>
 	                </tr>
 	              </thead>
@@ -27,10 +29,12 @@
 	              	<volist name="list" id="item">
 	                <tr class="odd gradeX">
 	                  <td><a href="{$item.sale_url}">{$item.name}</a></td>
-	                  <td><img src="{:show_image($item['img_url'], '100_100')}" /></td>
+	                  <td><img src="{$item.pic_url}" width="100px" /></td>
+	                  <td>{$item.tel}</td>
+	                  <td>{$item.open_time}</td>
 	                  <td>{$item.address}</td>
-	                  <td>{$item.status}</td>
 	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
+	                  <td>正常</td>
 	                  <td><button class="btn btn-inverse btn-mini" onclick="window.location.href('{:U('Product/proDel', array('pid' => $item.pid))}');">{:L('TEXT_DELETE')}</button></td>
 	                </tr>
 	            	</volist>

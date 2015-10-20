@@ -95,7 +95,7 @@
 	              <tbody>
 	              	<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$item): $mod = ($i % 2 );++$i;?><tr class="odd gradeX">
 	                  <td><?php echo ($item["title_zh"]); ?><br/><?php echo ($item["title_jp"]); ?></td>
-	                  <td><img src="<?php echo show_image($item['path'], '100_100');?>" /></td>
+	                  <td><img src="<?php echo show_image($item['path'], '100_100');?>" width="100px"/></td>
 	                  <td>
 	                  	人名币：<?php echo ($item["price_zh"]); ?>
 	                  	<br>

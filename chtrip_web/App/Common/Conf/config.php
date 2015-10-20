@@ -95,4 +95,49 @@ return  array(
 			'REPLY_NAME'  => '', //回复名称（留空则为发件人名称）
 	),
 
+	'FILE_TMP_PATH' => 'Public/tmp/',
+
+	/*excel 数据导入配置*/
+	'EXCEL_INSERT_CONF' => array(
+            'maxSize'    =>    1024*1024*10,
+            'rootPath'   =>    'Public/uploads/',
+            'savePath'   =>    '',
+            'saveName'   =>    array('uniqid',''),
+            'exts'       =>    array('xls', 'xlsx'),
+            'autoSub'    =>    true,
+            'subName'    =>    array('date','Ymd'),
+        ),
+
+	/*excel 产品数据键值对*/
+	'EXCEL_INSERT_PRODUCT_ARR' => array(
+			'shop_name',
+			'title_zh',
+			'title_jp',
+			'description_zh',
+			'description_jp',
+			'summary_zh',
+			'summary_jp',
+			'brand',
+			'category',
+			'price_zh',
+			'price_jp',
+			'image_url',
+		),
+
+	/*excel 商家数据键值对*/
+	'EXCEL_INSERT_SHOP_ARR' => array(
+			'name',
+			'description',
+			'pic_url',
+			'address',
+			'open_time',
+			'tel',
+			'avg_price',
+			'avg_rating',
+			'tag_name',
+			'category',
+			'area',
+			'type',
+		),
+
 );

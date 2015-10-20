@@ -98,4 +98,24 @@ class Log {
             $destination = C('LOG_PATH').date('y_m_d').'.log';        
         self::$storage->write("{$level}: {$message}", $destination);
     }
+
+    /**
+     * 普通文件写入内容
+     * @static
+     * @access public
+     * @param string $message 日志信息
+     * @param integer $type 日志记录方式
+     * @param string $destination  写入目标
+     * @return void
+     */
+    static function writeFile($message,$type='',$destination='') {
+        if(!self::$storage){
+            $type = $type?$type:C('LOG_TYPE');
+            $class  =   'Think\\Log\\Driver\\'. ucwords($type);
+            self::$storage = new $class();            
+        }
+        if(empty($destination))
+            $destination = C('LOG_PATH').date('y_m_d').'.log';        
+        self::$storage->writeFile("{$message}", $destination);
+    }
 }

@@ -65,6 +65,7 @@ class ExcelController extends Controller {
                     'sheet'    => 1,
                     'filePath' => $fileInfo['realpath'],
                 );
+            
             $excelInfo = $this->getExcelInfo($excelConf);
 
             echo '<pre>';

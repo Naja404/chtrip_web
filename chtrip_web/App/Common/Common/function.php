@@ -271,6 +271,75 @@ function page($page = 1, $count = 25){
 }
 
 /**
+ * 写入缓存文件	
+ * @param string $content 写入文件内容
+ * @param string $path 写入文件路径
+ */
+function writeFile($content = false, $path = false){
+	
+	if (!$path) $path = C('FILE_TMP_PATH').md5(time().microtime());
+	
+	Think\Log::writeFile($content, '', $path);
+
+	return $path;
+}
+
+/**
+ * 下载图片
+ * @param string $url 图片路径
+ * @param string $fileName 图片存储路径
+ */
+function downloadImage($url, $fileName){
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_POST, 0); 
+    curl_setopt($ch,CURLOPT_URL,$url); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+    $file_content = curl_exec($ch);
+    curl_close($ch);
+
+    $downloaded_file = fopen($fileName, 'w');
+    fwrite($downloaded_file, $file_content);
+    fclose($downloaded_file);
+}
+
+/**
+ * 缩放图片尺寸
+ */
+function resizeImg($path = false, $width = 90, $height = 66, $isCut = false){
+	
+	$imageInfo = getimagesize($path);
+
+	$ratio = $imageInfo[1] / $imageInfo[0];
+
+	$newHeight = intval($width / $ratio);
+	$newWidth = intval($height / $ratio);
+
+	$imgObj = imagecreatefromjpeg($path);
+
+    if(function_exists("imagecopyresampled")){
+       $newImgObj = imagecreatetruecolor($newWidth, $height);
+       imagecopyresampled($newImgObj, $imgObj, 0, 0, 0, 0, $newWidth, $height, $imageInfo[0], $imageInfo[1]);
+    }else{
+       $newImgObj = imagecreate($newWidth, $height);
+       imagecopyresized($newImgObj, $imgObj, 0, 0, 0, 0, $newWidth, $height, $imageInfo[0], $imageInfo[1]);
+    }
+
+    if ($newHeight != $height && $isCut) {
+    	$cropImg = imagecreatetruecolor($newWidth, $height);
+    	imagecopy($cropImg, $newImgObj, 0, 0, 0, 0, $newWidth, $height);
+
+    	$newImgObj = $cropImg;
+    }
+
+    return $newImgObj;
+
+}
+
+
+
+
+
+/**
  * 显示专辑类型
  * @param int $type 专辑类型
  */

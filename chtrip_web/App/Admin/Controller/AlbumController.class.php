@@ -20,8 +20,8 @@ class AlbumController extends AdminBasicController {
     public function _initialize(){
         parent::_initialize();
         
-        $this->uploadModel   = D('Upload');
-        $this->albumModel = D('Album');
+        $this->uploadModel  = D('Upload');
+        $this->albumModel   = D('Album');
         $this->productModel = D('Product');
     }
 
