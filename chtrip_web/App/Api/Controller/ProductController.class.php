@@ -87,7 +87,11 @@ class ProductController extends ApiBasicController {
         foreach ($queryRes as $k => $v) {
             $i++;
             $v['path'] = C('API_WEBSITE').$v['path'];
+            // if (!empty($v['title_btn'])) {
+            //     $v['colorNum'] = (string)($i);
+            // }
             $v['colorNum'] = (string)($i);
+            $v['activityTime'] = $this->_setActivityTime($v['activityTime']);
             $queryArr[] = $v;
 
             if ($i == 4) $i = 0;
@@ -278,6 +282,8 @@ class ProductController extends ApiBasicController {
         $pageNum  = I('request.pageNum', 1);
         $shopType = I('request.shopType', 1);
         $cityName = I('request.cityName', 'all');
+        $category = I('request.category', 'all');
+        $sort = I('request.sort', '0');
 
         $queryData = array(
                 'page'  => make_page($pageNum, $pageSize),
@@ -285,7 +291,11 @@ class ProductController extends ApiBasicController {
                 'order' => '',
             );
 
-        if ($cityName != 'all') $queryData['where']['area'] = array('LIKE', "%".$cityName."%");
+        if (!empty($cityName) && $cityName != 'all') $queryData['where']['area'] = array('LIKE', "%".$cityName."%");
+
+        if (!empty($category) && $category != 'all') $queryData['where']['category'] = array('LIKE', "%".$category."%");
+
+        if (!empty($sort) && $sort != '0') $queryData['where']['avg_rating'] = $this->_getAvgRating($sort);
 
         $count = $this->productModel->getShopCount($queryData);
         $queryRes = $this->productModel->getShopList($queryData);
@@ -350,7 +360,7 @@ class ProductController extends ApiBasicController {
             "1万以上"     => " >= 10000",
             );
 
-        if (!empty($cate) && !in_array($cate, array('类别'))) $where[] = " AND b.category ＝ '".$cate."'";
+        if (!empty($cate) && !in_array($cate, array('类别'))) $where[] = " AND b.category = '".$cate."'";
 
         if (!empty($brand) && !in_array($brand, array('品牌'))) $where[] = " AND b.brand LIKE '%".$brand."%'";
 
@@ -361,5 +371,38 @@ class ProductController extends ApiBasicController {
         $whereStr = implode('', $where);
 
         return $whereStr;
+    }
+
+    /**
+     * 获取星级数字
+     * @param string 星级中文
+     */
+    private function _getAvgRating($rating = '五星'){
+        $arr = array(
+                '一星' => 1,
+                '二星' => 2,
+                '三星' => 3,
+                '四星' => 4,
+                '五星' => 5,
+            );
+
+        return $arr[$rating];
+    }
+
+    /**
+     * 计算剩余时间
+     * @param int $activityTime 活动剩余时间差
+     */
+    private function _setActivityTime($activityTime = 0){
+
+        if ($activityTime <= 0) {
+            return '0';
+        }
+
+        if ($activityTime < 3600*24) {
+            return sprintf('剩:%s小时', ceil($activityTime / 3600));
+        }else{
+            return sprintf('剩:%s天', ceil($activityTime / 3600 / 24));
+        }
     }
 }

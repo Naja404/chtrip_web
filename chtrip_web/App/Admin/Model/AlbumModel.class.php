@@ -16,6 +16,7 @@ class AlbumModel extends Model{
 
 		$add = array(
 				'title'         => I('request.title'),
+				'title_btn'     => I('request.title_btn'),
 				'type'          => I('request.type'),
 				'gid'           => $gid,
 				'address_title' => I('request.address_title', ''),
@@ -41,6 +42,7 @@ class AlbumModel extends Model{
 		
 		$edit = array(
 				'title'       => I('request.title'),
+				'title_btn'   => I('request.title_btn'),
 				'type'        => I('request.type'),
 				'address_title' => I('request.address_title', ''),
 				'start_time'  => strtotime(I('request.start_time')),
