@@ -22,7 +22,7 @@
 
 	<!--Header-part-->
 	<div id="header">
-	  <h1>withtrip|伴旅</h1>
+	  <h1>nijiGo|彩虹Go</h1>
 	</div>
 	<!--close-Header-part--> 
 

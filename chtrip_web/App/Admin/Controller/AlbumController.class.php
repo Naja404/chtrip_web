@@ -23,6 +23,128 @@ class AlbumController extends AdminBasicController {
         $this->uploadModel  = D('Upload');
         $this->albumModel   = D('Album');
         $this->productModel = D('Product');
+
+        $this->adType = array('1' => '产品', '2' => '景点', '3' => '专辑' , '4' => '外链');
+
+        $this->ajaxRes = array(
+                'status' => 1,
+                'msg'    => L('error_operation'),
+            );
+    }
+
+    /**
+     * 滚动栏目
+     */
+    public function listAd(){
+        $this->assign('title', '滚动图列表');
+        $this->assign('adType', $this->adType);
+        $this->assign('list', $this->albumModel->getAdList());
+        $this->display('listAd');
+    }
+
+    /**
+     * 编辑滚动栏目       
+     */
+    public function editAd(){
+
+        $aid = I('request.aid');
+
+        if (IS_POST) {
+            $reqData = I('request.');
+            $reqData['aid'] = $aid;
+
+            $imageId = $this->_getIMGId();
+
+            if ($imageId) $reqData['image_id'] = $imageId;
+
+            $status = $this->albumModel->editAd($reqData);
+
+            if (!$status) $this->error('滚动图编辑失败');
+
+            $this->success($statu, U('Album/listAd'));
+        }
+
+        $this->assign('title', '编辑滚动图');
+        $this->assign('adType', $this->adType);
+        $this->assign('detail', $this->albumModel->getAdDetail($aid));
+        $this->display('editAd');
+    }
+
+    /**
+     * 专辑按钮列表
+     */
+    public function listAlbumBTN(){
+        $count = $this->albumModel->getAlbumBTNCount();
+        
+        $page = new \Think\Page($count, C('PAGE_LIMIT'));
+        
+        $p = I('request.p', 1);
+        
+        $data = array(
+                'page' => $p.','.C('PAGE_LIMIT'),
+            );
+
+        $this->assign('title', '专辑按钮列表');
+        $this->assign('list', $this->albumModel->getAlbumBTNList($data));
+        $this->display('listAlbumBTN');
+    }
+
+    /**
+     * 编辑专辑按钮
+     */
+    public function editAlbumBTN(){
+        
+        $id = I('request.id');
+
+        if (IS_POST) {
+            
+            $reqData = I('request.');
+
+            $status = $this->albumModel->editAlbumBTN($reqData);
+
+            if (!$status) $this->error('专辑按钮编辑失败');
+
+            $this->success($statu, U('Album/listAlbumBTN'));
+        }
+
+        $this->assign('title', '编辑专辑按钮');
+        $this->assign('detail', $this->albumModel->getAlbumBTNDetail($id));
+        $this->display('editAlbumBTN');
+    }
+
+    /**
+     * 删除专辑按钮
+     */
+    public function delAlbumBTN(){
+        
+        if (!IS_AJAX) $this->ajaxReturn($this->ajaxRes);
+
+        $id = I('request.id');
+
+        $status = $this->albumModel->delAlbumBTN($id);
+
+        if ($status === true) $this->ajaxRes = array('status' => '0');
+
+        $this->ajaxReturn($this->ajaxRes);
+    }
+
+    /**
+     * 新增专辑按钮
+     */
+    public function addAlbumBTN(){
+        if (IS_POST) {
+            
+            $reqData = I('request.');
+
+            $status = $this->albumModel->addAlbumBTN($reqData);
+
+            if (!$status) $this->error('专辑按钮新增失败');
+
+            $this->success($statu, U('Album/listAlbumBTN'));
+        }
+
+        $this->assign('title', '新增专辑按钮');
+        $this->display('addAlbumBTN');
     }
 
     /**
@@ -63,6 +185,7 @@ class AlbumController extends AdminBasicController {
 
             $this->success($statu, U('Album/listAlbum'));
         }
+        $this->assign('title_btn', $this->albumModel->getAlbumBTNList());
         $this->assign('type', $this->albumModel->getAlbumType());
         $this->display('addAlbum');
     }
@@ -90,6 +213,7 @@ class AlbumController extends AdminBasicController {
         $aid = I('request.aid');
 
         $this->assign('type', $this->albumModel->getAlbumType());
+        $this->assign('title_btn', $this->albumModel->getAlbumBTNList());
         $this->assign('detail', $this->albumModel->getAlbumDetail($aid));
         $this->display('editAlbum');
     }

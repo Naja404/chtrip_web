@@ -24,7 +24,12 @@
 		            <div class="control-group">
 		              <label class="control-label">专辑按钮文字</label>
 		              <div class="controls">
-		                <input type="text" name="title_btn" id="title_btn" placeholder="长度最多3个字符" class="span11">
+		                <select name="title_btn">
+		                	<option value="" selected >无</option>
+		                <volist name="title_btn" id="item" >
+		                  <option value="{$item.name}">{$item.name}</option>
+		                 </volist>
+		                </select>
 		              </div>
 		            </div>
 

@@ -8,6 +8,143 @@ use Think\Model;
 
 class AlbumModel extends Model{
 
+	public function _initialize(){
+	}
+
+	/**
+	 * 获取滚动列表
+	 */
+	public function getAdList(){
+		$sql = "SELECT a.id, a.type,a.title, a.url,a.url_id,b.path,
+					(CASE a.type 
+						WHEN 1 THEN (SELECT title_zh FROM ch_product_detail_copy WHERE pid = a.url_id LIMIT 1)
+						WHEN 2 THEN (SELECT name FROM ch_saler WHERE saler_id = a.url_id LIMIT 1) 
+						WHEN 3 THEN (SELECT title FROM ch_album WHERE id = a.url_id LIMIT 1) 
+						ELSE ''
+					 END) AS title_zh  FROM ch_ad AS a 
+			LEFT JOIN ch_product_image AS b ON b.gid = a.image_id
+			ORDER BY a.sort ASC";
+		return $this->query($sql);
+	}
+
+	/**
+	 * 获取滚动内容详情
+	 * @param int $id 滚动图片id
+	 */
+	public function getAdDetail($id = false){
+		$sql = "SELECT a.id, a.type,a.title, a.url,a.url_id,b.path,
+						(CASE a.type 
+							WHEN 1 THEN (SELECT title_zh FROM ch_product_detail_copy WHERE pid = a.url_id LIMIT 1)
+							WHEN 2 THEN (SELECT name FROM ch_saler WHERE saler_id = a.url_id LIMIT 1) 
+							WHEN 3 THEN (SELECT title FROM ch_album WHERE id = a.url_id LIMIT 1) 
+							ELSE ''
+						 END) AS title_zh FROM ch_ad AS a 
+				LEFT JOIN ch_product_image AS b ON b.gid = a.image_id
+				WHERE a.id = '".$id."' LIMIT 1";
+
+		$queryRes = $this->query($sql);
+
+		return $queryRes[0];
+	}
+
+	/**
+	 * 编辑滚动图片
+	 * @param array $reqData 请求内容
+	 */
+	public function editAd($reqData = array()){
+		$update = array(
+				'type'  => intval($reqData['type']),
+				'title' => $reqData['title'],
+				'sort'  => intval($reqData['sort']),
+			);
+
+		if ($reqData['image_id']) $update['image_id'] = $reqData['image_id'];
+
+		if ($reqData['type'] == 4) {
+			$update['url'] = $reqData['url'];
+		}else{
+			$update['url_id'] = intval($reqData['url_id']);
+		}
+
+		$where = "`id` = '".$reqData['aid']."'";
+
+		foreach ($update as $k => $v) {
+			$updateSql[] = "`".$k."` = '".$v."'";
+		}
+		
+		$updateSql = implode(', ', $updateSql);
+
+		$sql = "UPDATE ".tname('ad')." SET ".$updateSql." WHERE ".$where;
+		
+		return $this->execute($sql);
+
+		// return $this->table(tname('ad'))->where($where)->save($update);
+	}	
+
+	/**
+	 * 获取专辑按钮总数
+	 */
+	public function getAlbumBTNCount(){
+		return $this->table(tname('album_btn'))->count();
+	}
+
+	/**
+	 * 获取专辑按钮列表
+	 */
+	public function getAlbumBTNList(){
+		return $this->table(tname('album_btn'))->select();
+	}
+
+	/**
+	 * 获取专辑按钮详情
+	 * @param int $id 专辑按钮id
+	 */
+	public function getAlbumBTNDetail($id = false){
+		$where = array(
+				'id' => intval($id),
+			);
+		return $this->table(tname('album_btn'))->where($where)->find();
+	}
+
+	/**
+	 * 编辑专辑按钮	
+	 * @param array $reqData 请求内容
+	 */
+	public function editAlbumBTN($reqData = array()){
+
+		if (empty($reqData['name'])) return false;
+
+		$sql = "UPDATE ".tname('album_btn')." SET `name` = '".$reqData['name']."' WHERE id = '".intval($reqData['id'])."' ";
+
+		return $this->execute($sql);
+	}
+
+	/**
+	 * 删除专辑按钮
+	 * @param int $id 专辑按钮id
+	 */
+	public function delAlbumBTN($id = false){
+		$where = array(
+				'id' => (int)$id,
+			);
+
+		$queryRes = $this->table(tname('album_btn'))->where($where)->delete();
+
+		return $queryRes ? true : false;
+	}
+
+	/**
+	 * 新增专辑按钮 
+	 * @param array $reqData 请求内容
+	 */
+	public function addAlbumBTN($reqData = array()){
+		if (empty($reqData['name'])) return false;
+
+		$sql = "INSERT INTO `".tname('album_btn')."` (`name`) VALUES ('".$reqData['name']."')";
+
+		return $this->execute($sql);
+	}
+
 	/**
 	 * 添加专辑
 	 * @param int $gid 图片id
@@ -112,6 +249,7 @@ class AlbumModel extends Model{
 				LEFT JOIN ch_product_image AS b ON b.gid = a.gid 
 				LEFT JOIN ch_album_type AS c ON c.id = a.type 
 				WHERE a.status = 1 
+				ORDER BY a.id DESC
 				LIMIT ".page($data['page'], 15);
 
 		$queryRes = $this->query($sql);

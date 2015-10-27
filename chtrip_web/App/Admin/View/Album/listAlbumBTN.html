@@ -1,0 +1,67 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Album/listAlbum')}" >专辑</a> <a class="current">专辑按钮列表</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	      	<button class="btn btn-mini btn-info"><a href="{:U('Album/addAlbumBTN')}">新增专辑按钮</a></button>
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>专辑按钮列表</h5>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                  <th>标题</th>
+	                  <th>操作</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td>{$item.name}</td>
+	                  <td>
+						<button class="btn btn-inverse btn-mini" onclick="delAlbumBTN('{$item.id}')">{:L('TEXT_DELETE')}</button>
+	                  	<a href="{:U('Album/editAlbumBTN', array('id' => $item['id']))}"><button class="btn btn-info btn-mini" >编辑</button></a>
+	                  </td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+			<div class="pagination alternate" style="float:right;">
+				{$page_show}
+			</div>
+	    </div>
+	  </div>
+	</div>
+<script type="text/javascript">
+	function delAlbumBTN(id){
+		
+		if (!confirm('是否确认删除该条专辑按钮?')) {
+			return false;
+		}
+
+		$.ajax({
+			type:"POST",
+			url:"<?php echo U('Album/delAlbumBTN');?>",
+			data:{id:id},
+			success:function(data){
+				if (data.status) {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+			}
+
+		});
+	}
+
+</script>
+<include file="Public:footer" />

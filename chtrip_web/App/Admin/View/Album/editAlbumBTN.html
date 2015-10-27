@@ -1,0 +1,37 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> 
+	    	<a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Album/listAlbumBTN')}" >专辑按钮列表</a> <a class="current">编辑专辑按钮</a> 
+	    </div>
+	  </div>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span8">
+					<div class="widget-box">
+						<form action="{:U('Album/editAlbumBTN', array('id' => $detail['id']))}" method="post" class="form-horizontal" enctype="multipart/form-data">
+							<div class="widget-title"> 
+								<span class="icon"> <i class="icon-align-justify"></i> </span>
+								<h5>编辑专辑按钮</h5>
+							</div>
+
+							<div class="widget-content nopadding">
+								<div class="control-group">
+									<label class="control-label">按钮标题</label>
+									<div class="controls">
+										<input type="text" name="name" placeholder="请填按钮标题" value="{$detail.name}" class="span11">
+									</div>
+								</div>
+
+								<div class="form-actions">
+									<button type="submit" class="btn btn-success">保存</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<include file="Public:footer" />
