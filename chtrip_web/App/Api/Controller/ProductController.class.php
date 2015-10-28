@@ -32,12 +32,21 @@ class ProductController extends ApiBasicController {
      * 城市列表
      */
     public function cityList(){
-        $cityList = $this->productModel->getCityList();
 
-        $outPut = array(
-                'cityList' => $cityList,
-                'hasNew'   => '0',
-            );
+        if (I('request.ver')) {
+            $outPut = array(
+                    'cityList' => $this->productModel->getAllCityList(),
+                    'version'  => '0.9.4',
+                );
+
+        }else{
+            $cityList = $this->productModel->getCityList();
+
+            $outPut = array(
+                    'cityList' => $cityList,
+                    'hasNew'   => '0',
+                );
+        }
 
         json_msg($outPut);
     }
