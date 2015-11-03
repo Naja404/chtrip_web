@@ -8,13 +8,63 @@ use Think\Model;
 class UserModel extends Model{
 
 	/**
+	 * 检测ssid
+	 * @param string $ssid
+	 */
+	public function checkSSID($ssid = false){
+		
+		$ssid = $this->where(array('user_id' => $ssid))->getField('user_id');
+
+		if ($ssid) {
+			return $ssid;
+		}
+
+		$ssid = mkUUID();
+
+		$add = array(
+				'user_id'         => $ssid,
+				'uuid'            => md5($ssid),
+				'status'          => 1,
+				'created'         => NOW_TIME,
+				'last_login_time' => NOW_TIME,
+			);
+
+		$this->add($add);
+
+		return $ssid;
+	}
+
+	/**
+	 * 更新登录信息
+	 * @param string $ssid 用户id
+	 */
+	public function upLoginStatus($ssid = false){
+		$where = array(
+				'user_id' => $ssid,
+			);
+
+		$update = array(
+				'last_login_time' => NOW_TIME,
+			);
+
+		$this->where($where)->save($update);
+	}
+
+	/**
+	 * 检测手机号
+	 * @param int $mobile
+	 */
+	public function checkMobile($mobile = false){
+		$count = $this->table(tname('user_info'))->where(array('mobile' => $mobile))->count();
+
+		return $count > 0 ? true : false;
+	}
+
+	/**
 	 * 微信登陆
 	 * @param array $reqData 请求数据
 	 */
 	public function loginWeChat($reqData = array()){
-
-
-
 
 		return $reqData;
 

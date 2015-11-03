@@ -29,6 +29,13 @@ class ProductController extends ApiBasicController {
     }
 
     /**
+     * 用户协议
+     */
+    public function userProtocol(){
+        $this->display('Product/aboutme');
+    }
+
+    /**
      * 城市列表
      */
     public function cityList(){

@@ -4,6 +4,31 @@
  * @created 2014-9-18
  */
 
+/**
+ * 验证手机号
+ * @param int $mobile
+ */
+function check_mobile($mobile = false){
+
+    if (!is_numeric($mobile)) {
+        return false;
+    }
+
+    return preg_match('#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[0,6,7,8]{1}\d{8}$|^18[\d]{9}$#', $mobile) ? true : false;
+}
+
+/**
+ * 验证密码
+ * @param string $passwd 
+ */
+function check_pwd($passwd = false){
+	
+	$len = strlen($passwd);
+
+	if ($len < 6 || $len > 12) return false;
+
+	return true;
+}
 
 /**
  *
@@ -335,7 +360,12 @@ function resizeImg($path = false, $width = 90, $height = 66, $isCut = false){
 
 }
 
-
+/**
+ * 生成uuid
+ */
+function mkUUID(){
+	return md5(NOW_TIME.rand(1000, 9999));
+}
 
 
 

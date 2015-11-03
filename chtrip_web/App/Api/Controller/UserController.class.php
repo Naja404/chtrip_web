@@ -17,7 +17,77 @@ class UserController extends ApiBasicController {
         // parent::_initialize();
 
         $this->userModel = D('User');
+        $this->userInfoModel = D('userInfo');
         $this->userSNSModel = D('UserSns');
+
+    }
+
+    /**
+     * 用户注册
+     * @param int $mobile
+     * @param string @passwd
+     */
+    public function register(){
+
+        $reqData = I('request.');
+        
+        $regErr = $this->_checkReg($reqData);
+
+        if ($regErr !== true) json_msg($regErr, 1);
+
+        if ($this->userModel->checkMobile($reqData['mobile'])) json_msg(L('ERR_MOBILE_EXISTS'), 1);
+
+        $ssid = $this->userModel->checkSSID($reqData['ssid']);
+
+        $userAdd = array(
+                'user_id'  => $ssid,
+                'mobile'   => $reqData['mobile'],
+                'passwd'   => md5($reqData['pwd']),
+                'nickname' => $reqData['mobile'],
+                'sex'      => 0,
+            );
+
+        $insertID = $this->userInfoModel->add($userAdd);
+
+        $outdata = array(
+                'ssid'     => $ssid,
+                'info'     => L('SUCCESS_REGISTER'),
+                'nickname' => $reqData['mobile'],
+            );
+
+        json_msg($outdata);
+    }
+
+    /**
+     * 用户登录
+     */
+    public function login(){
+        
+        $reqData = I('request.');
+
+        $where = array(
+                'mobile' => $reqData['mobile'],
+                'passwd' => md5($reqData['pwd']),
+            );
+
+        $hasAccount = $this->userInfoModel->where($where)->count();
+
+        if ($hasAccount != 1) json_msg(L('ERR_LOGIN'), 1);
+
+        $userInfo = $this->userInfoModel->where($where)->find();
+
+        if (!$userInfo['user_id']) json_msg(L('ERR_LOGIN'), 1);
+
+        $this->userModel->upLoginStatus($ssid);
+
+        $outdata = array(
+                'ssid'     => $userInfo['user_id'],
+                'nickname' => $userInfo['nickname'],
+                'avatar'   => $userInfo['avatar'],
+                'info'     => L('SUCCESS_LOGIN'),
+            );
+
+        json_msg($outdata);
 
     }
 
@@ -166,6 +236,26 @@ class UserController extends ApiBasicController {
         }
 
         json_msg();
+    }
+
+    /**
+     * 检测注册值
+     * @param array $reqData 注册内容
+     */
+    private function _checkReg($reqData = array()){
+        if (isset($reqData['mobile'])){
+            if (!check_mobile($reqData['mobile'])) return L('ERR_MOBILE');
+        }else{
+            return L('ERR_EMPTY_MOBILE');
+        }
+
+        if (isset($reqData['pwd'])) {
+            if (!check_pwd($reqData['pwd'])) return L('ERR_PWD');
+        }else{
+            return L('ERR_EMPTY_PWD');
+        }
+
+        return true;
     }
 
 }
