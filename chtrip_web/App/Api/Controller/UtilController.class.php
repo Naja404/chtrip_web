@@ -64,9 +64,9 @@ class UtilController extends ApiBasicController {
      */
     public function setToken(){
 
-    	if (!I('request.token')) {
-    		json_msg(L('ERROR_PARAM'), 1);
-    	}
+    	// if (!I('request.token')) {
+    	// 	json_msg(L('ERROR_PARAM'), 1);
+    	// }
         
         $status = $this->utilModel->setToken(I('request.token'));
 

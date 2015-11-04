@@ -15,10 +15,15 @@ class UserModel extends Model{
 		
 		$ssid = $this->where(array('user_id' => $ssid))->getField('user_id');
 
-		if ($ssid) {
-			return $ssid;
-		}
+		if (is_string($ssid) && strlen($ssid) == 32) return true; 
 
+		return false;
+	}
+
+	/**
+	 * 生成ssid
+	 */
+	public function createSSID(){
 		$ssid = mkUUID();
 
 		$add = array(

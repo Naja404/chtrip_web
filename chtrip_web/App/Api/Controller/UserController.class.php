@@ -37,7 +37,7 @@ class UserController extends ApiBasicController {
 
         if ($this->userModel->checkMobile($reqData['mobile'])) json_msg(L('ERR_MOBILE_EXISTS'), 1);
 
-        $ssid = $this->userModel->checkSSID($reqData['ssid']);
+        $ssid = $this->checkSSID($reqData['ssid']);
 
         $userAdd = array(
                 'user_id'  => $ssid,
@@ -53,6 +53,7 @@ class UserController extends ApiBasicController {
                 'ssid'     => $ssid,
                 'info'     => L('SUCCESS_REGISTER'),
                 'nickname' => $reqData['mobile'],
+                'user_info' => array_values($this->userInfoModel->getUserInfo($ssid)),
             );
 
         json_msg($outdata);
@@ -81,14 +82,43 @@ class UserController extends ApiBasicController {
         $this->userModel->upLoginStatus($ssid);
 
         $outdata = array(
-                'ssid'     => $userInfo['user_id'],
-                'nickname' => $userInfo['nickname'],
-                'avatar'   => $userInfo['avatar'],
-                'info'     => L('SUCCESS_LOGIN'),
+                'ssid'      => $userInfo['user_id'],
+                'nickname'  => $userInfo['nickname'],
+                'avatar'    => C('API_WEBSITE').$userInfo['avatar'],
+                'info'      => L('SUCCESS_LOGIN'),
+                'user_info' => array_values($this->userInfoModel->getUserInfo($userInfo['user_id'])),
             );
 
         json_msg($outdata);
 
+    }
+
+    /**
+     * 设置用户信息
+     */
+    public function setInfo(){
+        $reqData = I('request.');
+
+        if (!$this->userModel->checkSSID($reqData['ssid'])) json_msg(L('ERROR_PARAM'), 1);
+
+        $setErr = $this->_checkSetInfo($reqData);
+
+        if (count($setErr) <= 0){
+            json_msg(L('ERROR_PARAM'), 1);
+        }
+        $where = array(
+                'user_id' => $reqData['ssid'],
+            );
+
+        $this->userInfoModel->where($where)->save($setErr);
+
+        $outdata = $this->userInfoModel->getUserInfo($reqData['ssid']);
+
+        $outdata['user_info'] = array_values($outdata);
+        $outdata['info'] = L('SUCCESS_UPDATE');
+        $outdata['avatar'] = C('API_WEBSITE').$outdata['avatar'];
+
+        json_msg($outdata);
     }
 
     /**
@@ -239,6 +269,27 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 检测ssid
+     * @param array $reqData 请求数据
+     */
+    public function checkSSID($reqData = array()){
+        
+        $hasSSID = $this->userModel->checkSSID($reqData['ssid']);
+
+        if (!$hasSSID) {
+            $ssid = $this->userModel->createSSID();
+            return $ssid;
+        }
+
+        if ($this->userInfoModel->checkUserInfo($reqData['ssid']) > 1) {
+            $ssid = $this->userModel->createSSID();
+            return $ssid;
+        }
+
+        return $reqData['ssid'];
+    }
+
+    /**
      * 检测注册值
      * @param array $reqData 注册内容
      */
@@ -256,6 +307,27 @@ class UserController extends ApiBasicController {
         }
 
         return true;
+    }
+
+    /**
+     * 验证用户信息
+     * @param array $reqData
+     */
+    private function _checkSetInfo($reqData = array()){
+
+        $sava = array();
+
+        if (isset($reqData['nickname'])) {
+            $save['nickname'] = $reqData['nickname'];
+        }
+
+        if (isset($reqData['sex'])) {
+            if (in_array($reqData['sex'], array('0', '1', '2'))) {
+                $save['sex'] = (int)$reqData['sex'];
+            }
+        }
+
+        return $save;
     }
 
 }

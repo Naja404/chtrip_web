@@ -22,10 +22,12 @@ class UtilModel extends Model{
 				'token'           => $this->_spliceToken(htmlspecialchars_decode($token)),
 			);
 
-		$hasUserID = $this->table(tname('user'))->where(array('token' => $data['token']))->getField('user_id');
+		if (!empty($data['token'])) {
+			$hasUserID = $this->table(tname('user'))->where(array('token' => $data['token']))->getField('user_id');
 
-		if (!empty($hasUserID)) {
-			return $hasUserID;
+			if (!empty($hasUserID)) {
+				return $hasUserID;
+			}
 		}
 
 		$queryRes = $this->table(tname('user'))->add($data);
@@ -51,6 +53,8 @@ class UtilModel extends Model{
 	 * @param string $token 设备token
 	 */
 	private function _spliceToken($token = false){
-		return preg_replace('/<|>|\s+/', '', $token);
+		$token = preg_replace('/<|>|\s+/', '', $token);
+
+		return empty($token) ? '' : $token ;
 	}
 }

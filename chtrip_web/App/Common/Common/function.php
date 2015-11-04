@@ -5,6 +5,14 @@
  */
 
 /**
+ * 隐藏手机号中间几位
+ * @param int $mobile 手机号
+ */
+function hide_mobile($mobile = false){
+	return substr_replace($mobile, '****', 3, 5);
+}
+
+/**
  * 验证手机号
  * @param int $mobile
  */

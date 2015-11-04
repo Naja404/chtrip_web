@@ -18,5 +18,10 @@ return array(
 	'ERR_LOGIN'			   => '登录信息错误',
 	'SUCCESS_REGISTER'	   => '注册成功',
 	'SUCCESS_LOGIN'		   => '登录成功',
+	'SUCCESS_UPDATE'	   => '更新成功',	
 
+
+	'TEXT_SEX_0' => '保密',
+	'TEXT_SEX_1' => '男',
+	'TEXT_SEX_2' => '女',
 );

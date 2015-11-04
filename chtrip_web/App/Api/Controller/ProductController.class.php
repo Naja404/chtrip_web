@@ -124,7 +124,7 @@ class ProductController extends ApiBasicController {
                      from ch_ad as a
                     left join ch_product_image as b on b.gid = a.image_id 
                     left join ch_product_detail_copy as c on c.pid = a.url_id
-                    ";
+                    ORDER BY a.sort ASC";
                     
         $adList = $this->adModel->query($adSql);
 
