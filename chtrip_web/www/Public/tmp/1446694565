@@ -1,0 +1,64 @@
+array (
+  'server' => 
+  array (
+    'USER' => 'nobody',
+    'HOME' => '/var/empty',
+    'FCGI_ROLE' => 'RESPONDER',
+    'SCRIPT_FILENAME' => '/Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/www/index.php',
+    'QUERY_STRING' => 'm=Api&c=Util&a=uploadFile',
+    'REQUEST_METHOD' => 'POST',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundaryepqQeKEBDKQWKXwX',
+    'CONTENT_LENGTH' => '10227',
+    'SCRIPT_NAME' => '/index.php',
+    'REQUEST_URI' => '/index.php?m=Api&c=Util&a=uploadFile',
+    'DOCUMENT_URI' => '/index.php',
+    'DOCUMENT_ROOT' => '/Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/www',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'SERVER_SOFTWARE' => 'nginx/1.8.0',
+    'REMOTE_ADDR' => '127.0.0.1',
+    'REMOTE_PORT' => '50335',
+    'SERVER_ADDR' => '127.0.0.1',
+    'SERVER_PORT' => '8080',
+    'SERVER_NAME' => 'local-api.atniwo.com',
+    'REDIRECT_STATUS' => '200',
+    'PATH_INFO' => '',
+    'HTTP_HOST' => 'local-api.atniwo.com:8080',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_CONTENT_LENGTH' => '10227',
+    'HTTP_CACHE_CONTROL' => 'max-age=0',
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'HTTP_ORIGIN' => 'http://local-api.atniwo.com:8080',
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
+    'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundaryepqQeKEBDKQWKXwX',
+    'HTTP_REFERER' => 'http://local-api.atniwo.com:8080/Util/test',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8',
+    'HTTP_COOKIE' => 'chthink_language=zh-CN; PHPSESSID=d599a5cb5436d951883bb56239fa623d',
+    'PHP_SELF' => '/index.php',
+    'REQUEST_TIME_FLOAT' => 1446694565.25403,
+    'REQUEST_TIME' => 1446694565,
+    'argv' => 
+    array (
+      0 => 'm=Api&c=Util&a=uploadFile',
+    ),
+    'argc' => 1,
+  ),
+  'request' => 
+  array (
+    '提交' => '提交',
+    'm' => 'Api',
+  ),
+  'file' => 
+  array (
+    'image' => 
+    array (
+      'name' => 'defaultDataPic@2x.jpg',
+      'type' => 'image/jpeg',
+      'tmp_name' => '/private/var/tmp/phpB4jXEk',
+      'error' => 0,
+      'size' => 9932,
+    ),
+  ),
+)

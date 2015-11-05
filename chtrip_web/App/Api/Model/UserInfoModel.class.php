@@ -34,6 +34,8 @@ class UserInfoModel extends Model{
 
         $queryRes['mobile'] = hide_mobile($queryRes['mobile']);
 
+        $queryRes['avatar'] = str_replace('.png', '_200_200.png', C('API_WEBSITE').$queryRes['avatar']);
+
         return $queryRes;
     }
 }

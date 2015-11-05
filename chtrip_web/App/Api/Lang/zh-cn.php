@@ -16,9 +16,13 @@ return array(
 	'ERR_EMPTY_PWD'        => '请填写密码',
 	'ERR_MOBILE_EXISTS'	   => '该手机号已存在',
 	'ERR_LOGIN'			   => '登录信息错误',
+	'ERR_UPLOAD'		   => '上传失败',
+	'ERR_SNS_BIND'		   => '绑定失败,该账号已被绑定',
+
 	'SUCCESS_REGISTER'	   => '注册成功',
 	'SUCCESS_LOGIN'		   => '登录成功',
-	'SUCCESS_UPDATE'	   => '更新成功',	
+	'SUCCESS_UPDATE'	   => '更新成功',
+	'SUCCESS_UPLOAD'	   => '上传成功',	
 
 
 	'TEXT_SEX_0' => '保密',

@@ -32,7 +32,7 @@ class ProductController extends ApiBasicController {
      * 用户协议
      */
     public function userProtocol(){
-        $this->display('Product/aboutme');
+        $this->display('Product/protocol');
     }
 
     /**

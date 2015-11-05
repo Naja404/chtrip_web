@@ -39,7 +39,6 @@ return array(
 
     //缩略图尺寸
     'PICTURE_THUMB_SIZE'        =>  array(
-            array('30,50,100','30,50,100'),//用户头像尺寸
             array('200','200'),//
     ),
     'IMAGES_PATH'    => './Public/uploads/images/',   //用户头像目录

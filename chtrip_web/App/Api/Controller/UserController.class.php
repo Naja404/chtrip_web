@@ -39,20 +39,42 @@ class UserController extends ApiBasicController {
 
         $ssid = $this->checkSSID($reqData['ssid']);
 
-        $userAdd = array(
-                'user_id'  => $ssid,
-                'mobile'   => $reqData['mobile'],
-                'passwd'   => md5($reqData['pwd']),
-                'nickname' => $reqData['mobile'],
-                'sex'      => 0,
-            );
+        if (isset($reqData['openid'])) {
+
+            $userSNS = $this->userSNSModel->where(array('openid' => $reqData['openid'], 'summary' => $reqData['state']))->find();
+
+
+            $userAdd = array(
+                    'user_id'  => $ssid,
+                    'mobile'   => $reqData['mobile'],
+                    'passwd'   => md5($reqData['pwd']),
+                    'nickname' => $userSNS['nickname'],
+                    'sex'      => $userSNS['sex'],
+                    'avatar'   => $userSNS['headimgurl'],
+                );
+
+            if ($userSNS['headimgurl']) $userAdd['avatar'] = $this->getImgWithURL($userSNS['headimgurl']);
+
+        }else{
+            $userAdd = array(
+                    'user_id'  => $ssid,
+                    'mobile'   => $reqData['mobile'],
+                    'passwd'   => md5($reqData['pwd']),
+                    'nickname' => $reqData['mobile'],
+                    'sex'      => 0,
+                );
+        }
 
         $insertID = $this->userInfoModel->add($userAdd);
+
+        if ($insertID && isset($userSNS['openid'])) {
+            $this->userSNSModel->where(array('openid' => $reqData['openid'], 'summary' => $reqData['state']))->save(array('user_id' => $userAdd['user_id']));
+        }
 
         $outdata = array(
                 'ssid'     => $ssid,
                 'info'     => L('SUCCESS_REGISTER'),
-                'nickname' => $reqData['mobile'],
+                'nickname' => $userAdd['mobile'],
                 'user_info' => array_values($this->userInfoModel->getUserInfo($ssid)),
             );
 
@@ -80,6 +102,11 @@ class UserController extends ApiBasicController {
         if (!$userInfo['user_id']) json_msg(L('ERR_LOGIN'), 1);
 
         $this->userModel->upLoginStatus($ssid);
+
+        if (isset($reqData['openid'])) {
+            $snsWhere = array('openid' => $reqData['openid'], 'summary' => $reqData['state']);
+            $this->userSNSModel->where($snsWhere)->save(array('user_id' => $userInfo['user_id']));
+        }
 
         $outdata = array(
                 'ssid'      => $userInfo['user_id'],
@@ -123,37 +150,16 @@ class UserController extends ApiBasicController {
 
     /**
      * 微信登录
-     *
      */
     public function loginWeChat(){
-
-        $reqData = array(
-                'ssid'    => I('request.ssid'),
-                'errcode' => I('request.errcode'),
-                'code'    => I('request.code'),
-                'state'   => I('request.state'),
-                'lang'    => I('request.lang'),
-                'country' => I('request.country'),
-            );
-
-        $userInfo = $this->userSNSModel->where(array('user_id' => $reqData['ssid'], 'summary' => $reqData['state']))->find();
-
-        if ($userinfo['openid']) json_msg($userinfo);
+        
+        $reqData = I('request.');
 
         if ($reqData['errcode'] == '-4') json_msg('您已拒绝授权', 1);
 
         if ($reqData['errcode'] == '-2') json_msg('您已取消', 1);
 
-        if (empty($reqData['code'])) json_msg('授权失败', 1); 
-
-        $add = array(
-                'user_id' => $reqData['ssid'],
-                'code'    => $reqData['code'],
-                'summary' => $reqData['state'],
-                'created' => time(),
-            );
-
-        $reqData['sns_id'] = $this->userSNSModel->add($add);
+        if (empty($reqData['code'])) json_msg('授权失败', 1);
 
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxaa9423c2b77e86bb&secret=90bcc16b9393971027300301a5e79a33&code=%s&grant_type=authorization_code";
 
@@ -163,25 +169,61 @@ class UserController extends ApiBasicController {
 
         $userInfoUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
 
-        $userInfo = json_decode(file_get_contents(sprintf($userInfoUrl, $tokenRes['access_token'], $tokenRes['openid'])), true);
+        $userSNS = $this->userSNSModel->where(array('openid' => $tokenRes['openid'], 'summary' => $reqData['state']))->find();
 
-        if ($userInfo['errcode']) json_msg('授权失败', 1);
+        // 没有授权过,没有关联账户
+        if (!$userSNS['openid']) {
 
-        $update = array(
-                'access_token' => $tokenRes['access_token'],
-                'openid'       => $userInfo['openid'],
-                'nickname'     => $userInfo['nickname'],
-                'sex'          => $userInfo['sex'],
-                'province'     => $userInfo['province'],
-                'city'         => $userInfo['city'],
-                'country'      => $userInfo['country'],
-                'headimgurl'   =>  $userInfo['headimgurl'],
-            );
+            $weChatInfo = json_decode(file_get_contents(sprintf($userInfoUrl, $tokenRes['access_token'], $tokenRes['openid'])), true);
 
-        $this->userSNSModel->where(array('id' => $reqData['sns_id']))->save($update);
+            if ($weChatInfo['errcode']) json_msg('授权失败', 1);
 
-        json_msg($userInfo);
+            $add = array(
+                    'summary'      => $reqData['state'],
+                    'access_token' => $tokenRes['access_token'],
+                    'openid'       => $weChatInfo['openid'],
+                    'nickname'     => $weChatInfo['nickname'],
+                    'sex'          => $weChatInfo['sex'],
+                    'province'     => $weChatInfo['province'],
+                    'city'         => $weChatInfo['city'],
+                    'country'      => $weChatInfo['country'],
+                    'headimgurl'   => $weChatInfo['headimgurl'],
+                );
 
+            $this->userSNSModel->add($add);
+
+            $outdata = array(
+                    'has_reg' => '0',
+                    'openid'  => $weChatInfo['openid'],
+                );
+
+            json_msg($outdata);
+        }else{
+            // 授权,检测是否关联过账户
+            if ($userSNS['user_id']) {
+                $this->_returnUserInfo($userSNS['user_id']);
+            }else{
+                $outdata = array(
+                        'has_reg' => '0',
+                        'openid'  => $userSNS['openid'],
+                    );
+                json_msg($outdata);
+            }
+        }
+    }
+
+    /**
+     * 根据url获取图片
+     */
+    public function getImgWithURL($url = false){
+
+        $tmpPath = 'Public/uploads/images/20151105/'.time().'.png';
+
+        downloadImage($url, $tmpPath);
+
+        downloadImage($url, str_replace('.png', '_200_200.png', $tmpPath));
+
+        return '/'.$tmpPath;
     }
 
     /**
@@ -281,7 +323,7 @@ class UserController extends ApiBasicController {
             return $ssid;
         }
 
-        if ($this->userInfoModel->checkUserInfo($reqData['ssid']) > 1) {
+        if ($this->userInfoModel->checkUserInfo($reqData['ssid']) > 0) {
             $ssid = $this->userModel->createSSID();
             return $ssid;
         }
@@ -328,6 +370,25 @@ class UserController extends ApiBasicController {
         }
 
         return $save;
+    }
+
+    /**
+     * 返回用户数据
+     */
+    private function _returnUserInfo($user_id = false){
+        
+        $userInfo = $this->userInfoModel->where(array('user_id' => $user_id))->find();
+
+        $outdata = array(
+                'has_reg' => '1',
+                'ssid'      => $user_id,
+                'nickname'  => $userInfo['nickname'],
+                'avatar'    => C('API_WEBSITE').$userInfo['avatar'],
+                'info'      => L('SUCCESS_LOGIN'),
+                'user_info' => array_values($this->userInfoModel->getUserInfo($user_id)),
+            );
+
+        json_msg($outdata);
     }
 
 }

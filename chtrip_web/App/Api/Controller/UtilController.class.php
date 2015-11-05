@@ -5,6 +5,7 @@
  */
 namespace Api\Controller;
 use Think\Controller;
+use Api\Model\Upload;
 
 class UtilController extends ApiBasicController {
 
@@ -13,8 +14,44 @@ class UtilController extends ApiBasicController {
 	 */
 	public $utilModel;
 
+    public $uploadModel;
+
     protected function _initialize(){
         $this->utilModel = D('util');
+        $this->uploadModel   = D('Upload');
+        $this->userInfoModel = D('UserInfo');
+    }
+
+    /**
+     * 上传图片
+     */
+    public function uploadFile(){
+
+        if (!IS_POST) json_msg(L('ERROR_PARAM'), 1);
+
+        $tmp = array(
+                'server' => $_SERVER,
+                'request' => I('request.'),
+                'file' => $_FILES,
+            );
+
+        @file_put_contents('Public/tmp/'.time(), var_export($tmp, true));
+
+        $reqData = I('request.');
+
+        $imgRes = $this->uploadModel->uploadFile();
+
+        if (!$imgRes['path']) json_msg(L('ERR_UPLOAD'), 1);
+
+        if ($reqData['type'] == 'avatar') $this->userInfoModel->where(array('user_id' => $reqData['ssid']))->save(array('avatar' => $imgRes['path']));
+
+        $outdata = array(
+                'info'      => L('SUCCESS_UPLOAD'),
+                'avatar'    => str_replace('.png', '_200_200.png', C('API_WEBSITE').$imgRes['path']),
+                'user_info' => array_values($this->userInfoModel->getUserInfo($reqData['ssid'])),
+            );
+
+        json_msg($outdata);
     }
 
     /**
