@@ -32,7 +32,7 @@ class UserInfoModel extends Model{
 
         $queryRes['sex'] = L('TEXT_SEX_'.$queryRes['sex']);
 
-        $queryRes['mobile'] = hide_mobile($queryRes['mobile']);
+        $queryRes['mobile'] = $queryRes['mobile'] == '0' ? L('TEXT_MOBILE_NOT_BIND') : hide_mobile($queryRes['mobile']);
 
         $queryRes['avatar'] = str_replace('.png', '_200_200.png', C('API_WEBSITE').$queryRes['avatar']);
 

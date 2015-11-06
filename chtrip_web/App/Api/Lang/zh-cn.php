@@ -28,4 +28,5 @@ return array(
 	'TEXT_SEX_0' => '保密',
 	'TEXT_SEX_1' => '男',
 	'TEXT_SEX_2' => '女',
+	'TEXT_MOBILE_NOT_BIND' => '未绑定手机',
 );

@@ -77,6 +77,7 @@ class UserController extends ApiBasicController {
                 'nickname' => $userAdd['mobile'],
                 'user_info' => array_values($this->userInfoModel->getUserInfo($ssid)),
             );
+        $outdata['hasBand'] = $outdata['user_info'][2] == L('TEXT_MOBILE_NOT_BIND') ? '0' : '1';
 
         json_msg($outdata);
     }
@@ -115,6 +116,8 @@ class UserController extends ApiBasicController {
                 'info'      => L('SUCCESS_LOGIN'),
                 'user_info' => array_values($this->userInfoModel->getUserInfo($userInfo['user_id'])),
             );
+        
+        $outdata['hasBand'] = $outdata['user_info'][2] == L('TEXT_MOBILE_NOT_BIND') ? '0' : '1';
 
         json_msg($outdata);
 
@@ -130,9 +133,8 @@ class UserController extends ApiBasicController {
 
         $setErr = $this->_checkSetInfo($reqData);
 
-        if (count($setErr) <= 0){
-            json_msg(L('ERROR_PARAM'), 1);
-        }
+        if (count($setErr) <= 0 || is_string($setErr)) json_msg($setErr, 1);
+
         $where = array(
                 'user_id' => $reqData['ssid'],
             );
@@ -144,6 +146,8 @@ class UserController extends ApiBasicController {
         $outdata['user_info'] = array_values($outdata);
         $outdata['info'] = L('SUCCESS_UPDATE');
         $outdata['avatar'] = C('API_WEBSITE').$outdata['avatar'];
+
+        $outdata['hasBand'] = $outdata['mobile'] == L('TEXT_MOBILE_NOT_BIND') ? '0' : '1';
 
         json_msg($outdata);
     }
@@ -178,7 +182,11 @@ class UserController extends ApiBasicController {
 
             if ($weChatInfo['errcode']) json_msg('授权失败', 1);
 
+            $ssid = $this->checkSSID($reqData['ssid']);
+
             $add = array(
+                    'user_id'      => $ssid,
+                    'code'         => $reqData['code'],
                     'summary'      => $reqData['state'],
                     'access_token' => $tokenRes['access_token'],
                     'openid'       => $weChatInfo['openid'],
@@ -192,23 +200,63 @@ class UserController extends ApiBasicController {
 
             $this->userSNSModel->add($add);
 
-            $outdata = array(
-                    'has_reg' => '0',
-                    'openid'  => $weChatInfo['openid'],
-                );
+            $userId = $add['user_id'];
 
-            json_msg($outdata);
+            $this->setUserInfoWithSNS($add);
+
         }else{
             // 授权,检测是否关联过账户
             if ($userSNS['user_id']) {
-                $this->_returnUserInfo($userSNS['user_id']);
+                $userId = $userSNS['user_id'];
             }else{
-                $outdata = array(
-                        'has_reg' => '0',
-                        'openid'  => $userSNS['openid'],
+                $ssid = $this->checkSSID();
+
+                $this->userSNSModel->where(array('openid' => $userSNS['openid'], 'summary' => $reqData['state']))
+                                   ->save(array('user_id' => $ssid));
+                $userId = $ssid;
+
+                $setInfo = array(
+                        'user_id' => $userId,
                     );
-                json_msg($outdata);
+
+                $this->setUserInfoWithSNS($setInfo);
             }
+        }
+        
+        $this->_returnUserInfo($userId);
+    }
+
+    /**
+     * 根据第三方登陆设置用户信息
+     * @param array $setInfo 信息内容
+     */
+    public function setUserInfoWithSNS($setInfo = array()){
+
+        $where = array('user_id' => $setInfo['user_id']);
+
+        $userInfo = $this->userInfoModel->where($where)->find();
+
+        if ($userInfo['user_id']) {
+            
+            $update = array();
+
+            if (empty($userInfo['nickname'])) $update['nickname'] = $setInfo['nickname'];
+
+            if (empty($userInfo['avatar'])) $update['avatar'] = getImgWithURL($setInfo['headimgurl']);
+
+            if (count($update)) $this->userInfoModel->where($where)->save($update);
+
+        }else{
+            $add = array(
+                    'user_id'  => $setInfo['user_id'],
+                    'mobile'   => '0',
+                    'passwd'   => md5('000000'),
+                    'nickname' => $setInfo['nickname'] ? $setInfo['nickname'] : '',
+                    'avatar'   => $this->getImgWithURL($setInfo['headimgurl']),
+                    'sex'      => $setInfo['sex'] ? (int)$setInfo['sex'] : '0',
+                );
+
+            $this->userInfoModel->add($add);
         }
     }
 
@@ -216,6 +264,8 @@ class UserController extends ApiBasicController {
      * 根据url获取图片
      */
     public function getImgWithURL($url = false){
+
+        if (!$url) return '';
 
         $tmpPath = 'Public/uploads/images/20151105/'.time().'.png';
 
@@ -316,6 +366,11 @@ class UserController extends ApiBasicController {
      */
     public function checkSSID($reqData = array()){
         
+        if (!isset($reqData['ssid'])) {
+            $ssid = $this->userModel->createSSID();
+            return $ssid;
+        }
+
         $hasSSID = $this->userModel->checkSSID($reqData['ssid']);
 
         if (!$hasSSID) {
@@ -369,6 +424,16 @@ class UserController extends ApiBasicController {
             }
         }
 
+        if (isset($reqData['mobile'])) {
+            if (!check_mobile($reqData['mobile'])) return L('ERR_MOBILE');
+
+            if ($this->userInfoModel->where(array('mobile' => $reqData['mobile']))->count() > 0) return L('ERR_MOBILE_EXISTS');
+
+            $save['mobile'] = $reqData['mobile'];
+        }
+
+        if (count($save) <= 0) return L('ERROR_PARAM');
+
         return $save;
     }
 
@@ -380,13 +445,14 @@ class UserController extends ApiBasicController {
         $userInfo = $this->userInfoModel->where(array('user_id' => $user_id))->find();
 
         $outdata = array(
-                'has_reg' => '1',
                 'ssid'      => $user_id,
                 'nickname'  => $userInfo['nickname'],
                 'avatar'    => C('API_WEBSITE').$userInfo['avatar'],
                 'info'      => L('SUCCESS_LOGIN'),
                 'user_info' => array_values($this->userInfoModel->getUserInfo($user_id)),
             );
+        
+        $outdata['hasBand'] = $outdata['user_info'][2] == L('TEXT_MOBILE_NOT_BIND') ? '0' : '1';
 
         json_msg($outdata);
     }
