@@ -277,7 +277,7 @@ class UserModel extends Model{
 
 		if (count($salerID) < 0) return false;
 
-		$queryRes = $this->table(tname('saler'))->where(array('saler_id' => array('IN', $salerID)))->select();
+		$queryRes = $this->table(tname('saler'))->where(array('saler_id' => array('IN', $salerID)))->order('area DESC')->select();
 
 		$returnRes = array();
 		

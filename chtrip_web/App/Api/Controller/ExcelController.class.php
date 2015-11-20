@@ -22,6 +22,14 @@ class ExcelController extends Controller {
         $this->salerModel = D('Saler');
     }
 
+    public function test(){
+            $img = resizeImg('Public/1915.jpg', 180, 132, false);
+
+            $newPath = str_replace('.jpg', '_100_100.jpg', 'Public/1915.jpg');
+
+            imagejpeg($img, $newPath);
+    }
+
     /**
      * 初始化上传模块  
      */

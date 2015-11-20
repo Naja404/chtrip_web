@@ -54,7 +54,7 @@ return array(
     			'__PUBLIC__' => '/Public/admin/',
     	),
 
-    'ADMIN_WEBSITE' => 'http://admin.atniwo.com',
+    'ADMIN_WEBSITE' => 'http://local-admin.atniwo.com:8080',
 
     /* AUTH 设定 */
     'AUTH_CONFIG'   => array(

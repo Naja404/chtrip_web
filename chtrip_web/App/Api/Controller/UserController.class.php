@@ -242,7 +242,7 @@ class UserController extends ApiBasicController {
 
             if (empty($userInfo['nickname'])) $update['nickname'] = $setInfo['nickname'];
 
-            if (empty($userInfo['avatar'])) $update['avatar'] = getImgWithURL($setInfo['headimgurl']);
+            if (empty($userInfo['avatar'])) $update['avatar'] = $this->getImgWithURL($setInfo['headimgurl']);
 
             if (count($update)) $this->userInfoModel->where($where)->save($update);
 
