@@ -106,6 +106,7 @@ class ProductController extends ApiBasicController {
             // if (!empty($v['title_btn'])) {
             //     $v['colorNum'] = (string)($i);
             // }
+            $v['title'] = htmlspecialchars_decode($v['title']);
             $v['colorNum'] = (string)($i);
             $v['activityTime'] = $this->_setActivityTime($v['activityTime']);
             $queryArr[] = $v;
