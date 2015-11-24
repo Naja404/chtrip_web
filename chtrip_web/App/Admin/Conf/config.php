@@ -54,7 +54,7 @@ return array(
     			'__PUBLIC__' => '/Public/admin/',
     	),
 
-    'ADMIN_WEBSITE' => 'http://local-admin.atniwo.com:8080',
+    'ADMIN_WEBSITE' => 'http://local-admin.atniwo.com',
 
     /* AUTH 设定 */
     'AUTH_CONFIG'   => array(
@@ -76,5 +76,9 @@ return array(
             'ADMIN_PROFUCT_SHIPTYPE' => 'ch_Admin:Product:shiptype',
             'ADMIN_PRODUCT_SALE'     => 'ch_Admin:Product:sale',
             'ADMIN_PRODUCT_TAG'      => 'ch_Admin:Product:tag',
+        ),
+
+    'FETCH_CLASS' => array(
+            'www_enjoytokyo_jp' => 'Enjoytokyo',
         ),
 );

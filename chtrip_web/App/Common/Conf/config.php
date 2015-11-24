@@ -69,7 +69,7 @@ return  array(
     'DATA_CACHE_PREFIX'     => '',     // 缓存前缀
     'DATA_CACHE_TYPE'       => 'Redis',  // 数据缓存类型,
 
-    'API_WEBSITE' => 'http://local-admin.atniwo.com:8080',
+    'API_WEBSITE' => 'http://local-admin.atniwo.com',
 
     /* 分页设置 */
     'PAGE_LIMIT'                => 30,

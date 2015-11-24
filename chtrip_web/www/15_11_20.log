@@ -232,3 +232,280 @@ NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/cht
 NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
 NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
 
+[ 2015-11-20T09:52:48+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000012s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000240s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000499s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:52:50+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000010s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000224s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000469s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:52:58+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000011s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000258s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000505s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:53:01+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000018s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000461s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000926s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:53:16+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000018s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000455s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000953s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:53:16+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000015s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000336s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000888s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:57:19+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000058s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000610s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001227s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:57:22+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000011s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000332s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000585s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:57:39+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000015s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000390s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000721s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:57:42+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000020s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000383s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000776s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:58:05+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000017s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000488s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000868s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:58:08+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000018s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000408s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000806s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:58:08+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000029s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000751s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001491s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:58:12+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000010s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000223s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000454s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:58:53+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000011s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000230s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000471s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T09:59:02+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000011s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000232s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000472s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T10:00:30+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000010s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000247s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000496s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T10:00:43+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000015s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000405s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000791s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T10:03:52+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000008s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000219s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000420s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T10:03:54+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000009s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000215s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000430s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T10:13:06+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000011s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000225s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000470s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+
+[ 2015-11-20T10:24:57+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000008s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000202s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000406s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:31:59+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000009s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000251s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000530s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:32:00+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000011s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000229s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000512s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:32:03+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000013s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000327s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000642s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:32:03+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000008s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000203s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000406s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:32:05+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000010s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000214s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000445s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:42:37+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000010s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000300s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000568s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:42:40+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000009s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000217s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000444s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:42:40+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000008s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000204s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000414s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+
+[ 2015-11-20T14:42:43+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000010s ]
+INFO: Run Behavior\UpgradeNoticeBehavior [ RunTime:0.000216s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000431s ]
+NOTIC: [8] Undefined offset: 1 /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Library/Think/Dispatcher.class.php 第 70 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1314 行.
+NOTIC: [2] Cannot modify header information - headers already sent by (output started at /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/App/Admin/Common/function.php:4) /Users/Hisoka/WorkSpace/WebProject/chtrip_web/chtrip_web/ThinkPHP/Common/functions.php 第 1316 行.
+

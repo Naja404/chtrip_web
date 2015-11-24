@@ -1,0 +1,61 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="" >数据</a> <a class="current">导入数据</a> </div>
+	  </div>
+	  <div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span8">
+		      <div class="widget-box">
+		         <form class="form-horizontal" enctype="multipart/form-data">
+		        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+		          <h5>爬虫</h5>
+		        </div>
+		        <div class="loading" style="display:none;">载入中</div>
+		        <div class="widget-content nopadding">
+
+		            <div class="control-group">
+		              <label class="control-label">网页地址</label>
+		              <div class="controls">
+		              	<input type="url" placeholder="请输入网页地址" name="url"><a onclick="subUrl();">&nbsp;获取</a>
+		              </div>
+		            </div>
+
+		            <div class="form-actions">
+
+		            </div>
+		          </form>
+		        </div>
+		    	</form>
+		      </div>
+			</div>
+		</div>
+	  </div>
+	</div>
+	<script type="text/javascript">
+		function subUrl(){
+
+			var url = $('input[name=url]').val();
+
+			if (!url) return false;
+
+			$.ajax({
+				type:"POST",
+				url:"{:U('Excel/fetchBug')}",
+				data:{url:url},
+				beforeSend:function(XMLHttpRequest){
+					$(".loading").show();
+				},
+				success:function(data){
+					if (data.status == '0') {
+						$('.form-actions').html(data.html);
+					}
+				},complete:function(XMLHttpRequest){
+					$(".loading").hide();
+				}
+			});
+		}
+
+	</script>
+<include file="Public:footer" />

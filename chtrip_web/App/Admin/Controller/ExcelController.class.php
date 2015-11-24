@@ -26,6 +26,33 @@ class ExcelController extends AdminBasicController {
     }
 
     /**
+     * 爬虫功能
+     */
+    public function fetchBug(){
+
+        if (IS_AJAX) {
+            $this->_initSnoopy();
+
+            $htmlRes = $this->snoopy->fetch(I('request.url'));
+
+            $this->_initParam(I('request.url'));
+
+            $returnRes = $this->fetch->fetch($htmlRes->results, 'getShop');
+
+            $ajaxRes = array(
+                    'status' => '0',
+                    'html'   => $this->_setFetchHtml($returnRes),
+                );
+
+            $this->ajaxReturn($ajaxRes);
+        }
+
+        $this->assign('title', '爬虫功能');
+        $this->display('Excel/fetchBug');
+
+    }
+
+    /**
      * 导入产品/店铺数据
      */
     public function insertPro(){
@@ -252,12 +279,27 @@ class ExcelController extends AdminBasicController {
 
     /**
      * 初始化参数及配置信息
-     *
+     * @param string $Domain 域名
      */
-    private function _initParam(){
+    private function _initParam($Domain = 'Enjoytokyo'){
 
-        $this->fetch = new \FetchHTML('Data');
+        $Domain = get_domain($Domain);
+
+        import('Extend.FetchHTML');
+
+        $this->fetch = new \FetchHTML(C('FETCH_CLASS.'.$Domain));
 
     }
 
+    /**
+     * 设置输出模板
+     * @param array $data 数据内容
+     */
+    private function _setFetchHtml($data = array()){
+        
+        $this->assign('title', $data['title']);
+        $this->assign('data', $data['data']);
+        
+        return $this->fetch('Excel/fetchHtml');
+    }
 }

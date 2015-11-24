@@ -5,6 +5,18 @@
  */
 
 /**
+ * 获取域名
+ * @param string $url 
+ */
+function get_domain($url = false){
+	if (!$url) return false;
+
+	$url = parse_url($url);
+
+	return str_replace('.', '_', $url['host']);
+}
+
+/**
  * 隐藏手机号中间几位
  * @param int $mobile 手机号
  */
