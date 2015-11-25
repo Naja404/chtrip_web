@@ -47,6 +47,7 @@ KindEditor.lang({
 	hr : '插入横线',
 	emoticons : '插入表情',
 	link : '超级链接',
+	selectPro : '添加产品/店铺',
 	unlink : '取消超级链接',
 	fullscreen : '全屏显示',
 	about : '关于',
@@ -109,6 +110,14 @@ KindEditor.lang({
 	ajaxLoading : '加载中，请稍候 ...',
 	uploadLoading : '上传中，请稍候 ...',
 	uploadError : '上传错误',
+
+	'selectPro.proType_1' : '商品',
+	'selectPro.proType_2' : '店铺',
+	'selectPro.proName' : '名称',
+	'selectPro.proSearch' : '查询',
+	'selectPro.emptyProName' : '请输入名称',
+	'selectPro.notSelected' : '请选择一个商品/店铺',
+
 	'plainpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
 	'wordpaste.comment' : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。',
 	'code.pleaseInput' : '请输入程序代码。',

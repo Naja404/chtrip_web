@@ -26,9 +26,32 @@ class ProductController extends AdminBasicController {
         $this->productModel = D('Product');
 
         $this->ajaxRes = array(
-                'status' => 1,
+                'status' => '1',
                 'msg'    => L('error_operation'),
             );
+    }
+
+    /**
+     * ajax 查询内容
+     */
+    public function searchProAjax(){
+
+        $this->ajaxRes['msg'] = '暂无数据';
+
+        if (!IS_AJAX) $this->ajaxReturn($this->ajaxRes);
+
+        if (!I('request.name')) $this->ajaxReturn($this->ajaxRes);
+
+        $queryRes = $this->productModel->searchProAjax(I('request.type'), I('request.name'), true);
+
+        if ($queryRes !== false){
+            $this->ajaxRes = array(
+                    'status' => '0',
+                    'html'   => $queryRes,
+                );
+        }
+
+        $this->ajaxReturn($this->ajaxRes);
     }
 
     /**

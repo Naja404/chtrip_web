@@ -239,7 +239,7 @@ class ProductModel extends Model{
 	 * 获取专辑详细内容
 	 * @param int $aid 专辑id
 	 */
-	public function getAlbumDetail($aid = 0){
+	public function getAlbumDetail($aid = 0, $controller = false){
 		$sql = "SELECT a.*, b.name AS type_name, c.path  FROM ch_album AS a
 						LEFT JOIN ch_album_type AS b ON b.id = a.type
 						LEFT JOIN ch_product_image AS c ON c.gid = a.gid
@@ -273,5 +273,4 @@ class ProductModel extends Model{
 
 	 	return $queryRes;
 	 }
-
 }

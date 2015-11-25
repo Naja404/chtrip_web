@@ -81,4 +81,6 @@ return array(
     'FETCH_CLASS' => array(
             'www_enjoytokyo_jp' => 'Enjoytokyo',
         ),
+
+    'PREVIEW_ALBUM' => 'http://local-api.atniwo.com/Product/showAlbum?aid=%s',
 );

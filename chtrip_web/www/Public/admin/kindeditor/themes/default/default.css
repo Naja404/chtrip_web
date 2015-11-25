@@ -233,6 +233,15 @@
 	width: 16px;
 	height: 16px;
 }
+/*
+ * 产品选择
+ */
+ .ke-icon-selectPro {
+	background-position: 0px -1232px;
+	width: 16px;
+	height: 16px;
+}
+
 .ke-icon-fullscreen {
 	background-position: 0px -656px;
 	width: 16px;

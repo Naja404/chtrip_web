@@ -8,6 +8,43 @@ use Think\Model;
 class ProductModel extends Model{
 
 	/**
+	 * 查询内容
+	 * @param int $type 0.商品 1.店铺
+	 * @param string $name 查询内容
+	 * @param bool $isHTML 是否格式化html
+	 */
+	public function searchProAjax($type = 0, $name = false, $isHTML = false){
+
+		if ($type == 0) {
+			$where = array(
+					'title_zh' => array('LIKE', '%'.$name.'%'),
+				);
+			$field = 'title_zh';
+			$id = 'pid';
+			$queryRes = $this->table(tname('product_detail_copy'))
+					->where($where)
+					->limit(10)
+					->select();
+		}else{
+			$where = array(
+					'name' => array('LIKE', '%'.$name.'%'),
+					'status' => 1,
+				);
+			$field = 'name';
+			$id = 'saler_id';
+			$queryRes = $this->table(tname('saler'))->where($where)->limit(10)->select();
+		}
+
+		if (count($queryRes) <= 0) return false;
+
+		if ($isHTML) {
+			return $this->_formatSearchResToHTML($queryRes, $field, $id);
+		}
+
+		return count($queryRes) <= 0 ? false : $queryRes;
+	}
+
+	/**
 	 * 获取产品总量
 	 *
 	 */
@@ -262,6 +299,23 @@ class ProductModel extends Model{
 
     	$this->table(tname('product_image'))->addAll($addIMG);
 
+	}
+
+	/**
+	 * 格式化查询数据为html
+	 * @param array $queryRes 查询结果
+	 * @param string $field 字段
+	 */
+	private function _formatSearchResToHTML($queryRes = array(), $field = 'name', $id = 'pid'){
+		
+		$html = '';
+
+		foreach ($queryRes as $k => $v) {
+			$html .= '<input id="pro_'.$k.'" type="radio" name="proId" value="'.$id.'_'.$v[$id].'">';
+			$html .='<label for="pro_'.$k.'">'.$v[$field].'</label><br>';
+		}
+
+		return $html;
 	}
 
 }

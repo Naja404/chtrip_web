@@ -148,7 +148,13 @@ class ProductController extends ApiBasicController {
 
         $aid = I('request.aid', 0);
 
-        $this->assign('detail', $this->productModel->getAlbumDetail($aid));
+        $detailRes = $this->productModel->getAlbumDetail($aid);
+
+        if (preg_match('/{hasPro:\w+}/', $detailRes['content'])) {
+            $detailRes['content'] = $this->_formatProToHTML($detailRes['content']);
+        }
+
+        $this->assign('detail', $detailRes);
 
         $this->display('Product/albumDetail');
     }
@@ -422,4 +428,41 @@ class ProductController extends ApiBasicController {
             return sprintf('剩:%s天', ceil($activityTime / 3600 / 24));
         }
     }
+
+     /**
+      * 格式化产品内容
+      * @param string $content 文本内容
+      */
+     private function _formatProToHTML($content = false){
+        preg_match_all('/{hasPro:\w+}/', $content, $pregArr);
+
+        if (count($pregArr[0]) <= 0) return $content;
+
+        foreach ($pregArr[0] as $k => $v) {
+            $tmpHtml = $this->_checkProType($v);
+            $content = str_replace($v, $tmpHtml, $content);
+        }
+
+        return $content;
+     }
+
+     /**
+      * 返回类型
+      * @param string $pidStr
+      */
+     private function _checkProType($pidStr = false){
+        preg_match('/\d+/', $pidStr, $pid);
+
+        if (preg_match('/{hasPro:pid_\\d+}/', $pidStr)) {
+            $queryRes = $this->productModel->getProductDetail($pid[0]);
+            $htmlFile = 'Product/proTpl';
+        }else{
+            $queryRes = $this->productModel->getShopDetail($pid[0]);
+            $htmlFile = 'Product/shopTpl';
+        }
+
+        $this->assign('data', $queryRes);
+
+        return $this->fetch($htmlFile);
+     }
 }
