@@ -8,6 +8,19 @@ use Think\Model;
 class ProductModel extends Model{
 
 	/**
+	 * 更新店铺信息
+	 * @param int $sid 店铺id
+	 * @param array $update 更新数据
+	 */
+	public function upSalerInfo($sid = false, $update = array()){
+		$where = array(
+				'saler_id' => $sid,
+			);
+		
+		return $this->table(tname('saler'))->where($where)->save($update);
+	}
+
+	/**
 	 * 获取所有城市列表
 	 */
 	public function getAllCityList(){

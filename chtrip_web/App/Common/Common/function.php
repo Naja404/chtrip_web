@@ -398,4 +398,42 @@ function show_album_type($type = 0){
 	
 
 }
+
+/**
+ * google 反查地理坐标
+ * @param string $address 地址
+ */
+function google_geo($address = false){
+
+	$url = sprintf(C('GOOGLE_CONF.GEO_URL'), $address, C('GOOGLE_CONF.GEO_KEY'));
+
+	$json = json_decode(file_get_contents($url), true);
+
+	if ($json['status'] != 'OK') return false;
+
+	return $json['results'][0]['geometry']['location'];
+
+}
+
+/**
+ * google 生成地图图片
+ * @param string $address 地址
+ * @param array $conf 配置信息
+ * @param string $filePath 图片路径
+ */
+function google_static_image($address = false, $conf = array(), $filePath = false){
+	
+	if (!$filePath) $filePath = C('MAP_IMAGE').mkUUID().'.png';
+
+	if (count($conf) <= 0) $conf = C('GOOGLE_CONF.STATIC_IMAGE_CONF');
+
+	$url = sprintf(C('GOOGLE_CONF.STATIC_IMAGE_URL'), $address, $conf['scale'], $conf['color'], $conf['latlng'], $conf['zoom'], $conf['size'], C('GOOGLE_CONF.STATIC_IMAGE_KEY'), $conf['language']);
+
+	downloadImage($url, $filePath);
+
+	if (!file_exists($filePath)) return false;
+
+	return '/'.$filePath;
+}
+
 ?>

@@ -16,7 +16,13 @@
 	<span style="font-size:16px;">
 		<span style="color:#337FE5;"><strong>地址：</strong></span>
 		{$data.address}
+		<?php if(!empty($data['address_img'])){?>
+		<span style="color:#337FE5;" onclick="showMap('<?php echo $data["saler_id"];?>');"><strong>&nbsp;&nbsp;查看地图</strong></span>
+		<?php } ?>
 	</span> 
+	<div id="saler_<?php echo $data['saler_id'];?>" style="display:none;">
+		<img src="{$data.address_img}" />
+	</div>
 </p>
 <p>
 	<span style="font-size:16px;">

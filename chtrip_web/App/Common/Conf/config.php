@@ -140,4 +140,21 @@ return  array(
 			'type',
 		),
 
+	// google 配置内容
+	'GOOGLE_CONF' => array(
+			'GEO_URL'          => 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
+			'GEO_KEY'          => 'AIzaSyA0xWHwylqZ2i0oJWMcMt6Kaepxv14P_Lg',
+			'STATIC_IMAGE_URL' => 'https://maps.googleapis.com/maps/api/staticmap?center=%s&scale=%s&markers=color:%s|label:!|%s&zoom=%s&size=%s&key=%s&language=%s',
+			'STATIC_IMAGE_KEY' => 'AIzaSyAb4TVivdvWXYNauoZXTDxkpDtfv6WDg4I',
+			'STATIC_IMAGE_CONF' => array(
+					'scale'    => 1,
+					'color'    => 'red',
+					'zoom'     => 18,
+					'size'	   => '400x300',
+					'language' => 'zh-CN',
+				),
+		),
+
+	'MAP_IMAGE' => 'Public/uploads/map/',
+
 );

@@ -355,6 +355,8 @@ class ProductController extends ApiBasicController {
                 $queryRes['tag_name'] = array();
             }
         }
+        
+        if (empty($queryRes['address_img'])) $queryRes['address_img'] = $this->_getMapImg($queryRes);
 
         $this->assign('detail', $queryRes);
         $this->display('Product/shopDetail');
@@ -450,7 +452,7 @@ class ProductController extends ApiBasicController {
       * 返回类型
       * @param string $pidStr
       */
-     private function _checkProType($pidStr = false){
+    private function _checkProType($pidStr = false){
         preg_match('/\d+/', $pidStr, $pid);
 
         if (preg_match('/{hasPro:pid_\\d+}/', $pidStr)) {
@@ -458,6 +460,10 @@ class ProductController extends ApiBasicController {
             $htmlFile = 'Product/proTpl';
         }else{
             $queryRes = $this->productModel->getShopDetail($pid[0]);
+
+            if (empty($queryRes['address_img'])) $queryRes['address_img'] = $this->_getMapImg($queryRes);
+
+
             $htmlFile = 'Product/shopTpl';
         }
 
@@ -465,5 +471,33 @@ class ProductController extends ApiBasicController {
         $this->assign('data', $queryRes);
 
         return $this->fetch($htmlFile);
-     }
+    }
+
+     /**
+      * 获取地图图片
+      * @param array $addRes 查询内容
+      */
+    private function _getMapImg($addRes = array()){
+        $latlng = google_geo($addRes['address']);
+
+        if (!is_array($latlng)) return '1';
+
+        $conf = C('GOOGLE_CONF.STATIC_IMAGE_CONF');
+
+        $conf['latlng'] = implode(',', array_values($latlng));
+
+        $filePath = google_static_image($addRes['address'], $conf);
+
+        if ($filePath == false) return '2';
+
+        $update = array(
+                'lat'         => $latlng['lat'],
+                'lng'         => $latlng['lng'],
+                'address_img' => $filePath,
+            );
+
+        $this->productModel->upSalerInfo($addRes['saler_id'], $update); 
+
+        return $filePath;
+    }
 }

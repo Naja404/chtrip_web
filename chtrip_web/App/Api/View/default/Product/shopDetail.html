@@ -33,7 +33,17 @@
             <?php if(!empty($detail['tel'])){?>
             <p>电话：<?php echo $detail['tel'];?></p>
             <?php }?>
-            <p>地址：{$detail.address}</p>
+            <?php if(!empty($detail['address'])){?>
+            <p>地址：<?php echo $detail['address'];?></p>
+            <?php }?>
+            <p>
+                <?php if(!empty($detail['address_img'])){?>
+                <span style="color:#337FE5;" onclick="showMap('<?php echo $detail["saler_id"];?>');"><strong>&nbsp;&nbsp;查看地图</strong></span>
+                <?php } ?>
+                <div id="saler_<?php echo $detail['saler_id'];?>" style="display:none;">
+                    <img src="{$detail.address_img}" />
+                </div>
+            </P>
             <!-- <p>地图信息</p> -->
         </div>
     </div>
@@ -42,6 +52,15 @@
     </div> -->
     <div class="clearFooter">
     </div>
+<script type="text/javascript">
+            function showMap(sid){
+                $("#saler_"+sid).toggle(function(){
+                    
+                },function(){
+                    
+                });
+            }
+</script>
 </div>
 </body>
 </html>
