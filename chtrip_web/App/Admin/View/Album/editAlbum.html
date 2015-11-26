@@ -125,7 +125,8 @@
 			$('#jpSelectFormBtn').attr('class', 'btn btn-inverse btn-mini');
 		}
 	}
-	var albumContent;
+	var albumContent,
+		getProUrl = "{:U('Product/searchProAjax')}";
 	KindEditor.ready(function(K) {
 		albumContent = K.create('textarea[name="content"]', {
 			resizeType : 1,
@@ -135,7 +136,7 @@
 			items : [
 				'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
 				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-				'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+				'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'selectPro']
 		});
 
 		$('.ke-container').width('600px');

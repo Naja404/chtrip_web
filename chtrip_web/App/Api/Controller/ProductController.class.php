@@ -461,6 +461,7 @@ class ProductController extends ApiBasicController {
             $htmlFile = 'Product/shopTpl';
         }
 
+        $this->assign('ssid', I('request.ssid'));
         $this->assign('data', $queryRes);
 
         return $this->fetch($htmlFile);

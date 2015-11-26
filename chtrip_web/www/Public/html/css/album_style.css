@@ -286,3 +286,10 @@ img {
 		font-weight: 600
 	}
 }
+.want-icon {
+	position:relative;
+	width:80px;
+	float:right;
+	right:20px;
+	top:-120px;
+}
