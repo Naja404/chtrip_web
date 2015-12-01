@@ -212,7 +212,7 @@ class ProductModel extends Model{
 	 * @param array $queryData 查询条件数组
 	 */
 	public function getShopList($queryData = array()){
-		return $this->table(tname('saler'))->field('saler_id, name, pic_url, avg_price, avg_rating, category, area, address')->where($queryData['where'])->order('created DESC')->limit($queryData['page'])->select();
+		return $this->table(tname('saler'))->field('saler_id, name, pic_url, avg_price, avg_rating, category, area, address, lat, lng')->where($queryData['where'])->order('created DESC')->limit($queryData['page'])->select();
 	}
 
 	/**

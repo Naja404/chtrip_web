@@ -327,6 +327,7 @@ class ProductController extends ApiBasicController {
 
         foreach ($queryRes as $k => $v) {
             $v['avg_rating'] = (string)10*$v['avg_rating'];
+            $v['googlemap'] = sprintf("comgooglemaps://?center=%s,%s&zoom=14&views=traffic", $v['lat'], $v['lng']);
             $queryArr[] = $v;
         }
 

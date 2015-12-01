@@ -74,6 +74,16 @@ class UtilController extends ApiBasicController {
     }
 
     /**
+     * 
+     * @param type item
+     */
+    public function testMAP(){
+        $what = google_geo(I('request.address'));
+        echo '<pre>';
+        print_r($what);exit();
+    }
+
+    /**
      * 处理图片
      */
     public function resizeImg(){

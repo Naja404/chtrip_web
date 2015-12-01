@@ -405,7 +405,7 @@ function show_album_type($type = 0){
  */
 function google_geo($address = false){
 
-	$url = sprintf(C('GOOGLE_CONF.GEO_URL'), $address, C('GOOGLE_CONF.GEO_KEY'));
+	$url = sprintf(C('GOOGLE_CONF.GEO_URL'), urlencode($address), C('GOOGLE_CONF.GEO_KEY'));
 
 	$json = json_decode(file_get_contents($url), true);
 
@@ -427,7 +427,7 @@ function google_static_image($address = false, $conf = array(), $filePath = fals
 
 	if (count($conf) <= 0) $conf = C('GOOGLE_CONF.STATIC_IMAGE_CONF');
 
-	$url = sprintf(C('GOOGLE_CONF.STATIC_IMAGE_URL'), $address, $conf['scale'], $conf['color'], $conf['latlng'], $conf['zoom'], $conf['size'], C('GOOGLE_CONF.STATIC_IMAGE_KEY'), $conf['language']);
+	$url = sprintf(C('GOOGLE_CONF.STATIC_IMAGE_URL'), urlencode($address), $conf['scale'], $conf['color'], $conf['latlng'], $conf['zoom'], $conf['size'], C('GOOGLE_CONF.STATIC_IMAGE_KEY'), $conf['language']);
 
 	downloadImage($url, $filePath);
 
