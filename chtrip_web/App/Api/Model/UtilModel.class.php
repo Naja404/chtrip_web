@@ -53,7 +53,7 @@ class UtilModel extends Model{
 	 * @param string $token 设备token
 	 */
 	private function _spliceToken($token = false){
-		$token = preg_replace('/<|>|\s+/', '', $token);
+		preg_replace('/<|>|\s+/', '', $token);
 
 		return empty($token) ? '' : $token ;
 	}

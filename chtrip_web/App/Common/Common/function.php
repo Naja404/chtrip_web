@@ -21,6 +21,9 @@ function get_domain($url = false){
  * @param int $mobile 手机号
  */
 function hide_mobile($mobile = false){
+	
+	if (!$mobile) return false;
+
 	return substr_replace($mobile, '****', 3, 5);
 }
 

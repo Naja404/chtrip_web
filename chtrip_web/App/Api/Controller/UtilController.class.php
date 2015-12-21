@@ -138,7 +138,7 @@ class UtilController extends ApiBasicController {
         $content .= '<br/>DeviceToken:'.I('get.token');
 
         $to = array(
-                '326101710@qq.com',
+                'all@nijigo.com',
             );
         $subject = 'NijiGo FeedBack';
 
