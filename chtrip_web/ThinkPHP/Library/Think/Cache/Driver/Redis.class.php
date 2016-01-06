@@ -114,7 +114,7 @@ class Redis extends Cache {
      * @author  Hisoka @2014-4-22
      */
     public function push($path = false, $value = false){
-        $path = !empty($path) ? $path : C('REDIS_LIST_FETCH_EMAIL');
+        $path = !empty($path) ? $path : C('CACHE_LIST.PUSH');
 
         if (empty($value)) {
             return false;
@@ -133,7 +133,7 @@ class Redis extends Cache {
      * @author  Hisoka @2014-4-22
      */
     public function pop($path = false){
-        $path = !empty($path) ? $path : C('REDIS_LIST_FETCH_EMAIL');
+        $path = !empty($path) ? $path : C('CACHE_LIST.PUSH');
 
         $result = $this->handler->RPOP($path);
 

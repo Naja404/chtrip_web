@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8" >
+	<meta http-equiv="X-UA-Compatible" content="IE-edge,chrome=1">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/html/nijigo/css/bootstrap.min.css"/>
+	<script src="__PUBLIC__/html/nijigo/js/jquery.js"></script>
+	<style type="text/css">
+		input{
+			border: 0;
+			outline: none;
+			width: 100%;
+			height: 3em;
+			font-size: 1.2em;
+		}
+		select {
+			height: 3em;
+			width: 80%;
+			font-size: 1.2em;
+			appearance:none;
+			-moz-appearance:none;
+			-webkit-appearance:none;
+			border: 0;
+			background-color: white;
+		}
+		button{
+			width: 100%;
+			height: 3em;
+			font-size: 1.2em;
+			border: 0;
+			position: fixed;
+			bottom: 0;
+			color: white;
+			background-color: #9c9c9c;
+		}
+	</style>
+	<title>nijigo</title>
+</head>
+<body>
+	<form id="addForm">
+	<table class="table table-bordered">
+		<tbody>
+			<tr>
+				<td>
+					<input type="text" name="name" placeholder="收件人">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="tel" name="mobile" placeholder="手机号">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="province">
+						<option selected="true" disabled="true">选择收件人所在省份</option>
+						<volist name="cityList" id="item">
+							<option value="{$item.id}">{$item.name}</option>
+						</volist>
+					</select>
+					<span class="glyphicon glyphicon-chevron-down" style="float:right;padding:20px;"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<select name="city" >
+					<option selected="true" disabled="true">选择城市</option>
+				</select>
+				<span class="glyphicon glyphicon-chevron-down" style="float:right;padding:20px;"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<select name="area" >
+					<option selected="true" disabled="true">选择区县</option>
+				</select>
+				<span class="glyphicon glyphicon-chevron-down" style="float:right;padding:20px;"></span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" name="address" placeholder="详细地址">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="tel" name="post" placeholder="邮政编码">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<br>
+	<br>
+	<button disabled="true" id="subBTN" onclick="subForm();return false;">保存收货地址</button>
+	</form>
+	<script type="text/javascript">
+
+		function setBTN(validate){
+			if (validate == true){
+				$("#subBTN").attr("disabled", false);
+				$("#subBTN").css("background-color", "blue");
+			}else{
+				$("#subBTN").attr("disabled", true);
+				$("#subBTN").css("background-color", "gray");
+			}
+		}
+
+		function subForm(){
+			
+		}
+
+		$(document).ready(function(){
+
+			$("#addForm").bind("input propertychange", function(){
+
+					if ($("input[name=name]").val() == "") return setBTN(false);
+
+					if ($("input[name=mobile]").val() == "") return setBTN(false);
+
+					if ($("select[name=province]").val() == "") return setBTN(false);
+
+					if ($("select[name=city]").val() == "") return setBTN(false);
+
+					if ($("select[name=area]").val() == "") return setBTN(false);
+
+					if ($("input[name=address]").val() == "") return setBTN(false);
+
+					if ($("input[name=post]").val() == "") return setBTN(false);
+
+					return setBTN(true);
+			});
+
+			$("select[name=province]").bind("change", function(){
+				if (this.value <= 0) return false;
+
+				$.ajax({
+					type:"POST",
+					url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'level' => 2, 'type' => 'city'))}",
+					data:{id:this.value},
+					beforeSend:function(XMLHttpRequest){
+						// $(".spinner").show();
+					},
+					success:function(data){
+						$("select[name=city]").html(data.html.city);
+						if (data.html.area) {
+							$("select[name=area]").html(data.html.area);
+						};
+					},complete:function(XMLHttpRequest){
+						// $(".spinner").hide();
+					}
+				});
+			});
+
+			$("select[name=city]").bind("change", function(){
+				if (this.value <= 0) return	false;
+				$.ajax({
+					type:"POST",
+					url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'level' => 3, 'type' => 'city'))}",
+					data:{id:this.value},
+					beforeSend:function(XMLHttpRequest){
+						// $(".spinner").show();
+					},
+					success:function(data){
+						$("select[name=area]").html(data.html.city);
+					},complete:function(XMLHttpRequest){
+						// $(".spinner").hide();
+					}
+				});
+			});
+
+
+		});
+	</script>
+</body>
+</html>

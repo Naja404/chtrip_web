@@ -76,6 +76,45 @@ class UserModel extends Model{
 	}
 
 	/**
+	 * 添加到购物车
+	 * @param array $proData 商品数组
+	 */
+	public function addCart($proData = array()){
+		$where = array(
+				'user_id' => $proData['ssid'],
+			);
+
+		$wherePro = array(
+				'pid' => $proData['pid'],
+			);
+
+		$queryRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+		$proRes = $this->table(tname('products_copy'))->where($wherePro)->find();
+
+		if (!$queryRes['user_id']) $this->creatBuyList($proData['ssid']);
+
+		$userCart = unserialize($queryRes['cart']);
+
+		// 判断限购
+		if ($proRes['limit'] > 0) {
+			if (isset($userCart[$proData['pid']]) && $userCart[$proData['pid']] + 1 > $proRes['limit']) return L('TEXT_BUY_PRO_LIMIT');
+		}
+
+
+		$userCart[$proData['pid']]++;
+		$proRes['rest']--;
+		// 判断库存
+		if ($proRes['rest'] < 0) return L('TEXT_NOT_STOCK');
+
+		$this->query("UPDATE `ch_products_copy` SET rest = '".$proRes['rest']."' WHERE `pid` = '".$proData['pid']."' ");
+
+		$addRes = $this->query("UPDATE `ch_user_buylist` SET cart = '".serialize($userCart)."' WHERE ( `user_id` = '".$proData['ssid']."' )");
+
+		return count($addRes) <= 0 ? true : L('TEXT_ADD_CART_FAILD');
+	}
+
+	/**
 	 * 添加商品到扫货清单
 	 * @param array $proData 商品数组
 	 */

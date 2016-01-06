@@ -105,7 +105,7 @@ class ProductModel extends Model{
 					b.summary_zh,
 					b.price_zh, 
 				  CONCAT('".C('API_WEBSITE')."', REPLACE(c.path, '.', '_100_100.')) AS thumb,
-				  a.recommend ";
+				  a.recommend, a.rest ";
 
 		$order = ' a.sort DESC, a.recommend DESC, a.created DESC ';
 

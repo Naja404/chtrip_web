@@ -19,7 +19,48 @@ class UserController extends ApiBasicController {
         $this->userModel = D('User');
         $this->userInfoModel = D('userInfo');
         $this->userSNSModel = D('UserSns');
+        $this->userAddressModel = D('UserAddress');
 
+    }
+
+    /**
+     * 获取用户收获地址
+     */
+    public function getAddress(){
+        $reqData = I('request.');
+
+        $queryRes = $this->userAddressModel->getUserAddress($reqData['ssid']);
+
+        if (!is_array($queryRes)) json_msg($queryRes, 1);
+
+        json_msg($queryRes);
+    }
+
+    /**
+     * 添加收货地址
+     */
+    public function addAddress(){
+
+        if (IS_AJAX) {
+            $reqData = I('request.');
+
+            if ($reqData['type'] == 'city') {
+                
+                $queryRes = $this->userAddressModel->getCityList($reqData['id'], $reqData['level'], 1);
+
+                $ajax = array(
+                        'status' => '0',
+                        'html'   => $queryRes,
+                    );
+
+                $this->ajaxReturn($ajax);
+            }
+            // todo address add method
+
+        }
+
+        $this->assign('cityList', $this->userAddressModel->getCityList());
+        $this->display('User/addAddress');
     }
 
     /**
@@ -305,6 +346,22 @@ class UserController extends ApiBasicController {
         if (count($returnRes) > 0) {
             json_msg($returnRes);
         }
+
+        json_msg();
+    }
+
+    /**
+     * 添加产品到购物车
+     */
+    public function addCart(){
+        $reqData = array(
+                'ssid' => I('request.ssid'),
+                'pid'  => I('request.pid'),
+            );
+
+        $returnRes = $this->userModel->addCart($reqData);
+
+        if (is_string($returnRes)) json_msg($returnRes, 1);
 
         json_msg();
     }

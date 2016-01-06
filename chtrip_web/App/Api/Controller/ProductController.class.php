@@ -192,7 +192,8 @@ class ProductController extends ApiBasicController {
         $queryArr = array();
         foreach ($queryRes as $k => $v) {
             $v['price_zh'] = $v['price_zh'].' RMB';
-
+            $v['stock_label'] = L('TEXT_ADD_CART');
+            if ($v['rest'] == 0) $v['stock_label'] = L('TEXT_NOT_STOCK');
             $queryArr[] = $v;
         }
 

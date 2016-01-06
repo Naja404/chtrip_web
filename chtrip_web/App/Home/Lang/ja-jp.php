@@ -5,7 +5,7 @@ return array(
 	'TEXT_NEWS'      => '報道',
 	'TEXT_ABOUT'     => 'について',
 	'TEXT_MEMBERS'   => '一員',
-	'TEXT_JOB'       => 'JOB',
+	'TEXT_JOB'       => '服务',
 	'TEXT_CONTACT'   => 'コンタクト',
 	'TEXT_KNOW_MORE' => '詳細はこちら',
 );

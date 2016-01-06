@@ -29,4 +29,9 @@ return array(
 	'TEXT_SEX_1' => '男',
 	'TEXT_SEX_2' => '女',
 	'TEXT_MOBILE_NOT_BIND' => '未绑定手机',
+
+	'TEXT_ADD_CART' => '加入购物车',
+	'TEXT_NOT_STOCK' => '已售罄',
+	'TEXT_BUY_PRO_LIMIT' => '该商品购限购量已上限',
+	'TEXT_ADD_CART_FAILD' => '加入购物车失败',
 );

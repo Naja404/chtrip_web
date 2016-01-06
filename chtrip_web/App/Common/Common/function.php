@@ -356,8 +356,7 @@ function downloadImage($url, $fileName){
 function resizeImg($path = false, $width = 90, $height = 66, $isCut = false){
 	
 	$imageInfo = getimagesize($path);
-	echo '<pre>';
-	print_r($imageInfo);exit();
+
 	$ratio = $imageInfo[1] / $imageInfo[0];
 
 	$newHeight = intval($width / $ratio);
