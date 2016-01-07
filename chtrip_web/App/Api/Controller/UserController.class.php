@@ -318,6 +318,16 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 获取购物车列表
+     */
+    public function getCart(){
+        
+        $returnRes = $this->userModel->getCart(I('request.ssid'));
+
+        json_msg($returnRes);
+    }
+
+    /**
      * 获取扫货清单
      */
     public function getBuyList(){

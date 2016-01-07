@@ -76,6 +76,73 @@ class UserModel extends Model{
 	}
 
 	/**
+	 * 获取购物车
+	 * @param string $userId 用户id
+	 */
+	public function getCart($userId = false){
+		$where = array(
+				'user_id' => $userId,
+			);
+
+		$cartId = $this->table(tname('user_buylist'))->where($where)->find();
+
+		$cartId = unserialize($cartId['cart']);
+
+		if (!is_array($cartId) || count($cartId) <= 0) return $this->_cartInfo();
+
+		$cartIdArr = array_keys($cartId);
+
+		$proId = implode(",", $cartIdArr);
+
+		$sql = "SELECT 
+					A.pid, 
+					A.status, 
+					CONCAT('".C('API_WEBSITE')."', REPLACE(C.path, '.', '_100_100.')) AS thumb,
+					B.title_zh, 
+					B.summary_zh, 
+					B.price_zh, 
+					B.price_jp 
+					FROM ch_products_copy
+					 AS A
+					LEFT JOIN ch_product_detail_copy AS B ON B.pid = A.pid
+					LEFT JOIN ch_product_image AS C ON C.gid = A.image_id
+					WHERE A.pid IN (".$proId.")";
+
+		$proRes = $this->query($sql);
+
+		$selectCount = $priceZHTotal = $priceJPTotal= 0;
+
+		foreach ($proRes as $k => $v) {
+			if (!in_array($v['pid'], $cartIdArr) && isset($cartId[$v['pid']])){
+				unset($cartId[$v['pid']]);
+				continue;
+			}
+
+			$v['total'] = (string)$cartId[$v['pid']]['total'];
+			$v['select'] = (string)$cartId[$v['pid']]['select'];
+
+			$cartId[$v['pid']]['select'] == 1 ? $selectCount++ : '';
+			$cartId[$v['pid']] = $v;
+			$priceZHTotal += $v['price_zh'];
+			$priceJPTotal += $v['price_jp'];
+		}
+
+		$selectAll = count($cartIdArr) == $selectCount ? 1 : 0;
+
+		if (!is_array($cartId) || count($cartId) <= 0) return $this->_cartInfo();
+
+		$proData = array(
+				'list'           => $cartId,
+				'select_all'     => (string)$selectAll,
+				'select_count'   => (string)$selectCount,
+				'price_zh_total' => (string)sprintf("%1\$.2f", round($priceZHTotal, 2)),
+				'price_jp_total' => (string)sprintf("%1\$.2f", round($priceJPTotal, 2)),
+			);
+
+		return $this->_cartInfo($proData);
+	}
+
+	/**
 	 * 添加到购物车
 	 * @param array $proData 商品数组
 	 */
@@ -96,13 +163,17 @@ class UserModel extends Model{
 
 		$userCart = unserialize($queryRes['cart']);
 
+		// 判断产品是否存在
+		if ($proRes['pid'] != $proData['pid']) return L('TEXT_ADD_CART_FAILD');
+
 		// 判断限购
 		if ($proRes['limit'] > 0) {
-			if (isset($userCart[$proData['pid']]) && $userCart[$proData['pid']] + 1 > $proRes['limit']) return L('TEXT_BUY_PRO_LIMIT');
+			if (isset($userCart[$proData['pid']]) && $userCart[$proData['pid']]['total'] + 1 > $proRes['limit']) return L('TEXT_BUY_PRO_LIMIT');
 		}
 
+		$userCart[$proData['pid']]['total']++;
 
-		$userCart[$proData['pid']]++;
+		if (!isset($userCart[$proData['pid']]['select'])) $userCart[$proData['pid']]['select'] = 1;
 		$proRes['rest']--;
 		// 判断库存
 		if ($proRes['rest'] < 0) return L('TEXT_NOT_STOCK');
@@ -340,4 +411,22 @@ class UserModel extends Model{
 		$this->table(tname('user_buylist'))->add($add);
 	}
 
+	/**
+	 * 返回购物车信息
+	 * @param array $proData 商品数据
+	 */
+	private function _cartInfo($proData = array()){
+
+		$cartInfo = array(
+				'list'           => array(),
+				'select_count'   => '0',
+				'select_all'     => '0',
+				'price_zh_total' => '0.00',
+				'price_jp_total' => '0.00',
+			);
+
+		if (count($proData) <= 0) return $cartInfo;
+
+		return $proData;
+	}
 }
