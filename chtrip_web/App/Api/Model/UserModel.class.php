@@ -101,7 +101,9 @@ class UserModel extends Model{
 					B.title_zh, 
 					B.summary_zh, 
 					B.price_zh, 
-					B.price_jp 
+					B.price_jp, 
+					A.rest, 
+					A.limit 
 					FROM ch_products_copy
 					 AS A
 					LEFT JOIN ch_product_detail_copy AS B ON B.pid = A.pid
@@ -122,9 +124,33 @@ class UserModel extends Model{
 			$v['select'] = (string)$cartId[$v['pid']]['select'];
 
 			$cartId[$v['pid']]['select'] == 1 ? $selectCount++ : '';
+			
+			// 单品数量金额
+			if ($v['total'] > 1) {
+				$v['price_zh'] = $v['price_zh'] * $v['total'];
+				$v['price_jp'] = $v['price_jp'] * $v['total'];
+			}
+
+			// 累加选中金额
+			if ($v['select'] == 1) {
+				$priceZHTotal += $v['price_zh'];
+				$priceJPTotal += $v['price_jp'];
+			}
+
+			// 允许加减商品数量
+			$v['minus'] = '1';
+			$v['plus'] = '1';
+
+			// 是否能加减商品数量
+			if ($v['rest'] > 0) {
+				if ($v['total'] >= $v['limit'] && $v['limit'] != 0) $v['plus'] = '0';
+			}else{
+				$v['plus'] = '0';
+			}
+
+			if ($v['total'] <= 1) $v['minus'] = '0';
+
 			$cartId[$v['pid']] = $v;
-			$priceZHTotal += $v['price_zh'];
-			$priceJPTotal += $v['price_jp'];
 		}
 
 		$selectAll = count($cartIdArr) == $selectCount ? 1 : 0;
@@ -132,7 +158,7 @@ class UserModel extends Model{
 		if (!is_array($cartId) || count($cartId) <= 0) return $this->_cartInfo();
 
 		$proData = array(
-				'list'           => $cartId,
+				'list'           => array_values($cartId),
 				'select_all'     => (string)$selectAll,
 				'select_count'   => (string)$selectCount,
 				'price_zh_total' => (string)sprintf("%1\$.2f", round($priceZHTotal, 2)),
@@ -140,6 +166,111 @@ class UserModel extends Model{
 			);
 
 		return $this->_cartInfo($proData);
+	}
+
+	/**
+	 * 更新购物车状态
+	 * @param array $reqData 请求数据
+	 */
+	public function setCart($reqData = array()){
+
+		$queryRes = $this->table(tname('user_buylist'))->where(array('user_id' => $reqData['ssid']))->find();
+
+		$cartArr = unserialize($queryRes['cart']);
+		$cartIdArr = array_keys($cartArr);
+
+		if (!in_array($reqData['pid'], $cartIdArr) && !in_array($reqData['type'], array(3, 4))) return $this->getCart($reqData['ssid']);
+		
+
+		switch ($reqData['type']) {
+			// 取消选中
+			case '0':
+				$cartArr[$reqData['pid']]['select'] = 0;
+				break;
+			// 选中
+			case '1':
+				$cartArr[$reqData['pid']]['select'] = 1;
+				break;
+			// 删除
+			case '2':
+				$tmpCart = $cartArr[$reqData['pid']];
+				unset($cartArr[$reqData['pid']]);
+				break;
+			// 全选
+			case '3':
+				foreach ($cartArr as $k => $v) {
+					$cartArr[$k]['select'] = 1;
+				}
+				break;
+			// 取消全选
+			case '4':
+				foreach ($cartArr as $k => $v) {
+					$cartArr[$k]['select'] = 0;
+				}
+				break;
+			// 删减商品数量
+			case '5':
+				if ($cartArr[$reqData['pid']]['total'] > 1){
+					$this->upProToCart($reqData['pid'], '2');
+					$cartArr[$reqData['pid']]['total']--;
+				}
+				break;
+			// 增加商品数量
+			case '6':
+				if ($this->checkProRest($reqData['pid'])) {
+					$this->upProToCart($reqData['pid'], '1');
+					$cartArr[$reqData['pid']]['total']++;
+				}
+				break;
+			default:
+				break;
+		}
+
+		$cartArr = count($cartArr) <= 0 ? "" : serialize($cartArr);
+
+		$queryRes = $this->query("UPDATE ".tname('user_buylist')." SET cart = '".$cartArr."' WHERE `user_id` = '".$reqData['ssid']."'");
+		
+		if (isset($tmpCart)) $this->query("UPDATE ".tname('products_copy')." SET rest = rest + ".(int)$tmpCart['total']." WHERE pid = ".(int)$reqData['pid']);
+
+		return $this->getCart($reqData['ssid']);
+	}
+
+	/**
+	 * 检测商品库存
+	 * @param string $pid 商品id
+	 */
+	public function checkProRest($pid = false){
+		$where = array(
+				'pid' => $pid,
+			);
+
+		$rest = $this->table(tname('products_copy'))->where($where)->count();
+
+		return (int)$rest >= 1 ? true : false;
+	}
+
+	/**
+	 * 更新商品库存
+	 * @param string $pid 商品id
+	 */
+	public function upProToCart($pid = false, $type = 0){
+		
+		$sql = "UPDATE ".tname('products_copy')." SET %s WHERE pid = ".(int)$pid;
+
+		switch ($type) {
+			case '1':
+				$update = " rest = rest - 1 ";
+				break;
+			case '2':
+				$update = " rest = rest + 1 ";
+				break;
+			default:
+				break;
+		}
+
+		if (!isset($update)) return;
+
+		$this->query(sprintf($sql, $update));
 	}
 
 	/**
