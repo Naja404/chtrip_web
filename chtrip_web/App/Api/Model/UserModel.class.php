@@ -112,7 +112,7 @@ class UserModel extends Model{
 
 		$proRes = $this->query($sql);
 
-		$selectCount = $priceZHTotal = $priceJPTotal= 0;
+		$selectTotal = $selectCount = $priceZHTotal = $priceJPTotal= 0;
 
 		foreach ($proRes as $k => $v) {
 			if (!in_array($v['pid'], $cartIdArr) && isset($cartId[$v['pid']])){
@@ -124,6 +124,7 @@ class UserModel extends Model{
 			$v['select'] = (string)$cartId[$v['pid']]['select'];
 
 			$cartId[$v['pid']]['select'] == 1 ? $selectCount++ : '';
+			$cartId[$v['pid']]['select'] == 1 ? $selectTotal += $cartId[$v['pid']]['total'] : '';
 			
 			// 单品数量金额
 			if ($v['total'] > 1) {
@@ -160,7 +161,7 @@ class UserModel extends Model{
 		$proData = array(
 				'list'           => array_values($cartId),
 				'select_all'     => (string)$selectAll,
-				'select_count'   => (string)$selectCount,
+				'select_count'   => (string)$selectTotal,
 				'price_zh_total' => (string)sprintf("%1\$.2f", round($priceZHTotal, 2)),
 				'price_jp_total' => (string)sprintf("%1\$.2f", round($priceJPTotal, 2)),
 			);
