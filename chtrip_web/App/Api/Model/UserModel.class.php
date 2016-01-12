@@ -8,6 +8,34 @@ use Think\Model;
 class UserModel extends Model{
 
 	/**
+	 * 结算预览
+	 * @param array $reqData 查询内容
+	 */
+	public function preCheckOut($reqData = array()){
+
+		if (!$reqData['ssid']) return L('ERROR_PARAM');
+
+		$address     = $this->_getDefaultAddress($reqData['ssid']);
+		$proPrice    = $this->_getCartPrice($reqData['ssid']);
+		$addressShip = $this->_getShipping($proPrice['weight_total'], $reqData['ship']);
+
+		if ((int)$proPrice['price_zh_total'] == 0 || (int)$proPrice['weight_total'] == 0) return L('ERROR_PARAM');
+
+		$tmpPrice = round($proPrice['price_zh_total'], 2) + round($addressShip['ship_price'], 2);
+
+		$returnRes = array(
+				'address'             => $address,
+				'product_price_total' => $proPrice['price_zh_total'],
+				'weight_total'        => $proPrice['weight_total'],
+				'shipping_type'       => $addressShip['list'],
+				'shipping_price'	  => $addressShip['ship_price'],
+				'price_total' 		  => (string)get_price($tmpPrice), 
+			);
+
+		return $returnRes;
+	}
+
+	/**
 	 * 检测ssid
 	 * @param string $ssid
 	 */
@@ -103,7 +131,8 @@ class UserModel extends Model{
 					B.price_zh, 
 					B.price_jp, 
 					A.rest, 
-					A.limit 
+					A.limit,
+					B.weight  
 					FROM ch_products_copy
 					 AS A
 					LEFT JOIN ch_product_detail_copy AS B ON B.pid = A.pid
@@ -112,7 +141,7 @@ class UserModel extends Model{
 
 		$proRes = $this->query($sql);
 
-		$selectTotal = $selectCount = $priceZHTotal = $priceJPTotal= 0;
+		$weightTotal = $selectTotal = $selectCount = $priceZHTotal = $priceJPTotal= 0;
 
 		foreach ($proRes as $k => $v) {
 			if (!in_array($v['pid'], $cartIdArr) && isset($cartId[$v['pid']])){
@@ -136,6 +165,8 @@ class UserModel extends Model{
 			if ($v['select'] == 1) {
 				$priceZHTotal += $v['price_zh'];
 				$priceJPTotal += $v['price_jp'];
+
+				$weightTotal += $v['weight'] * $v['total'];
 			}
 
 			// 允许加减商品数量
@@ -162,8 +193,9 @@ class UserModel extends Model{
 				'list'           => array_values($cartId),
 				'select_all'     => (string)$selectAll,
 				'select_count'   => (string)$selectTotal,
-				'price_zh_total' => (string)sprintf("%1\$.2f", round($priceZHTotal, 2)),
-				'price_jp_total' => (string)sprintf("%1\$.2f", round($priceJPTotal, 2)),
+				'price_zh_total' => (string)get_price($priceZHTotal),
+				'price_jp_total' => (string)get_price($priceJPTotal),
+				'weight_total'   => (string)$weightTotal,
 			);
 
 		return $this->_cartInfo($proData);
@@ -560,5 +592,75 @@ class UserModel extends Model{
 		if (count($proData) <= 0) return $cartInfo;
 
 		return $proData;
+	}
+
+	/**
+	 * 获取默认收货地址
+	 * @param string $userId 用户id
+	 */
+	private function _getDefaultAddress($userId = false){
+
+		$where = array(
+				'user_id' => $userId,
+				'default' => 1,
+				'status'  => 1,
+			);
+
+		$queryRes = $this->table(tname('user_address'))
+						 ->field('name, address, mobile')
+						 ->where($where)
+						 ->find();
+
+		return count($queryRes) <= 0 ? array() : $queryRes;
+	}
+
+	/**
+	 * 获取购物车总金额
+	 * @param string $userId 用户id
+	 */
+	private function _getCartPrice($userId = false){
+		
+		$cartInfo = $this->getCart($userId);
+
+		return $cartInfo;
+	}
+
+	/**
+	 * 获取运费
+	 * @param int $weight 商品总重量
+	 * @param int $ship 物流选择 
+	 */
+	private function _getShipping($weight = 0, $ship = 1){
+
+		$ship = (int)$ship <= 0 ? 1 : $ship;
+
+		$sql = "SELECT 
+					A.weight, 
+					FORMAT((A.shipping_jpy * ".C('JPY')."), 2) AS shipping_zh, 
+					B.name, 
+					B.ship_day, 
+					B.note, 
+					IF(B.id = ".$ship.", '1', '0') AS selected
+				FROM ch_shipping AS A 
+				LEFT JOIN ch_shipping_type AS B ON B.id = A.type
+				WHERE 
+					A.weight >= ".(int)$weight." 
+					AND 
+					B.status = 1 
+				GROUP BY B.id 
+				ORDER BY A.weight, B.id ASC";
+
+		$queryRes = $this->query($sql);
+
+		foreach ($queryRes as $k => $v) {
+			if ($v['selected'] == 1) $shipPrice = $v['shipping_zh'];
+		}
+
+		$returnRes = array(
+				'list'       => $queryRes,
+				'ship_price' => $shipPrice,
+			);
+
+		return $returnRes;
 	}
 }

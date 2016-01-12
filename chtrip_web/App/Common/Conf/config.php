@@ -155,6 +155,8 @@ return  array(
 				),
 		),
 
+	'JPY' => '0.0558',
+
 	'MAP_IMAGE' => 'Public/uploads/map/',
 
 );

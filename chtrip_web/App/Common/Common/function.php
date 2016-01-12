@@ -5,6 +5,14 @@
  */
 
 /**
+ * 保留2位小数，不四舍五入
+ * @param float $num 
+ */
+function get_price($num){
+	return sprintf("%.2f",substr(sprintf("%.3f", $num), 0, -2));
+}
+
+/**
  * 获取域名
  * @param string $url 
  */

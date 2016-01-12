@@ -24,6 +24,19 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 订单预览
+     */
+    public function preCheckOut(){
+        $reqData = I('request.');
+
+        $queryRes = $this->userModel->preCheckOut($reqData);
+
+        if (!is_array($queryRes)) json_msg($queryRes, 1);
+
+        json_msg($queryRes);
+    }
+
+    /**
      * 获取用户收获地址
      */
     public function getAddress(){
