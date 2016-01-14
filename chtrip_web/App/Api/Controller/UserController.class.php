@@ -46,7 +46,12 @@ class UserController extends ApiBasicController {
 
         if (!is_array($queryRes)) json_msg($queryRes, 1);
 
-        json_msg($queryRes);
+        $outdata = array(
+                'list'    => $queryRes,
+                'add_url' => sprintf(C('API_ADD_ADDRESS_URL'), $reqData['ssid'], time()),
+            );
+
+        json_msg($outdata);
     }
 
     /**
@@ -57,23 +62,56 @@ class UserController extends ApiBasicController {
         if (IS_AJAX) {
             $reqData = I('request.');
 
+            $ajax = array(
+                    'status' => '0',
+                );
+
             if ($reqData['type'] == 'city') {
                 
                 $queryRes = $this->userAddressModel->getCityList($reqData['id'], $reqData['level'], 1);
+                $ajax['html'] = $queryRes;
 
-                $ajax = array(
-                        'status' => '0',
-                        'html'   => $queryRes,
-                    );
+                $this->ajaxReturn($ajax);
+            }elseif ($reqData['type'] == 'add') {
+                
+                // $checkRes = $this->userAddressModel->checkAdd($reqData);
+
+                // if ($checkRes !== true) {
+                //     $ajax = array(
+                //             'status' => 1,
+                //             'msg'    => $checkRes,
+                //         );
+                //     $this->ajaxReturn($ajax);
+                // }
+
+                $this->userAddressModel->setAddress($reqData);
 
                 $this->ajaxReturn($ajax);
             }
-            // todo address add method
 
         }
 
         $this->assign('cityList', $this->userAddressModel->getCityList());
         $this->display('User/addAddress');
+    }
+
+    /**
+     * 编辑收货地址
+     */
+    public function editAddress(){
+
+        $reqData = I('request.');
+
+        $checkRes = $this->userAddressModel->checkAddress($reqData);
+
+        if ($checkRes !== true) {
+
+            $this->display('User/404');
+        }
+
+        $this->assign('detail', $this->userAddressModel->getDetail());
+        $this->assign('cityList', $this->userAddressModel->getCityList());
+        $this->display('User/editAddress');
     }
 
     /**

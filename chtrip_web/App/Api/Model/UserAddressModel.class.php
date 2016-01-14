@@ -13,8 +13,14 @@ class UserAddressModel extends Model{
      * @param string $userId 用户id
      */
     public function getUserAddress($userId = false){
+        $where = array(
+                'user_id' => $userId,
+                'status'  => 1,
+            );
 
-        return array();
+        $queryRes = $this->field('name, mobile, address, default')->where($where)->select();
+
+        return count($queryRes) <= 0 ? array() : $queryRes;
     }
 
     /**
@@ -44,6 +50,38 @@ class UserAddressModel extends Model{
         } 
 
         return $queryRes;
+    }
+
+    /**
+     * 新增地址
+     * @param array $reqData 请求内容
+     */
+    public function setAddress($reqData = array()){
+
+        $where = array(
+                'default' => 1,
+                'user_id' => $reqData['ssid'],
+                'status'  => 1,
+            );
+        
+        $count = $this->where($where)->count();
+
+        $add = array(
+                'user_id' => $reqData['ssid'],
+                'name'    => $reqData['name'],
+                'mobile'  => $reqData['mobile'],
+                'pid'     => $reqData['province'],
+                'cid'     => $reqData['city'],
+                'aid'     => $reqData['area'],
+                'address' => $reqData['address'],
+                'post'    => $reqData['post'],
+                'default' => $count > 0 ? 0 : 1,
+                'created' => time(),
+                'edit'    => time(),
+                'status'  => 1,
+            );
+
+        $this->add($add);
     }
 
     private function _formatCitySelect($data = array()){

@@ -43,12 +43,12 @@
 		<tbody>
 			<tr>
 				<td>
-					<input type="text" name="name" placeholder="收件人">
+					<input type="text" name="name" placeholder="收件人" value="{$detail.name}">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="tel" name="mobile" placeholder="手机号">
+					<input type="tel" name="mobile" placeholder="手机号" value="{$detail.mobile}">
 				</td>
 			</tr>
 			<tr>
@@ -80,12 +80,12 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="address" placeholder="详细地址">
+					<input type="text" name="address" placeholder="详细地址" value="{$detail.address}">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="tel" name="post" placeholder="邮政编码">
+					<input type="tel" name="post" placeholder="邮政编码" value="{$detail.post}">
 				</td>
 			</tr>
 		</tbody>
@@ -93,51 +93,14 @@
 	<br>
 	<br>
 	<br>
+	<button disabled="true" id="subBTN" onclick="subForm();return false;">保存收货地址</button>
 	</form>
-	<button disabled="true" id="subBTN" >保存收货地址</button>
 	<script type="text/javascript">
-		var validateStat = false;
-
-		function connectWebViewJavascriptBridge(callback) {
-			if (window.WebViewJavascriptBridge) {
-				callback(WebViewJavascriptBridge)
-			} else {
-				document.addEventListener('WebViewJavascriptBridgeReady', function() {
-					callback(WebViewJavascriptBridge)
-				}, false)
-			}
-		}
-
-		connectWebViewJavascriptBridge(function(bridge) {
-
-		    /* Init your app here */
-
-		    bridge.init(function(message, responseCallback) {
-		    	var defaultData = {"status":"1"};
-		    	if (message == "subAddress"){
-		    		if (validateStat) {
-						$.ajax({
-							type:"POST",
-							url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'type' => 'add'))}",
-							data:$("#addForm").serialize(),
-							success:function(data){
-								responseCallback(data);
-							}
-						})
-		    		}else{
-		    			responseCallback(defaultData);
-		    		}
-		    	}else{
-		    		responseCallback(defaultData);
-		    	}
-		    })
-		})
 
 		function setBTN(validate){
-			validateStat = validate;
 			if (validate == true){
 				$("#subBTN").attr("disabled", false);
-				$("#subBTN").css("background-color", "green");
+				$("#subBTN").css("background-color", "blue");
 			}else{
 				$("#subBTN").attr("disabled", true);
 				$("#subBTN").css("background-color", "gray");
@@ -145,7 +108,7 @@
 		}
 
 		function subForm(){
-
+			
 		}
 
 		$(document).ready(function(){
