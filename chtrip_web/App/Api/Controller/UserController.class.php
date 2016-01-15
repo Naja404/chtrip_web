@@ -87,6 +87,11 @@ class UserController extends ApiBasicController {
                 $this->userAddressModel->setAddress($reqData);
 
                 $this->ajaxReturn($ajax);
+
+            }elseif($reqData['type'] == 'edit'){
+                $res = $this->userAddressModel->saveAddress($reqData);
+
+                $this->ajaxReturn($ajax);
             }
 
         }
@@ -105,12 +110,16 @@ class UserController extends ApiBasicController {
         $checkRes = $this->userAddressModel->checkAddress($reqData);
 
         if ($checkRes !== true) {
-
             $this->display('User/404');
+            exit();
         }
+        
+        $detail = $this->userAddressModel->getDetail($reqData);
 
-        $this->assign('detail', $this->userAddressModel->getDetail());
-        $this->assign('cityList', $this->userAddressModel->getCityList());
+        $this->assign('detail', $detail);
+        $this->assign('province', $this->userAddressModel->getCityList());
+        $this->assign('city', $this->userAddressModel->getCityList($detail['pid'], 2));
+        $this->assign('area', $this->userAddressModel->getCityList($detail['cid'], 3));
         $this->display('User/editAddress');
     }
 

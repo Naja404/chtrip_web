@@ -18,7 +18,12 @@ class UserAddressModel extends Model{
                 'status'  => 1,
             );
 
-        $queryRes = $this->field('name, mobile, address, default')->where($where)->select();
+        $queryRes = $this->field('id, name, mobile, address, default')->where($where)->select();
+
+        foreach ($queryRes as $k => $v) {
+            $queryRes[$k]['edit_url'] = sprintf(C('API_EDIT_ADDRESS_URL'), $userId, $v['id'], time());
+            if ((int)$v['default'] == 1) $queryRes[$k]['address'] = L('TEXT_DEFAULT_ADDRESS').$v['address'];
+        }
 
         return count($queryRes) <= 0 ? array() : $queryRes;
     }
@@ -53,6 +58,23 @@ class UserAddressModel extends Model{
     }
 
     /**
+     * 检测用户地址
+     * @param array $reqData 请求数据
+     */
+    public function checkAddress($reqData = array()){
+        
+        $where = array(
+                'id'      => $reqData['aid'],
+                'user_id' => $reqData['ssid'],
+                'status'  => 1,
+            );
+
+        $queryRes = $this->where($where)->count();
+
+        return (int)$queryRes === 1 ? true : false;
+    }
+
+    /**
      * 新增地址
      * @param array $reqData 请求内容
      */
@@ -82,6 +104,56 @@ class UserAddressModel extends Model{
             );
 
         $this->add($add);
+    }
+
+    /**
+     * 保存
+     * @param type item
+     */
+    public function saveAddress($reqData = array()){
+        $where = array(
+                'user_id' => $reqData['ssid'],
+                'id'      => $reqData['aid'],
+            );
+
+        $save = array(
+                'name'    => $reqData['name'],
+                'mobile'  => $reqData['mobile'],
+                'pid'     => $reqData['province'],
+                'cid'     => $reqData['city'],
+                'aid'     => $reqData['area'],
+                'address' => $reqData['address'],
+                'post'    => $reqData['post'],
+                'edit'    => time(),
+            );
+
+        if ((int)$reqData['default'] == 1) {
+            $save['default'] = 1;
+            
+            $defaultWhere = array(
+                    'user_id' => $reqData['ssid'],
+                );
+
+            $this->where($defaultWhere)->save(array('default' => 0));
+        }
+
+        $this->where($where)->save($save);
+    }
+
+    /**
+     * 获取地址详情
+     * @param array $reqData 请求数据
+     */
+    public function getDetail($reqData = array()){
+        $where = array(
+                'id'      => $reqData['aid'],
+                'user_id' => $reqData['ssid'],
+                'status'  => 1,
+            );
+
+        $queryRes = $this->where($where)->find();
+
+        return $queryRes;
     }
 
     private function _formatCitySelect($data = array()){

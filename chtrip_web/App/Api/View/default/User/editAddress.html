@@ -38,7 +38,7 @@
 	<title>nijigo</title>
 </head>
 <body>
-	<form id="addForm">
+	<form id="editForm">
 	<table class="table table-bordered">
 		<tbody>
 			<tr>
@@ -54,9 +54,9 @@
 			<tr>
 				<td>
 					<select name="province">
-						<option selected="true" disabled="true">选择收件人所在省份</option>
-						<volist name="cityList" id="item">
-							<option value="{$item.id}">{$item.name}</option>
+						<!-- <option selected="true" disabled="true">选择收件人所在省份</option> -->
+						<volist name="province" id="item">
+							<option value="{$item.id}" <?php echo $item['id'] == $detail['pid'] ? 'selected="true"' : ''; ?> >{$item.name}</option>
 						</volist>
 					</select>
 					<span class="glyphicon glyphicon-chevron-down" style="float:right;padding:20px;"></span>
@@ -65,7 +65,10 @@
 			<tr>
 				<td>
 				<select name="city" >
-					<option selected="true" disabled="true">选择城市</option>
+					<!-- <option selected="true" disabled="true">选择城市</option> -->
+					<volist name="city" id="item">
+					<option value="{$item.id}" <?php echo $item['id'] == $detail['cid'] ? 'selected="true"' : ''; ?> >{$item.name}</option>
+					</volist>
 				</select>
 				<span class="glyphicon glyphicon-chevron-down" style="float:right;padding:20px;"></span>
 				</td>
@@ -73,7 +76,10 @@
 			<tr>
 				<td>
 				<select name="area" >
-					<option selected="true" disabled="true">选择区县</option>
+					<!-- <option selected="true" disabled="true">选择区县</option> -->
+					<volist name="area" id="item">
+					<option value="{$item.id}" <?php echo $item['id'] == $detail['aid'] ? 'selected="true"' : ''; ?> >{$item.name}</option>
+					</volist>
 				</select>
 				<span class="glyphicon glyphicon-chevron-down" style="float:right;padding:20px;"></span>
 				</td>
@@ -88,48 +94,97 @@
 					<input type="tel" name="post" placeholder="邮政编码" value="{$detail.post}">
 				</td>
 			</tr>
+			<?php if((int)$detail['default'] != 1){?>
+			<tr>
+				<td>
+					<label for="default">
+是否设置成默认
+					</label>
+					<input type="checkbox" name="default" id="default" value="1">
+				</td>
+			</tr>
+			<?php }?>
 		</tbody>
 	</table>
 	<br>
 	<br>
 	<br>
-	<button disabled="true" id="subBTN" onclick="subForm();return false;">保存收货地址</button>
+	<input type="hidden" name="aid" value="{$detail.id}">
+	<!-- <button disabled="true" id="subBTN">保存收货地址</button> -->
 	</form>
 	<script type="text/javascript">
+		var validateStat = false;
 
-		function setBTN(validate){
-			if (validate == true){
-				$("#subBTN").attr("disabled", false);
-				$("#subBTN").css("background-color", "blue");
-			}else{
-				$("#subBTN").attr("disabled", true);
-				$("#subBTN").css("background-color", "gray");
+		function connectWebViewJavascriptBridge(callback) {
+			if (window.WebViewJavascriptBridge) {
+				callback(WebViewJavascriptBridge)
+			} else {
+				document.addEventListener('WebViewJavascriptBridgeReady', function() {
+					callback(WebViewJavascriptBridge)
+				}, false)
 			}
 		}
 
-		function subForm(){
-			
+		connectWebViewJavascriptBridge(function(bridge) {
+
+		    /* Init your app here */
+
+		    bridge.init(function(message, responseCallback) {
+		    	var defaultData = {"status":"1"};
+		    	if (message == "editAddress"){
+		    		checkInput();
+		    		if (validateStat) {
+						$.ajax({
+							type:"POST",
+							url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'type' => 'edit'))}",
+							data:$("#editForm").serialize(),
+							success:function(data){
+								responseCallback(data);
+							}
+						})
+		    		}else{
+		    			responseCallback(defaultData);
+		    		}
+		    	}else{
+		    		responseCallback(defaultData);
+		    	}
+		    })
+		})
+
+		function checkInput(){
+
+			if ($("input[name=name]").val() == "") return setBTN(false);
+
+			if ($("input[name=mobile]").val() == "") return setBTN(false);
+
+			if ($("select[name=province]").val() == "") return setBTN(false);
+
+			if ($("select[name=city]").val() == "") return setBTN(false);
+
+			if ($("select[name=area]").val() == "") return setBTN(false);
+
+			if ($("input[name=address]").val() == "") return setBTN(false);
+
+			if ($("input[name=post]").val() == "") return setBTN(false);
+
+			return setBTN(true);
+		}
+
+		function setBTN(validate){
+			validateStat = validate;
+			// if (validate == true){
+			// 	$("#subBTN").attr("disabled", false);
+			// 	$("#subBTN").css("background-color", "green");
+			// }else{
+			// 	$("#subBTN").attr("disabled", true);
+			// 	$("#subBTN").css("background-color", "gray");
+			// }
 		}
 
 		$(document).ready(function(){
 
 			$("#addForm").bind("input propertychange", function(){
-
-					if ($("input[name=name]").val() == "") return setBTN(false);
-
-					if ($("input[name=mobile]").val() == "") return setBTN(false);
-
-					if ($("select[name=province]").val() == "") return setBTN(false);
-
-					if ($("select[name=city]").val() == "") return setBTN(false);
-
-					if ($("select[name=area]").val() == "") return setBTN(false);
-
-					if ($("input[name=address]").val() == "") return setBTN(false);
-
-					if ($("input[name=post]").val() == "") return setBTN(false);
-
-					return setBTN(true);
+				checkInput()
 			});
 
 			$("select[name=province]").bind("change", function(){
@@ -169,7 +224,6 @@
 					}
 				});
 			});
-
 
 		});
 	</script>

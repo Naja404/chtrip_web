@@ -158,6 +158,7 @@ return  array(
 	'JPY' => '0.0558',
 
 	'API_ADD_ADDRESS_URL' => 'http://api.nijigo.com/User/addAddress/ssid/%s.html?t=%s',
+	'API_EDIT_ADDRESS_URL' => 'http://api.nijigo.com/User/editAddress/ssid/%s/aid/%s.html?t=%s',
 
 	'MAP_IMAGE' => 'Public/uploads/map/',
 

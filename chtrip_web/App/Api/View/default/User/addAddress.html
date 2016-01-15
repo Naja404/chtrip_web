@@ -94,7 +94,7 @@
 	<br>
 	<br>
 	</form>
-	<button disabled="true" id="subBTN" >保存收货地址</button>
+	<!-- <button disabled="true" id="subBTN" >保存收货地址</button> -->
 	<script type="text/javascript">
 		var validateStat = false;
 
@@ -135,17 +135,13 @@
 
 		function setBTN(validate){
 			validateStat = validate;
-			if (validate == true){
-				$("#subBTN").attr("disabled", false);
-				$("#subBTN").css("background-color", "green");
-			}else{
-				$("#subBTN").attr("disabled", true);
-				$("#subBTN").css("background-color", "gray");
-			}
-		}
-
-		function subForm(){
-
+			// if (validate == true){
+			// 	$("#subBTN").attr("disabled", false);
+			// 	$("#subBTN").css("background-color", "green");
+			// }else{
+			// 	$("#subBTN").attr("disabled", true);
+			// 	$("#subBTN").css("background-color", "gray");
+			// }
 		}
 
 		$(document).ready(function(){

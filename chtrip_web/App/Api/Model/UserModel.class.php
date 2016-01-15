@@ -15,13 +15,13 @@ class UserModel extends Model{
 
 		if (!$reqData['ssid']) return L('ERROR_PARAM');
 
-		$address     = $this->_getDefaultAddress($reqData['ssid']);
+		$address     = $this->_getDefaultAddress($reqData['ssid'], (int)$reqData['aid']);
 		$proPrice    = $this->_getCartPrice($reqData['ssid']);
 		$addressShip = $this->_getShipping($proPrice['weight_total'], $reqData['ship']);
 
 		if ((int)$proPrice['price_zh_total'] == 0 || (int)$proPrice['weight_total'] == 0) return L('ERROR_PARAM');
 
-		$tmpPrice = round($proPrice['price_zh_total'], 2) + round($addressShip['ship_price'], 2);
+		$tmpPrice = $proPrice['price_zh_total'] + $addressShip['ship_price'];
 
 		$returnRes = array(
 				'address'             => $address,
@@ -29,7 +29,7 @@ class UserModel extends Model{
 				'weight_total'        => $proPrice['weight_total'],
 				'shipping_type'       => $addressShip['list'],
 				'shipping_price'	  => $addressShip['ship_price'],
-				'price_total' 		  => (string)get_price($tmpPrice), 
+				'price_total' 		  => (string)$tmpPrice, 
 			);
 
 		return $returnRes;
@@ -598,16 +598,27 @@ class UserModel extends Model{
 	 * 获取默认收货地址
 	 * @param string $userId 用户id
 	 */
-	private function _getDefaultAddress($userId = false){
+	private function _getDefaultAddress($userId = false, $aid = 0){
 
 		$where = array(
 				'user_id' => $userId,
-				'default' => 1,
+				// 'default' => 1,
 				'status'  => 1,
 			);
 
+		if ($aid != 0) {
+			$where['id'] = $aid;
+			$hasAdd = $this->table(tname('user_address'))->where($where)->count();
+			if ($hasAdd < 1) {
+				unset($where['id']);
+				$where['default'] = 1;
+			}
+		}else{
+			$where['default'] = 1;
+		}
+
 		$queryRes = $this->table(tname('user_address'))
-						 ->field('name, address, mobile')
+						 ->field('id, name, CONCAT(address, "\n", mobile) AS address, mobile')
 						 ->where($where)
 						 ->find();
 
@@ -635,6 +646,7 @@ class UserModel extends Model{
 		$ship = (int)$ship <= 0 ? 1 : $ship;
 
 		$sql = "SELECT 
+					B.id,
 					A.weight, 
 					FORMAT((A.shipping_jpy * ".C('JPY')."), 2) AS shipping_zh, 
 					B.name, 
