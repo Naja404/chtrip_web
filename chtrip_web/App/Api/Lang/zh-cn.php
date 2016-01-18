@@ -18,6 +18,7 @@ return array(
 	'ERR_LOGIN'            => '登录信息错误',
 	'ERR_UPLOAD'           => '上传失败',
 	'ERR_SNS_BIND'         => '绑定失败,该账号已被绑定',
+	'ERR_USER_INFO'		   => '用户信息错误',	
 	
 	'SUCCESS_REGISTER'     => '注册成功',
 	'SUCCESS_LOGIN'        => '登录成功',

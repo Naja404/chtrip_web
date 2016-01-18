@@ -446,4 +446,110 @@ function google_static_image($address = false, $conf = array(), $filePath = fals
 	return '/'.$filePath;
 }
 
+/**
+ * curl 请求
+ * @param string $url 请求地址
+ * @param mixed $reqData 请求内容
+ */
+function put_curl($url = false, $reqData){
+	$curl = curl_init();
+
+	curl_setopt($curl,CURLOPT_URL, $url);
+	curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,TRUE);
+	curl_setopt($curl,CURLOPT_SSL_VERIFYHOST,2);//严格校验
+	//设置header
+	curl_setopt($curl, CURLOPT_HEADER, FALSE);
+	//要求结果为字符串且输出到屏幕上
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($curl, CURLOPT_POST, TRUE);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $reqData);
+
+	$respData = curl_exec($curl);
+	curl_close($curl);
+
+	return xml_to_arr($respData);
+}
+
+/**
+ * 设置微信sign
+ * @param array $reqData 请求数组
+ */
+function set_wx_sign($reqData = array()){
+	// $reqData = set_ascii_sort($reqData);
+	$str = urldecode(http_build_query($reqData))."&key=4B0F17F38B688EE55855ABF16348E6E1";
+
+	return strtoupper(md5($str));
+}
+
+/**
+ * 设置ascii 排序
+ * @param array $arr 参数数组
+ */
+function set_ascii_sort($arr = array()){
+	
+	$key = array_keys($arr);
+
+	foreach ($key as $k => $v) {
+		$strArr = str_split($v);
+		$tmpV = 0;
+		foreach ($strArr as $j => $m) {
+			$tmpV += ord($m);
+		}
+		// $tmp[$v] = $tmpV;
+		$tmp[$tmpV] = $v;
+	}
+	// todo 排序
+
+	$vSort = array_keys($tmp);
+	$vCount = count($vSort);
+
+	for ($i=0; $i < $vCount - 1; $i++) { 
+		for ($j=0; $j < $vCount - $i - 1; $j++) { 
+			if ($vSort[$j] > $vSort[$j+1]) {
+				$temp = $vSort[$j];
+				$vSort[$j] = $vSort[$j+1];
+				$vSort[$j+1] = $temp;
+			}
+		}
+	}
+
+	foreach ($vSort as $k) {
+
+		$tmpArr[$tmp[$k]] = $arr[$tmp[$k]];
+	}
+
+	return $tmpArr;
+}
+
+/**
+ * 格式化成xml
+ * @param array $data 数据数组
+ */
+function format_xml($data = array()){
+
+	$xmlH = "<xml>%s</xml>";
+	$xmlB = "<%s>%s</%s>";
+
+	$body = '';
+
+	foreach ($data as $k => $v) {
+		$body .= sprintf($xmlB, $k, $v, $k);
+	}
+
+	return sprintf($xmlH, $body);
+}
+
+/**
+ * xml转array
+ * @param string $xml 
+ */
+function xml_to_arr($xml){	
+	if(!$xml) throw new WxPayException("xml数据异常！");
+	//将XML转为array
+	libxml_disable_entity_loader(true);
+	
+	$arr = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+	
+	return $arr;
+}
 ?>

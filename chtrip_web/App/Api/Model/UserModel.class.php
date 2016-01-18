@@ -8,6 +8,26 @@ use Think\Model;
 class UserModel extends Model{
 
 	/**
+	 * 检测用户支付
+	 * @param string $userId 用户id
+	 * @param array $reqData 请求内容
+	 */
+	public function checkUserPay($userId = false, $reqData = array()){
+
+		// 检测用户状态
+		$whereAddress = array(
+				'id'      => $reqData['aid'],
+				'user_id' => $userId,
+				'status'  => 1,
+			);
+
+		$hasAddress = $this->table(tname('user_address'))->where($whereAddress)->find();
+
+		if ((int)$hasAddress !== 1) return false;
+		
+	}
+
+	/**
 	 * 结算预览
 	 * @param array $reqData 查询内容
 	 */

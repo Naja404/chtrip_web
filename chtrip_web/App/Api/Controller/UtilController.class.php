@@ -17,9 +17,10 @@ class UtilController extends ApiBasicController {
     public $uploadModel;
 
     protected function _initialize(){
-        $this->utilModel = D('util');
+        $this->utilModel     = D('util');
         $this->uploadModel   = D('Upload');
         $this->userInfoModel = D('UserInfo');
+        $this->userModel     = D('User');
     }
 
     /**
@@ -145,6 +146,44 @@ class UtilController extends ApiBasicController {
         send_mail($to, $subject, $content);
 
         json_msg();
+    }
+
+    /**
+     * 设置app支付
+     */
+    public function setPay(){
+        // $reqData = I('request.');
+
+        // $status = $this->userModel->checkUserPay($reqData['ssid'], $reqData);
+
+        // if ($status === false) json_msg(L('ERR_USER_INFO'), 1);
+
+        // if ($reqData['pay'] == 'wxpay') {
+            $wxpayReq = array(
+                    'appid'            => 'wx140bb397338ea49a',
+                    'body'             => 'DHC-test-product',
+                    'device_info'      => $reqData['ssid'],
+                    'fee_type'         => 'CNY',
+                    'limit_pay'        => 'no_credit',
+                    'mch_id'           => '1308432801',
+                    'nonce_str'        => strtoupper(md5($reqData['ssid'].time())),
+                    'notify_url'       => 'http://api.nijigo.com/Util/wxpay.php',
+                    'out_trade_no'     => '20160118001_wx',
+                    'product_id'       => 'pid20160118001',
+                    'spbill_create_ip' => '47.89.27.226',
+                    'total_fee'        => 100,
+                    'trade_type'       => 'APP',
+                );
+            
+            $wxpayReq['sign'] = set_wx_sign($wxpayReq);
+
+            $xmlData = format_xml($wxpayReq);
+
+            $respData = put_curl('https://api.mch.weixin.qq.com/pay/unifiedorder', $xmlData);
+
+            echo '<pre>';
+            print_r($respData);exit();
+        // }
     }
 
 }
