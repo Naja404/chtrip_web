@@ -24,6 +24,26 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 开始支付
+     */
+    public function payOrder(){
+
+        $reqData = I('request.');
+
+        $status = $this->userModel->checkUserPay($reqData['ssid'], $reqData);
+
+        if ($status !== true) json_msg($status, 1);
+
+        $order = A('Api/Order');
+
+        $res = $order->createOrder($reqData);
+
+        if (is_string($res)) json_msg($res, 1);
+
+        json_msg($res);
+    }
+
+    /**
      * 订单预览
      */
     public function preCheckOut(){

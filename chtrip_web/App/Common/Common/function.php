@@ -467,7 +467,7 @@ function put_curl($url = false, $reqData){
 	$respData = curl_exec($curl);
 	curl_close($curl);
 
-	return xml_to_arr($respData);
+	return $respData;
 }
 
 /**
@@ -551,5 +551,17 @@ function xml_to_arr($xml){
 	$arr = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
 	
 	return $arr;
+}
+
+/**
+ * 记录日志
+ * @param array $arr mixed
+ * @param string $path 日志存储路径
+ */
+function write_log($arr = array(), $level = 'INFO', $path = false){
+
+	$path  = $path ? $path : C('LOG_PATH').date('y_m_d').'_custom.log';
+
+	Think\Log::write(var_export($arr, true), $level, '', $path);
 }
 ?>

@@ -18,7 +18,11 @@ return array(
 	'ERR_LOGIN'            => '登录信息错误',
 	'ERR_UPLOAD'           => '上传失败',
 	'ERR_SNS_BIND'         => '绑定失败,该账号已被绑定',
-	'ERR_USER_INFO'		   => '用户信息错误',	
+	'ERR_USER_INFO'		   => '用户信息错误',
+	'ERR_NO_ADDRESS'	   => '请选择收货地址',
+	'ERR_OUT_OF_SALER'     => '订单中有下架商品',
+	'ERR_CREATED_ORDER'	   => '订单创建失败',
+	'ERR_ALIPAY'           => '暂不支持支付宝',
 	
 	'SUCCESS_REGISTER'     => '注册成功',
 	'SUCCESS_LOGIN'        => '登录成功',

@@ -22,10 +22,19 @@ class UserModel extends Model{
 			);
 
 		$hasAddress = $this->table(tname('user_address'))->where($whereAddress)->find();
+		// 验证订单地址
+		if ((int)$hasAddress !== 1) return L('ERR_NO_ADDRESS');
 
-		if ((int)$hasAddress !== 1) return false;
+		$cartInfo = $this->getCart($userId);
+		// 验证订单商品中状态
+		foreach ($cartInfo['list'] as $k => $v) {
+			if ($v['status'] != '1') return L('ERR_OUT_OF_SALER');
+		}
 		
+		return true;
 	}
+
+
 
 	/**
 	 * 结算预览

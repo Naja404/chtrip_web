@@ -162,4 +162,18 @@ return  array(
 
 	'MAP_IMAGE' => 'Public/uploads/map/',
 
+	'WXPAY_CONF' => array(
+			'APP_ID'     => 'wx140bb397338ea49a',
+			'MCH_ID'     => '1308432801',
+			'FEE_TYPE'   => 'CNY',
+			'LIMIT_PAY'  => 'no_credit',
+			'TRADE_TYPE' => 'APP',
+			'PACKAGE'    => 'Sign=WXPay',
+			'NOTIFY_URL' => 'http://api.nijigo.com/Util/wxpay',
+			'REQ_URL'    => 'https://api.mch.weixin.qq.com/pay/unifiedorder',
+		),
+
+	'SERVER_IP' => '47.89.27.226',
+
+
 );
