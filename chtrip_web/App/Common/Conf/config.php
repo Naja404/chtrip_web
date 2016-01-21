@@ -173,6 +173,16 @@ return  array(
 			'REQ_URL'    => 'https://api.mch.weixin.qq.com/pay/unifiedorder',
 		),
 
+	'ALIPAY_CONF' => array(
+			'PATH'        => 'Public/conf/',
+			'PARTNER_ID'  => '2088121371189092',
+			'SELLER_ID'   => 'jeffzhang@nijigo.com',
+			'NOTIFY_URL'  => 'http://api.nijigo.com/Util/alipay',
+			'SERVICE_APP' => 'mobile.securitypay.pay',
+			'SERVICE_WAP' => 'alipay.wap.create.direct.pay.by.user',
+			'WAP_URL'     => 'https://mapi.alipay.com/gateway.do?',
+		),
+
 	'SERVER_IP' => '47.89.27.226',
 
 

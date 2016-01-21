@@ -286,7 +286,7 @@ class UserController extends ApiBasicController {
 
         if (empty($reqData['code'])) json_msg('授权失败', 1);
 
-        $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxaa9423c2b77e86bb&secret=90bcc16b9393971027300301a5e79a33&code=%s&grant_type=authorization_code";
+        $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx140bb397338ea49a&secret=234f110c04e124980eaa3dad81740da1&code=%s&grant_type=authorization_code";
 
         $tokenRes = json_decode(file_get_contents(sprintf($url, $reqData['code'])), true);
 

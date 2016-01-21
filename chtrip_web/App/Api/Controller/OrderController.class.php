@@ -25,7 +25,7 @@ class OrderController extends ApiBasicController {
      * @param array $reqData
      */
     public function createOrder($reqData = array()){
-        
+
         $payInfo = L('ERR_CREATED_ORDER');
 
         $preOrderInfo = $this->_preCreateOrder($reqData);
@@ -37,7 +37,12 @@ class OrderController extends ApiBasicController {
         }
 
         if ($reqData['pay'] == 'alipay') {
-            $payInfo = L('ERR_ALIPAY');
+            
+            $payType = 'WAP';
+
+            if (isset($reqData['has_app']) && $reqData['has_app'] == '1') $payType = 'APP';
+
+            $payInfo = $this->getAlipayKey($preOrderInfo, $payType);
         }
 
         if (!is_string($payInfo)) $this->clearCart($reqData['ssid']);
@@ -110,6 +115,85 @@ class OrderController extends ApiBasicController {
         write_log($output, 'wx_output_90');
 
         return $output;
+    }
+
+    /**
+     * 获取支付宝支付接口数据
+     * @param array $reqData 请求数据内容
+     */
+    public function getAlipayKey($reqData = array(), $payType = 'WAP'){
+
+        $param = $this->_confAlipay($reqData, $payType);
+
+        if ($payType == 'WAP') {
+            $output = array(
+                    'url' => C('ALIPAY_CONF.WAP_URL').createLinkstringUrlencode($param),
+                );
+        }else{
+            $param['url'] = createLinkstringUrlencode($param, true);
+            $output = $param;
+        }
+
+        return $output;
+    }
+
+    /**
+     * 支付宝配置信息
+     * @param string $payType 支付类型 app,wap
+     */
+    private function _confAlipay($order = array(), $payType = 'WAP'){
+        
+        $conf = array(
+                'partner'             => C('ALIPAY_CONF.PARTNER_ID'),
+                'seller_id'           => C('ALIPAY_CONF.SELLER_ID'),
+                'private_key_path'    => C('ALIPAY_CONF.PATH').'rsa_private_key.pem',
+                'ali_public_key_path' => C('ALIPAY_CONF.PATH').'alipay_public_key.pem',
+                'sign_type'           => 'RSA',
+                'input_charset'       => 'utf-8',
+                'cacert'              => getcwd().'\\cacert.pem',
+                'transport'           => 'http',
+                'payType'             => $payType,
+            );
+
+
+
+        if ($payType == 'WAP') {
+            $param = array(
+                    'partner'        => C('ALIPAY_CONF.PARTNER_ID'),
+                    'seller_id'      => C('ALIPAY_CONF.SELLER_ID'),
+                    'out_trade_no'   => $order['oid'],
+                    'subject'        => '彩虹Go-商品',
+                    'body'           => '彩虹Go-商品详情',
+                    'total_fee'      => $order['total_fee'],
+                    'notify_url'     => C('ALIPAY_CONF.NOTIFY_URL'),
+                    'return_url'     => C('ALIPAY_CONF.NOTIFY_URL'),
+                    'service'        => C('ALIPAY_CONF.SERVICE_'.$payType),
+                    'payment_type'   => '1',
+                    '_input_charset' => 'utf-8',
+                    'it_b_pay'       => '30m',
+                    'show_url'       => 'http://www.nijigo.com',
+                );
+        }else{
+            $param = array(
+                    'partner'        => '"'.C('ALIPAY_CONF.PARTNER_ID').'"',
+                    'seller_id'      => '"'.C('ALIPAY_CONF.SELLER_ID').'"',
+                    'out_trade_no'   => '"'.$order['oid'].'"',
+                    'subject'        => '"彩虹Go-商品"',
+                    'body'           => '"彩虹Go-商品详情"',
+                    'total_fee'      => '"'.$order['total_fee'].'"',
+                    'notify_url'     => '"'.C('ALIPAY_CONF.NOTIFY_URL').'"',
+                    'service'        => '"'.C('ALIPAY_CONF.SERVICE_'.$payType).'"',
+                    'payment_type'   => '"1"',
+                    '_input_charset' => '"utf-8"',
+                    'it_b_pay'       => '"30m"',
+                    'show_url'       => '"m.alipay.com"',
+                );
+        }
+
+        $param = alipay_sign($param, $conf);
+
+        return $param;
+
     }
 
     /**

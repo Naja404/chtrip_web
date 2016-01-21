@@ -9,7 +9,7 @@
  * @param float $num 
  */
 function get_price($num){
-	return sprintf("%.2f",substr(sprintf("%.3f", $num), 0, -2));
+	return sprintf("%.2f",substr(sprintf("%.4f", $num), 0, -2));
 }
 
 /**
@@ -563,5 +563,129 @@ function write_log($arr = array(), $level = 'INFO', $path = false){
 	$path  = $path ? $path : C('LOG_PATH').date('y_m_d').'_custom.log';
 
 	Think\Log::write(var_export($arr, true), $level, '', $path);
+}
+
+/**
+ * 支付宝生成sign
+ * @param array $param 请求参数
+ * @param array $conf 配置信息
+ */
+function alipay_sign($param = array(), $conf = array()){
+	
+	$para_filter = paraFilter($param);
+
+	$para_sort = $para_filter;
+
+	if ($conf['payType'] == 'WAP') $para_sort = argSort($para_filter);
+	
+	$prestr = createLinkstring($para_sort);
+
+	$sign = rsaSign($prestr, $conf['private_key_path']);
+
+	if ($conf['payType'] == 'APP') $sign = urlencode($sign);
+
+	$para_sort['sign'] = $sign;
+	$para_sort['sign_type'] = 'RSA';
+
+	return $para_sort;
+
+}
+
+/**
+ * 除去数组中的空值和签名参数
+ * @param $para 签名参数组
+ * return 去掉空值与签名参数后的新签名参数组
+ */
+function paraFilter($para) {
+	$para_filter = array();
+	while (list ($key, $val) = each ($para)) {
+		if($key == "sign" || $key == "sign_type" || $val == "")continue;
+		else	$para_filter[$key] = $para[$key];
+	}
+	return $para_filter;
+}
+/**
+ * 对数组排序
+ * @param $para 排序前的数组
+ * return 排序后的数组
+ */
+function argSort($para) {
+	ksort($para);
+	reset($para);
+	return $para;
+}
+
+/**
+ * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+ * @param $para 需要拼接的数组
+ * return 拼接完成以后的字符串
+ */
+function createLinkstring($para) {
+	$arg  = "";
+	while (list ($key, $val) = each ($para)) {
+		$arg.=$key."=".$val."&";
+	}
+	//去掉最后一个&字符
+	$arg = substr($arg,0,count($arg)-2);
+	
+	//如果存在转义字符，那么去掉转义
+	if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+	
+	return $arg;
+}
+
+/**
+ * RSA签名
+ * @param $data 待签名数据
+ * @param $private_key_path 商户私钥文件路径
+ * return 签名结果
+ */
+function rsaSign($data, $private_key_path) {
+    $priKey = file_get_contents($private_key_path);
+    $res = openssl_get_privatekey($priKey);
+    openssl_sign($data, $sign, $res);
+    openssl_free_key($res);
+	//base64编码
+    $sign = base64_encode($sign);
+    return $sign;
+}
+
+/**
+ * RSA验签
+ * @param $data 待签名数据
+ * @param $ali_public_key_path 支付宝的公钥文件路径
+ * @param $sign 要校对的的签名结果
+ * return 验证结果
+ */
+function rsaVerify($data, $ali_public_key_path, $sign)  {
+	$pubKey = file_get_contents($ali_public_key_path);
+    $res = openssl_get_publickey($pubKey);
+    $result = (bool)openssl_verify($data, base64_decode($sign), $res);
+    openssl_free_key($res);    
+    return $result;
+}
+
+/**
+ * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串，并对字符串做urlencode编码
+ * @param $para 需要拼接的数组
+ * return 拼接完成以后的字符串
+ */
+function createLinkstringUrlencode($para, $hasStr = false) {
+	$arg  = "";
+	while (list ($key, $val) = each ($para)) {
+		if ($hasStr) {
+			$val = str_replace('"', '', $val);
+			$arg.=$key."=\\\"".$val."\\\"&";
+		}else{
+			$arg.=$key."=".urlencode($val)."&";
+		}
+	}
+	//去掉最后一个&字符
+	$arg = substr($arg,0,count($arg)-2);
+	
+	//如果存在转义字符，那么去掉转义
+	if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+	
+	return $arg;
 }
 ?>

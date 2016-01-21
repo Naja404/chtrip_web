@@ -58,7 +58,7 @@ class UserModel extends Model{
 				'weight_total'        => $proPrice['weight_total'],
 				'shipping_type'       => $addressShip['list'],
 				'shipping_price'	  => $addressShip['ship_price'],
-				'price_total' 		  => (string)$tmpPrice, 
+				'price_total' 		  => get_price($tmpPrice), 
 			);
 
 		return $returnRes;

@@ -148,4 +148,18 @@ class UtilController extends ApiBasicController {
         json_msg();
     }
 
+    /**
+     * 微信回调
+     */
+    public function wxpay(){
+        write_log(I('request.'), 'wxpay_155');
+    }
+
+    /**
+     * 支付宝回调
+     */
+    public function alipay(){
+        write_log(I('request.'), 'alipay_162');
+    }
+
 }
