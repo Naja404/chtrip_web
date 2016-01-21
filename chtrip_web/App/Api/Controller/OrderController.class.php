@@ -37,12 +37,7 @@ class OrderController extends ApiBasicController {
         }
 
         if ($reqData['pay'] == 'alipay') {
-            
-            $payType = 'WAP';
-
-            if (isset($reqData['has_app']) && $reqData['has_app'] == '1') $payType = 'APP';
-
-            $payInfo = $this->getAlipayKey($preOrderInfo, $payType);
+            $payInfo = $this->getAlipayKey($preOrderInfo);
         }
 
         if (!is_string($payInfo)) $this->clearCart($reqData['ssid']);
@@ -72,7 +67,7 @@ class OrderController extends ApiBasicController {
      * @param array $reqData 请求数据内容
      */
     public function getWXPayKey($reqData = array()){
-
+        $reqData['total_fee'] = 0.01;
         $wxpayReq = array(
                 'appid'            => C('WXPAY_CONF.APP_ID'),
                 'body'             => '彩虹Go-商品',
@@ -121,18 +116,15 @@ class OrderController extends ApiBasicController {
      * 获取支付宝支付接口数据
      * @param array $reqData 请求数据内容
      */
-    public function getAlipayKey($reqData = array(), $payType = 'WAP'){
+    public function getAlipayKey($reqData = array()){
 
-        $param = $this->_confAlipay($reqData, $payType);
+        $wap = $this->_confAlipay($reqData, 'WAP');
+        $app = $this->_confAlipay($reqData, 'APP');
 
-        if ($payType == 'WAP') {
-            $output = array(
-                    'url' => C('ALIPAY_CONF.WAP_URL').createLinkstringUrlencode($param),
-                );
-        }else{
-            $param['url'] = createLinkstringUrlencode($param, true);
-            $output = $param;
-        }
+        $output = array(
+                'wap_url' => C('ALIPAY_CONF.WAP_URL').createLinkstringUrlencode($wap),
+                'app_url' => createLinkstringUrlencode($app, true),
+            );
 
         return $output;
     }
@@ -142,7 +134,7 @@ class OrderController extends ApiBasicController {
      * @param string $payType 支付类型 app,wap
      */
     private function _confAlipay($order = array(), $payType = 'WAP'){
-        
+        $order['total_fee'] = '0.01';
         $conf = array(
                 'partner'             => C('ALIPAY_CONF.PARTNER_ID'),
                 'seller_id'           => C('ALIPAY_CONF.SELLER_ID'),

@@ -21,6 +21,7 @@ class UtilController extends ApiBasicController {
         $this->uploadModel   = D('Upload');
         $this->userInfoModel = D('UserInfo');
         $this->userModel     = D('User');
+        $this->orderModel    = D('Order');
     }
 
     /**
@@ -152,14 +153,49 @@ class UtilController extends ApiBasicController {
      * 微信回调
      */
     public function wxpay(){
-        write_log(I('request.'), 'wxpay_155');
+
+        $log = array(
+                'get'     => $_GET,
+                'post'    => $_POST,
+                'request' => $_REQUEST,
+            );
+        
+        write_log($log, 'Util.wxpay');
     }
 
     /**
      * 支付宝回调
      */
     public function alipay(){
-        write_log(I('request.'), 'alipay_162');
+        $reqData = I('request.');
+        
+        write_log($reqData, 'Util.alipay');
+
+        if (!isset($reqData['trade_status']) || !isset($reqData['out_trade_no'])) return false;
+        
+        if ($reqData['trade_status'] !== 'TRADE_SUCCESS') return false;
+
+        $where = array(
+                'oid' => $reqData['out_trade_no'],
+            );
+
+        $orderInfo = $this->orderModel->where($where)->find();
+
+        $save = array(
+                'pay_time'   => strtotime($reqData['notify_time']),
+                'pay_status' => 1,
+            );
+
+        if ($orderInfo['status'] == 4) $save['status'] = 2;
+
+        $res = $this->orderModel->where($where)->save($save);
+
+        $log = array(
+                'old_data'   => $orderInfo,
+                'update_sql' => $this->orderModel->getLastSql(),
+            );
+
+        write_log($log, 'alipay_update_186');
     }
 
 }

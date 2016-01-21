@@ -675,7 +675,7 @@ function createLinkstringUrlencode($para, $hasStr = false) {
 	while (list ($key, $val) = each ($para)) {
 		if ($hasStr) {
 			$val = str_replace('"', '', $val);
-			$arg.=$key."=\\\"".$val."\\\"&";
+			$arg.=$key."=\"".$val."\"&";
 		}else{
 			$arg.=$key."=".urlencode($val)."&";
 		}

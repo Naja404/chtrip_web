@@ -24,6 +24,13 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 获取订单
+     */
+    public function getOrder(){
+        
+    }
+
+    /**
      * 开始支付
      */
     public function payOrder(){
