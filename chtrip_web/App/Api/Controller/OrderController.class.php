@@ -199,6 +199,7 @@ class OrderController extends ApiBasicController {
 
         $order = array(
                 'oid'        => $this->orderModel->makeOrderId(),
+                'user_id'    => $reqData['ssid'],
                 'ship_type'  => $reqData['ship'],
                 'ship_fee'   => $totalInfo['shipping_price'],
                 'weight'     => $totalInfo['weight_total'],

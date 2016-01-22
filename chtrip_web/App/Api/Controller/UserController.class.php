@@ -20,6 +20,7 @@ class UserController extends ApiBasicController {
         $this->userInfoModel = D('userInfo');
         $this->userSNSModel = D('UserSns');
         $this->userAddressModel = D('UserAddress');
+        $this->orderModel = D('Order');
 
     }
 
@@ -28,6 +29,14 @@ class UserController extends ApiBasicController {
      */
     public function getOrder(){
         
+        $reqData = I('request.');
+
+        $order = $this->orderModel->getOrderList($reqData);
+
+        if (is_string($order)) json_msg($order, 1);
+
+        json_msg($order);
+
     }
 
     /**

@@ -40,4 +40,12 @@ return array(
 	'TEXT_BUY_PRO_LIMIT'   => '该商品购限购量已上限',
 	'TEXT_ADD_CART_FAILD'  => '加入购物车失败',
 	'TEXT_DEFAULT_ADDRESS' => '[默认]',
+
+	'TEXT_ORDER_STATUS_0' => '已取消',
+	'TEXT_ORDER_STATUS_1' => '已完成',
+	'TEXT_ORDER_STATUS_2' => '待发货',
+	'TEXT_ORDER_STATUS_3' => '待收货',
+	'TEXT_ORDER_STATUS_4' => '待支付',
+	'TEXT_ORDER_NUMBER'   => '订单编号:%s',
+
 );
