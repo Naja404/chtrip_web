@@ -52,11 +52,13 @@ class OrderModel extends Model{
 		foreach ($tmpList as $k => $v) {
 			
 			$tmpArr = array(
-					'oid'       => sprintf(L('TEXT_ORDER_NUMBER'), $v[0]['oid']),
-					'status'    => L('TEXT_ORDER_STATUS_'.$v[0]['status']),
-					'total_fee' => '￥'.$v[0]['total_fee'],
-					'created'   => date('Y-m-d H:i:s', time()),
-					'pro'       => $v,
+					'oid'          => $v[0]['oid'],
+					'oid_label'    => sprintf(L('TEXT_ORDER_NUMBER'), $v[0]['oid']),
+					'status'       => $v[0]['status'],
+					'status_label' => L('TEXT_ORDER_STATUS_'.$v[0]['status']),
+					'total_fee'    => '￥'.$v[0]['total_fee'],
+					'created'      => date('Y-m-d H:i:s', time()),
+					'pro'          => $v,
 				);
 
 			$orderList[] = $tmpArr;
@@ -64,6 +66,50 @@ class OrderModel extends Model{
 
 		return $orderList;
 
+	}
+
+	/**
+	 * 取消订单
+	 * @param array $reqData 请求数据
+	 */
+	public function cancelOrder($reqData = array()){
+
+		$queryRes = $this->getOrderInfo($reqData);
+
+		if ($queryRes['status'] != 4) return L('ERROR_PARAM');
+
+		$res = $this->query("UPDATE `".tname('order')."` SET status = '0', opera = '".$reqData['ssid']."' WHERE ( `user_id` = '".$reqData['ssid']."' AND `oid` = '".$reqData['oid']."')");
+
+		return $res !== false ? true : L('ERROR_PARAM');
+	}
+
+	/**
+	 * 检测用户订单
+	 * @param array $reqData 请求数据
+	 */
+	public function chackUserPay($reqData = array()){
+		
+		$queryRes = $this->getOrderInfo($reqData);
+
+		if ($queryRes['status'] != 4) return L('ERROR_PARAM');
+
+		return $queryRes;
+	}
+
+	/**
+	 * 获取订单详情
+	 * @param type item
+	 */
+	public function getOrderInfo($reqData = array()){
+		
+		$where = array(
+				'user_id' => $reqData['ssid'],
+				'oid'     => $reqData['oid'],
+			);
+
+		$queryRes = $this->where($where)->find();
+
+		return $queryRes;
 	}
 
 	/**
@@ -87,5 +133,23 @@ class OrderModel extends Model{
 		$orderId = date('Ymd', time()).rand(1000, 9999).$strTmp.$maxId['id'];
 
 		return $orderId;
+	}
+
+	/**
+	 * 更新订单id
+	 * @param int $oid 订单id
+	 */
+	public function upOrderId($oid = 0){
+		$midOid = substr($oid, 9, 4);
+
+		$newOid = str_replace($midOid, rand(1000, 9999), $oid);
+
+		if ($newOid == $oid) $newOid = str_replace($midOid, rand(1000, 9999), $oid);
+
+		$sql = "UPDATE `".tname('order')."` SET wx_oid = '".$newOid."' WHERE `oid` = '".$oid."'";
+
+		$this->query($sql);
+
+		return $newOid;
 	}
 }

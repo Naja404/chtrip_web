@@ -40,6 +40,43 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 取消订单
+     */
+    public function cancelOrder(){
+        
+        $reqData = I('request.');
+
+        $status = $this->orderModel->cancelOrder($reqData);
+
+        if ($status !== true) json_msg($status, 1);
+
+        return $this->getOrder();
+    }
+
+    /**
+     * 更改支付方式
+     */
+    public function changePay(){
+
+        $reqData = I('request.');
+
+        $status = $this->orderModel->chackUserPay($reqData);
+
+        if (is_string($status)) json_msg($status, 1);
+
+        $order = A('Api/Order');
+        
+        $status['pay'] = $reqData['pay'];
+        $status['ssid'] = $reqData['ssid'];
+
+        $res = $order->getPayRes($status);
+
+        if (is_string($res)) json_msg($res, 1);
+
+        json_msg($res);
+    }
+
+    /**
      * 开始支付
      */
     public function payOrder(){

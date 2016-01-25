@@ -186,8 +186,8 @@ class UserModel extends Model{
 			
 			// 单品数量金额
 			if ($v['total'] > 1) {
-				$v['price_zh'] = $v['price_zh'] * $v['total'];
-				$v['price_jp'] = $v['price_jp'] * $v['total'];
+				$v['price_zh'] = get_price($v['price_zh'] * $v['total']);
+				$v['price_jp'] = get_price($v['price_jp'] * $v['total']);
 			}
 
 			// 累加选中金额

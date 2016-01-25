@@ -33,6 +33,7 @@ class OrderController extends ApiBasicController {
         if ($preOrderInfo === false || count($preOrderInfo) <= 0) return $payInfo;
 
         if ($reqData['pay'] == 'wxpay') {
+            $preOrderInfo['ssid'] = $reqData['ssid'];
             $payInfo = $this->getWXPayKey($preOrderInfo);
         }
 
@@ -41,6 +42,25 @@ class OrderController extends ApiBasicController {
         }
 
         if (!is_string($payInfo)) $this->clearCart($reqData['ssid']);
+
+        return $payInfo;
+    }
+
+    /**
+     * 更改支付方式
+     * @param array $reqData 请求数据
+     */
+    public function getPayRes($orderInfo = array()){
+
+        if ($orderInfo['pay'] == 'wxpay') {
+            $orderInfo['oid'] = $this->orderModel->upOrderId($orderInfo['oid']);
+            $orderInfo['pid'] = '1024';
+            $payInfo = $this->getWXPayKey($orderInfo);
+        }
+
+        if ($orderInfo['pay'] == 'alipay') {
+            $payInfo = $this->getAlipayKey($orderInfo);
+        }
 
         return $payInfo;
     }
@@ -83,9 +103,9 @@ class OrderController extends ApiBasicController {
                 'total_fee'        => $reqData['total_fee'] * 100,
                 'trade_type'       => C('WXPAY_CONF.TRADE_TYPE'),
             );
-        
+
         $wxpayReq['sign'] = set_wx_sign($wxpayReq);
-        
+
         write_log($wxpayReq, 'wxpayReq_69');
 
         $xmlData = format_xml($wxpayReq);
