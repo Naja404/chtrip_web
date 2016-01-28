@@ -43,6 +43,8 @@ class OrderController extends ApiBasicController {
 
         if (!is_string($payInfo)) $this->clearCart($reqData['ssid']);
 
+        $this->sendOrderMail($preOrderInfo);
+
         return $payInfo;
     }
 
@@ -150,6 +152,22 @@ class OrderController extends ApiBasicController {
     }
 
     /**
+     * 发送订单通知邮件
+     * @param array $orderInfo 订单信息
+     */
+    public function sendOrderMail($orderInfo = array()){
+
+        $content = "有新的订单:".$orderInfo['oid']."<br/>支付金额:".$orderInfo['total_fee']."RMB<br><br><a href='http://admin.nijigo.com'>进入管理后台</a>";
+
+        $to = array(
+                'all@nijigo.com',
+            );
+        $subject = '新订单 - 单号:'.$orderInfo['oid'].' - Nijigo';
+
+        send_mail($to, $subject, $content);
+    }
+
+    /**
      * 支付宝配置信息
      * @param string $payType 支付类型 app,wap
      */
@@ -221,6 +239,7 @@ class OrderController extends ApiBasicController {
                 'oid'        => $this->orderModel->makeOrderId(),
                 'user_id'    => $reqData['ssid'],
                 'ship_type'  => $reqData['ship'],
+                'address_id' => $reqData['aid'],
                 'ship_fee'   => $totalInfo['shipping_price'],
                 'weight'     => $totalInfo['weight_total'],
                 'pay_type'   => $reqData['pay'] == 'wxpay' ? '1' : '2',
