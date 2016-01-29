@@ -48,6 +48,71 @@
 		              </div>
 		            </div>
 
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHIP_FEE')}</label>
+		              <div class="controls">
+		              	{$detail.ship_fee}
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_PAY_STATUS')}</label>
+		              <div class="controls">
+						<span class="label label-<?php echo $detail['pay_status'] ? 'success' : 'danger';?>">{:L('TEXT_PAY_STATUS_'.$detail['pay_status'])}</span>
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_SHIP_STATUS')}</label>
+		              <div class="controls">
+		              	<!-- 待发货 -->
+		              	<?php if($detail['status'] == 2) {?>
+		              		<input type="text" name="ship_id" placeholder="<?php echo L('TEXT_ADD_SHIPID');?>"><button onclick="subShipId('<?php echo $detail["oid"];?>');return false;"><?php echo L('BTN_ADD_SHIPID');?></button>
+		              	<!-- 待收货 -->
+		              	<?php }elseif ($detail['status'] == 3) {?>
+		              		<?php if ($detail['ship_info']){?>
+					            <table class="table table-bordered table-striped">
+					              <thead>
+					                <tr>
+					                  <th><?php echo L('TEXT_DATE');?></th>
+					                  <th><?php echo L('TEXT_CONTENT');?></th>
+					                  <th><?php echo L('TEXT_AREA');?></th>
+					                  <th><?php echo L('TEXT_CITY');?></th>
+					                </tr>
+					              </thead>
+					              <tbody>
+					              	<volist name="detail.ship_info" id="item">
+					                <tr class="odd gradeX">
+					                	<td>{$item.0}</td>
+					                	<td>{$item.1}</td>
+					                	<td>{$item.3}</td>
+					                	<td>{$item.4}</td>
+					                </tr>
+					            	</volist>
+					              </tbody>
+					            </table>
+		              		<?php } ?>
+		              	<!-- 订单取消 -->
+		              	<?php }elseif ($detail['status'] == 0) {?>
+							<span class="{:L('CSS_ORDER_STATUS_'.$detail['status'])}">{:L('TEXT_ORDER_STATUS_'.$detail['status'])}</span>
+		              	<?php }?>
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_ORDER_CREATED')}</label>
+		              <div class="controls">
+		              	{:date('Y-m-d H:i:s', $detail['created'])}
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_DEAL_STATUS')}</label>
+		              <div class="controls">
+		              	<span class="{:L('CSS_ORDER_STATUS_'.$detail['status'])}">{:L('TEXT_ORDER_STATUS_'.$detail['status'])}</span>
+		              </div>
+		            </div>
+
 <!-- 		            <div class="form-actions">
 		              <button type="submit" class="btn btn-success">Save</button>
 		            </div> -->
@@ -80,7 +145,32 @@
 	  </div>
 	</div>
 <script type="text/javascript">
+	function subShipId(oid){
 
+		var shipId = $("input[name=ship_id]").val();
 
+		if (!oid || !shipId) {
+			alert('参数错误');
+			return false;
+		}
+
+		$.ajax({
+			type:"POST",
+			url:"{:U('Order/setShipId')}",
+			data:{oid:oid, ship_id:shipId},
+			beforeSend:function(XMLHttpRequest){
+				$(".loading").show();
+			},
+			success:function(data){
+				if (data.status == '0') {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+			},complete:function(XMLHttpRequest){
+				$(".loading").hide();
+			}
+		});
+	}
 </script>
 <include file="Public:footer" />

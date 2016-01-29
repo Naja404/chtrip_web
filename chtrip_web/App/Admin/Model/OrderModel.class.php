@@ -64,6 +64,46 @@ class OrderModel extends Model{
 								  ->where($where)
 								  ->select();
 
+		$shipInfo = $this->table(tname('order_ship'))->where(array('oid' => $oid))->find();
+
+		$orderInfo['ship_info'] = unserialize($shipInfo['content']);
+
 		return $orderInfo;
+	}
+
+	/**
+	 * 检查订单的物流信息正确性
+	 * @param array $reqData 请求数据
+	 */
+	public function checkShipId($reqData = array()){
+		
+		$where = array(
+				'oid' => $reqData['oid'],
+				'sid' => $reqData['ship_id'],
+			);
+
+		$count = $this->table(tname('order_ship'))->where($where)->count();
+
+		return $count > 0 ? false : true;
+	}
+
+	/**
+	 * 更新订单物流状态
+	 * @param int $oid 订单号
+	 * @param int $status 订单状态 0.订单取消 1.订单完成 2.待发货 3.待收货 4.待付款
+	 */
+	public function upOrderStatus($oid = 0, $status = 0){
+
+		$statuArr = array(
+				0, 1, 2, 3, 4
+			);
+
+		if (!in_array($status, $statuArr)) return false;
+
+		$sql = "UPDATE ".tname('order')." SET status = '".(int)$status."' WHERE oid = '".$oid."'";
+
+		$this->query($sql);
+
+		return true;
 	}
 }

@@ -28,10 +28,18 @@ return array(
 		'TEXT_ORDER_STATUS_4' => '待支付',
 		'TEXT_PAY_STATUS_0'   => '未支付',
 		'TEXT_PAY_STATUS_1'   => '已支付',
+		'TEXT_SHIP_STATUS'    => '物流状态',
+		'TEXT_ADD_SHIPID'     => '输入物流单号',
+		'TEXT_DATE'           => '日期',
+		'TEXT_CONTENT'        => '内容',
+		'TEXT_AREA'           => '地点',
+		'TEXT_CITY'           => '城市',
 
 		'CSS_ORDER_STATUS_0' => 'label label-warning',
 		'CSS_ORDER_STATUS_1' => 'label label-success',
 		'CSS_ORDER_STATUS_2' => 'label label-inverse',
 		'CSS_ORDER_STATUS_3' => 'label label-info',
 		'CSS_ORDER_STATUS_4' => 'label label-important',
+
+		'BTN_ADD_SHIPID' => '添加物流单号',
 );

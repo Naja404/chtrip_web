@@ -22,6 +22,7 @@ class UtilController extends ApiBasicController {
         $this->userInfoModel = D('UserInfo');
         $this->userModel     = D('User');
         $this->orderModel    = D('Order');
+        $this->orderShipModel = D('OrderShip');
     }
 
     /**
@@ -153,14 +154,45 @@ class UtilController extends ApiBasicController {
      * 微信回调
      */
     public function wxpay(){
+        
+        $xml = xml_to_arr(file_get_contents("php://input"));
 
         $log = array(
-                'get'     => $_GET,
-                'post'    => $_POST,
-                'request' => $_REQUEST,
+                'xml' => $xml,
             );
         
         write_log($log, 'Util.wxpay');
+
+        if (!isset($xml['result_code']) || !isset($xml['return_code'])) return false;
+
+        if ($xml['result_code'] !== 'SUCCESS') return false;
+
+        $where = array(
+                'wx_oid'  => $xml['out_trade_no'],
+                'user_id' => $xml['device_info'],
+            );
+
+        $orderInfo = $this->orderModel->where($where)->find();
+
+        $save = array(
+                'pay_time'   => strtotime($xml['time_end']),
+                'pay_status' => 1,
+            );
+
+        if ($orderInfo['status'] == 4) $save['status'] = 2;
+
+        $res = $this->orderModel->where($where)->save($save);
+
+        $log = array(
+                'old_data'   => $orderInfo,
+                'update_sql' => $this->orderModel->getLastSql(),
+            );
+
+        write_log($log, 'wxpay_update_190');
+
+        $returnXml = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+
+        echo $returnXml;
     }
 
     /**
@@ -195,7 +227,72 @@ class UtilController extends ApiBasicController {
                 'update_sql' => $this->orderModel->getLastSql(),
             );
 
-        write_log($log, 'alipay_update_186');
+        write_log($log, 'alipay_update_225');
+    }
+
+    /**
+     * 物流信息
+     */
+    public function shipInfo(){
+        
+        $reqData = I('request.');
+
+        $where = array(
+                'oid' => $reqData['oid'],
+            );
+
+        $shipInfo = $this->orderShipModel->where($where)->find();
+
+        $shipInfo['content'] = unserialize($shipInfo['content']);
+
+        $this->assign('detail', $shipInfo);
+
+        $this->display('Product/shipInfo');
+    }
+
+    /**
+     * 运单爬虫
+     */
+    public function fetchShipInfo($shipId = 0){
+        // $shipId = 'el033486996jp';
+        // $shipId = 'CD232922995JP';
+        
+        $this->_initSnoopy();
+
+        $fetchUrl = sprintf(C('EMS_JAPAN'), $shipId);
+
+        $html = $this->snoopy->fetch($fetchUrl);
+
+        $returnRes = $this->fetch->fetch($html->results, 'getInfo');
+
+        if (count($returnRes) <= 0) return false;
+
+        $save = array(
+                'content' => serialize($returnRes),
+                'lasted'  => time(),
+            );
+
+        $where = array(
+                'sid' => $shipId,
+            );
+
+        $this->orderShipModel->where($where)->save($save);
+    }
+
+    /**
+     * 实例化snoopy
+     *
+     */
+    private function _initSnoopy(){
+
+        import('Extend.Snoopy');
+
+        $this->snoopy = new \Snoopy();
+        $this->snoopy->agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36';
+
+        import('Extend.FetchHTML');
+
+        $this->fetch = new \FetchHTML('Ems');
     }
 
 }

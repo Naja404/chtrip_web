@@ -48,4 +48,8 @@ return array(
 	'TEXT_ORDER_STATUS_4' => '待支付',
 	'TEXT_ORDER_NUMBER'   => '订单编号:%s',
 
+	'TEXT_DATE'         => '日期',
+	'TEXT_CONTENT'      => '内容',
+	'TEXT_NO_MORE_THAN' => '暂无相关内容',
+
 );

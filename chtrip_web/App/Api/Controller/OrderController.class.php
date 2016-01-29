@@ -160,7 +160,9 @@ class OrderController extends ApiBasicController {
         $content = "有新的订单:".$orderInfo['oid']."<br/>支付金额:".$orderInfo['total_fee']."RMB<br><br><a href='http://admin.nijigo.com'>进入管理后台</a>";
 
         $to = array(
-                'all@nijigo.com',
+                'stevenwang@nijigo.com',
+                'jeffzhang@nijigo.com',
+                'zhengyu@nijigo.com',
             );
         $subject = '新订单 - 单号:'.$orderInfo['oid'].' - Nijigo';
 

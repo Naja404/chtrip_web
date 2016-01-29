@@ -19,7 +19,13 @@ class OrderController extends AdminBasicController {
         parent::_initialize();
 
         $this->orderModel = D('Order');
+        $this->orderShipModel = D('OrderShip');
         $this->_assignText();
+
+        $this->ajaxRes = array(
+                'status' => '1',
+                'msg'    => L('ERR_PARAM'),
+            );
     }
 
     /**
@@ -62,6 +68,36 @@ class OrderController extends AdminBasicController {
         $this->assign('detail', $detail);
 
         $this->display('Order/detail');
+    }
+
+    /**
+     * 设置运单号
+     */
+    public function setShipId(){
+
+        if (!IS_AJAX) $this->ajaxReturn($this->ajaxRes);
+
+        $reqData = I('request.');
+
+        $status = $this->orderModel->checkShipId($reqData);
+
+        if ($status !== true) $this->ajaxReturn($this->ajaxRes);
+
+        $add = array(
+                'oid'     => $reqData['oid'],
+                'sid'     => $reqData['ship_id'],
+                'content' => '',
+                'created' => time(),
+                'lasted'  => time(),
+            );
+
+        $sid = $this->orderShipModel->add($add);
+
+        if ($sid) $this->orderModel->upOrderStatus($reqData['oid'], 3);
+
+        $this->ajaxRes = array('status' => '0');
+
+        $this->ajaxReturn($this->ajaxRes);
     }
 
     private function _assignText(){

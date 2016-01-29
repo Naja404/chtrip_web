@@ -30,7 +30,7 @@ class OrderModel extends Model{
 				CONCAT('".C('API_WEBSITE')."', REPLACE(C.path, '.', '_100_100.')) AS thumb ";
 		$joinDetail = tname('order_detail')." AS B ON B.oid = A.oid ";
 		$joinPro = tname('product_image')." AS C ON C.gid = B.image_id ";
-		$order = 'A.oid DESC';
+		$order = 'A.created DESC';
 
 		$queryRes = $this->field($field)
 						 ->table(tname('order').' AS A')

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8" >
+	<meta http-equiv="X-UA-Compatible" content="IE-edge,chrome=1">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/html/nijigo/css/bootstrap.min.css"/>
+	<script src="__PUBLIC__/html/nijigo/js/jquery.js"></script>
+	<style type="text/css">
+		input{
+			border: 0;
+			outline: none;
+			width: 100%;
+			height: 3em;
+			font-size: 1.2em;
+		}
+		select {
+			height: 3em;
+			width: 80%;
+			font-size: 1.2em;
+			appearance:none;
+			-moz-appearance:none;
+			-webkit-appearance:none;
+			border: 0;
+			background-color: white;
+		}
+		button{
+			width: 100%;
+			height: 3em;
+			font-size: 1.2em;
+			border: 0;
+			position: fixed;
+			bottom: 0;
+			color: white;
+			background-color: #9c9c9c;
+		}
+	</style>
+	<title>nijigo</title>
+</head>
+<body>
+	<?php if($detail['content']){?>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+			  <th style="width:30%;text-align:center;"><?php echo L('TEXT_DATE');?></th>
+			  <th style="width:70%;text-align:center;"><?php echo L('TEXT_CONTENT');?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="detail.content" id="item">
+			<tr>
+				<td style="width:30%;">
+					{$item.0}
+				</td>
+				<td style="width:70%;">
+					{$item.1}
+					<br>
+					{$item.3}
+					<br>
+					{$item.4}
+				</td>
+			</tr>
+			</volist>
+		</tbody>
+	</table>
+	<?php }else{ ?>
+	<br>
+	<br>
+		<center><span style="color:gray;">{:L('TEXT_NO_MORE_THAN')}</span></center>
+	<?php } ?>
+	<br>
+	<br>
+	<br>
+</body>
+</html>

@@ -38,4 +38,5 @@ return array(
 		'TEXT_STATUS'                => '状态',
 		'TEXT_CREATED'               => '创建时间',
 		'TEXT_ACTION'                => '操作',
+		'ERR_PARAM'					 => '参数错误',
 );
