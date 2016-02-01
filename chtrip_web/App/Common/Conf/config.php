@@ -186,4 +186,6 @@ return  array(
 	'SERVER_IP' => '47.89.27.226',
 
 	'EMS_JAPAN' => 'https://trackings.post.japanpost.jp/services/srv/search/?requestNo1=%s&locale=ja&search.x=93&search.y=24',
+	'SERVICE_TAX' => '0.08',
+	'SHIP_URL' => 'http://api.nijigo.com/Util/shipInfo/ssid/%s/oid/%s.html',
 );

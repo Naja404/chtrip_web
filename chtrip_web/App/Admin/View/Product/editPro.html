@@ -8,7 +8,7 @@
 		<div class="row-fluid">
 			<div class="span8">
 		      <div class="widget-box">
-		         <form action="{:U('Product/addProduct')}" method="post" class="form-horizontal" id="addProduct_form" enctype="multipart/form-data">
+		         <form action="{:U('Product/editPro', array('pid' => $detail['pid']))}" method="post" class="form-horizontal" id="editProduct_form" enctype="multipart/form-data">
 		        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
 		          <h5>{:L('TITLE_ADD_PRODUCT')}</h5>
 		          <button class="btn btn-inverse btn-mini" onclick="selectForm('zh');return false;" id="zhSelectFormBtn">{:L('TEXT_LANGUAGE_ZH')}</button>
@@ -18,42 +18,42 @@
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_TITLE')}</label>
 		              <div class="controls">
-		                <input type="text" name="titleZH" id="title" placeholder="{:L('INPUT_ADD_PRODUCT_TITLE')}" class="span11">
+		                <input type="text" name="titleZH" id="title" placeholder="{:L('INPUT_ADD_PRODUCT_TITLE')}" class="span11" value="{$detail.title_zh}">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_SUB_TITLE')}</label>
 		              <div class="controls">
-		                <input type="text" name="summary_zh" id="summary_zh" placeholder="{:L('INPUT_ADD_PRODUCT_TITLE')}" class="span11">
+		                <input type="text" name="summary_zh" id="summary_zh" placeholder="{:L('INPUT_ADD_PRODUCT_TITLE')}" class="span11" value="{$detail.summary_zh}">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_PRICE')}</label>
 		              <div class="controls">
-		                <input type="text" name="priceZH" placeholder="{:L('INPUT_ADD_PRODUCT_PRICE')}" class="span11">
+		                <input type="text" name="priceZH" placeholder="{:L('INPUT_ADD_PRODUCT_PRICE')}" class="span11" value="{$detail.price_zh}">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_WEIGHT')}</label>
 		              <div class="controls">
-		                <input type="text" name="weight" id="weight" placeholder="{:L('INPUT_ADD_PRODUCT_WEIGHT')}" class="span11">g
+		                <input type="text" name="weight" id="weight" placeholder="{:L('INPUT_ADD_PRODUCT_WEIGHT')}" class="span11" value="{$detail.weight}">g
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_PRODUCT_STOCK')}</label>
 		              <div class="controls">
-		                <input type="text" name="stock" id="stock" placeholder="{:L('INPUT_ADD_PRODUCT_STOCK')}" class="span11">
+		                <input type="text" name="stock" id="stock" placeholder="{:L('INPUT_ADD_PRODUCT_STOCK')}" class="span11" value="{$detail.stock}">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_PRODUCT_LIMIT')}</label>
 		              <div class="controls">
-		                <input type="text" name="limit" id="limit" placeholder="{:L('INPUT_PRODUCT_LIMIT')}" class="span11">
+		                <input type="text" name="limit" id="limit" placeholder="{:L('INPUT_PRODUCT_LIMIT')}" class="span11" value="{$detail.limit}">
 		              </div>
 		            </div>
 
@@ -62,7 +62,7 @@
 		              <div class="controls">
 		              	<select name="brand">
 		              		<volist name="brand" id="item">
-		              			<option value="{$item.name}">{$item.name}</option>
+		              			<option value="{$item.name}" <eq name="item.name" value="$detail['brand']">selected="true"</eq>>{$item.name}</option>
 		              		</volist>
 		              	</select>
 		              </div>
@@ -73,7 +73,7 @@
 		              <div class="controls">
 		              	<select name="category">
 		              		<volist name="category" id="item">
-		              			<option value="{$item.name}">{$item.name}</option>
+		              			<option value="{$item.name}" <eq name="item.name" value="$detail['category']">selected="true"</eq>>{$item.name}</option>
 		              		</volist>
 		              	</select>
 		              </div>
@@ -158,13 +158,15 @@
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_IMAGE')}</label>
 		              <div class="controls">
 		                <input type="file" name="image" />
+		                <input type="hidden" name="image_id" value="{$detail.image_id}">
+		                <input type="hidden" name="pid" value="{$detail.pid}">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_DESCRIPTION')}</label>
 		              <div class="controls">
-		              	<textarea name="descriptionZH"></textarea>
+		              	<textarea name="descriptionZH">{:htmlspecialchars_decode($detail['description_zh'])}</textarea>
 		              </div>
 		            </div>
 
@@ -177,14 +179,14 @@
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_TITLE_JP')}</label>
 		              <div class="controls">
-		                <input type="text" name="titleJP" id="titleJP" placeholder="{:L('INPUT_ADD_PRODUCT_TITLE')}" class="span11">
+		                <input type="text" name="titleJP" id="titleJP" placeholder="{:L('INPUT_ADD_PRODUCT_TITLE')}" class="span11" value="{$detail.title_jp}">
 		              </div>
 		            </div>
 
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_PRICE_JP')}</label>
 		              <div class="controls">
-		                <input type="text" name="priceJP" placeholder="{:L('INPUT_ADD_PRODUCT_PRICE')}" class="span11">
+		                <input type="text" name="priceJP" placeholder="{:L('INPUT_ADD_PRODUCT_PRICE')}" class="span11" value="{$detail.price_jp}">
 		              </div>
 		            </div>
 
@@ -273,7 +275,7 @@
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_DESCRIPTION_JP')}</label>
 		              <div class="controls">
-		              	<textarea name="descriptionJP"></textarea>
+		              	<textarea name="descriptionJP">{:htmlspecialchars_decode($detail['description_jp'])}</textarea>
 		              </div>
 		            </div>
 

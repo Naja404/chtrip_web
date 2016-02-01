@@ -1,8 +1,8 @@
-		<?php
-		/**
-		* ThinkPHP 简体中文语言包
-		*/
-		return array(
+<?php
+/**
+* ThinkPHP 简体中文语言包
+*/
+return array(
 		//title
 		'TITLE_PRODUCT'                   => '产品',
 		'TITLE_PRODUCT_LIST'              => '产品列表',
@@ -13,6 +13,8 @@
 		'TEXT_LANGUAGE_ZH'                => '中文',
 		'TEXT_LANGUAGE_JP'                => '日文',
 		'TEXT_ADD_PRODUCT_TITLE'          => '标题',
+		'TEXT_ADD_PRODUCT_SUB_TITLE'      => '小标题',
+		'TEXT_ADD_PRODUCT_WEIGHT'         => '重量',
 		'TEXT_ADD_PRODUCT_TITLE_JP'       => '日文标题',
 		'TEXT_ADD_PRODUCT_PRICE'          => '人名币',
 		'TEXT_ADD_PRODUCT_PRICE_JP'       => '日币',
@@ -36,6 +38,10 @@
 		'TEXT_COMMENT_INFO'               => '评论/销量/浏览量',
 		'TEXT_ACTION'                     => '操作',
 		'TEXT_CREATED'                    => '创建时间',
+		'TEXT_PRODUCT_STOCK'              => '库存',
+		'TEXT_PRODUCT_LIMIT'              => '每单限购',
+		'TEXT_PRODUCT_BRAND'              => '品牌',
+		'TEXT_PRODUCT_CATEGORY'           => '分类',
 		
 		//input
 		'INPUT_ADD_PRODUCT_TITLE'         => '请输入标题',
@@ -47,7 +53,11 @@
 		'INPUT_ADD_PRODUCT_BUY_URL'       => '请输入购买链接',
 		'INPUT_ADD_PRODUCT_IMAGE'         => '',
 		'INPUT_ADD_PRODUCT_SORT'          => '数字越大排序越靠前',
+		'INPUT_ADD_PRODUCT_WEIGHT'        => '请输入重量：克',
+		'INPUT_ADD_PRODUCT_STOCK'         => '请输入库存',
+		'INPUT_PRODUCT_LIMIT'             => '限购数量;0不限购',
 		
-		//errot
+		//error
 		'ERROR_ADD_PRODUCT'               => '产品添加失败,请重试',
+		'ERROR_EDIT_PRODUCT'			  => '产品更新失败,请重试',
 		);

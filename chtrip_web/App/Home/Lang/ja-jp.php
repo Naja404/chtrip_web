@@ -3,12 +3,12 @@
  * ThinkPHP 简体中文语言包
  */
 return array(
-	'TEXT_HOME'      => 'ホーム',
-	'TEXT_NEWS'      => '報道',
-	'TEXT_ABOUT'     => 'について',
-	'TEXT_MEMBERS'   => '一員',
-	'TEXT_JOB'       => '服务',
-	'TEXT_CONTACT'   => 'コンタクト',
+	'TEXT_HOME'      => 'HOME',
+	'TEXT_NEWS'      => 'NEWS',
+	'TEXT_ABOUT'     => 'ABOUT',
+	'TEXT_MEMBERS'   => 'MEMBERS',
+	'TEXT_JOB'       => 'SERVICE',
+	'TEXT_CONTACT'   => 'CONTACT',
 	'TEXT_KNOW_MORE' => '詳細はこちら',
 	
 	'TEXT_SLOGAN'             => '彩虹Go（Nijigo）、「インバウンド集客のプラットフォーム」',

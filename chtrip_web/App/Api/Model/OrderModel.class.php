@@ -56,6 +56,7 @@ class OrderModel extends Model{
 					'oid_label'    => sprintf(L('TEXT_ORDER_NUMBER'), $v[0]['oid']),
 					'status'       => $v[0]['status'],
 					'status_label' => L('TEXT_ORDER_STATUS_'.$v[0]['status']),
+					'ship_url'     => sprintf(C('SHIP_URL'), $reqData['ssid'], $v[0]['oid']),
 					'total_fee'    => '￥'.$v[0]['total_fee'],
 					'created'      => date('Y-m-d H:i:s', time()),
 					'pro'          => $v,

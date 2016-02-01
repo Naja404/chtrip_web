@@ -189,6 +189,13 @@ class UtilController extends ApiBasicController {
             );
 
         write_log($log, 'wxpay_update_190');
+        
+        $orderInfo = array(
+                    'oid'       => $xml['out_trade_no'],
+                    'total_fee' => $xml['total_fee'] / 100,
+            );
+
+        $this->sendOrderMail($orderInfo);
 
         $returnXml = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
 
@@ -228,6 +235,13 @@ class UtilController extends ApiBasicController {
             );
 
         write_log($log, 'alipay_update_225');
+
+        $orderInfo = array(
+                    'oid'       => $reqData['out_trade_no'],
+                    'total_fee' => $reqData['total_fee'],
+            );
+
+        $this->sendOrderMail($orderInfo);
     }
 
     /**
@@ -277,6 +291,24 @@ class UtilController extends ApiBasicController {
             );
 
         $this->orderShipModel->where($where)->save($save);
+    }
+
+    /**
+     * 发送订单付款通知邮件
+     * @param array $orderInfo 订单信息
+     */
+    public function sendOrderMail($orderInfo = array()){
+
+        $content = "有订单已付款:".$orderInfo['oid']."<br/>支付金额:".$orderInfo['total_fee']."RMB<br><br><a href='http://admin.nijigo.com'>进入管理后台</a>";
+
+        $to = array(
+                'stevenwang@nijigo.com',
+                'jeffzhang@nijigo.com',
+                'zhengyu@nijigo.com',
+            );
+        $subject = '已付款 - 单号:'.$orderInfo['oid'].' - Nijigo';
+
+        send_mail($to, $subject, $content);
     }
 
     /**

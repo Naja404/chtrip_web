@@ -253,6 +253,9 @@ class OrderController extends ApiBasicController {
                 'status'     => 4,
             );
 
+        // 微信支付,添加微信oid-用于回调
+        if ($reqData['pay'] == 'wxpay') $order['wx_oid'] = $order['oid'];
+
         $res = $this->orderModel->add($order);
 
         if (!$res) return false;

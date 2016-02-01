@@ -30,13 +30,11 @@
 	                  <td>
 	                  	人名币：{$item.price_zh}
 	                  	<br>
-	                  	<?php if($item['price_jp']){?>
 	                  	日元：{$item.price_jp}
-	                  	<?php }?>
 	                  </td>
 	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
 	                  <td>
-	                  	<button>编辑</button>
+	                  	<a class="btn" href="{:U('Product/editPro', array('pid' => $item['pid']))}" >编辑</a>
 	                  	<button onclick="delPro('{$item.pid}');">删除</button>
 	                  </td>
 	                </tr>

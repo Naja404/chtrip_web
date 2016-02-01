@@ -97,6 +97,7 @@ class ProductModel extends Model{
 	public function addProduct($imageId = false){
 
 		$tag = implode(',', I('post.tag'));
+		$stock = intval(I('post.stock'));
 
 		$addData = array(
 				'tag'       => strlen($tag) <= 1 ? '' : $tag,
@@ -104,6 +105,9 @@ class ProductModel extends Model{
 				'recommend' => I('post.recommend', 0) ? 1 : 0,
 				'image_id'  => intval($imageId),
 				'saler_id'  => intval(I('post.saler_id', 1)),
+				'stock'     => $stock,
+				'rest'      => $stock,
+				'limit'     => intval(I('post.limit')) > $stock ? $stock : intval(I('post.limit')),
 				'created'   => NOW_TIME,
 			);
 
@@ -228,6 +232,96 @@ class ProductModel extends Model{
 	}
 
 	/**
+	 * 获取品牌名及分类
+	 * @param int $type 1.名称 2.分类
+	 */
+	public function getProBrandCate($type = 1){
+		$where = array(
+				'type' => intval($type),
+			);
+
+		$queryRes = $this->table(tname('product_brand'))->where($where)->select();
+
+		return $queryRes;
+	}
+
+	/**
+	 * 获取产品详情
+	 * @param int $pid 产品id
+	 */
+	public function getProductDetail($pid = 0){
+
+		$where = array(
+				'A.pid' => $pid,
+			);
+
+		$joinDetail = tname('product_detail_copy')." AS B ON B.pid = A.pid";
+		$joinImg = tname('product_image')." AS C ON C.gid = A.image_id";
+
+		$field = "A.pid, 
+					A.image_id, 
+					A.stock, 
+					A.rest, 
+					A.limit, 
+					B.title_zh, 
+					B.title_jp, 
+					B.summary_zh, 
+					B.summary_jp, 
+					B.description_zh, 
+					B.description_jp, 
+					B.brand, 
+					B.category, 
+					B.price_zh, 
+					B.price_jp, 
+					B.weight,
+					CONCAT('".C('API_WEBSITE')."', REPLACE(C.path, '.', '_100_100.')) AS thumb";
+
+		$detail = $this->table(tname('products_copy')." AS A")
+						->field($field)
+						->join($joinDetail)
+						->join($joinImg)
+						->where($where)->find();
+
+		return $detail;
+	}
+
+	/**
+	 * 更新产品
+	 * @param int $imageId 图片id
+	 */
+	public function editProduct($imageId = 0){
+
+		$where = array(
+				'pid' => I('post.pid'),
+			);
+
+		$savePro = array(
+				'stock'    => I('post.stock'),
+				'limit'    => I('post.limit'),
+				'image_id' => $imageId ? $imageId : I('post.image_id'),
+			);
+
+		$proStatus = $this->table(tname('products_copy'))->where($where)->save($savePro);
+
+		$saveDetail = array(
+				'title_zh'       => trim(I('post.titleZH')),
+				'title_jp'       => trim(I('post.titleJP')),
+				'summary_zh'     => trim(I('post.summary_zh')),
+				'description_zh' => I('post.descriptionZH', '', 'htmlspecialchars'),
+				'description_jp' => I('post.descriptionJP', '', 'htmlspecialchars'),
+				'brand'          => I('post.brand'),
+				'category'       => I('post.category'),
+				'price_zh'       => trim(I('post.priceZH')),
+				'price_jp'       => trim(I('post.priceJP')),
+				'weight'         => I('post.weight'),
+			);
+	
+		$detailStatus = $this->table(tname('product_detail_copy'))->where($where)->save($saveDetail);
+
+		return true;
+	}
+
+	/**
 	 * 添加产品详细内容
 	 * @param int $pid 产品id
 	 */
@@ -241,8 +335,11 @@ class ProductModel extends Model{
 				'pid'            => $pid,
 				'title_zh'       => trim(I('post.titleZH')),
 				'title_jp'       => trim(I('post.titleJP')),
+				'summary_zh'     => trim(I('post.summary_zh')),
 				'description_zh' => I('post.descriptionZH', '', 'htmlspecialchars'),
 				'description_jp' => I('post.descriptionJP', '', 'htmlspecialchars'),
+				'brand'          => I('post.brand'),
+				'category'       => I('post.category'),
 				'price_zh'       => trim(I('post.priceZH')),
 				'price_jp'       => trim(I('post.priceJP')),
 				'shipping_type'  => I('post.shippingTypeZH'),
@@ -250,6 +347,7 @@ class ProductModel extends Model{
 				'sales'          => I('post.sales'),
 				'views'          => I('post.views'),
 				'buy_url'        => trim(I('post.buy_urlZH')),
+				'weight'         => I('post.weight'),
 				'created'        => NOW_TIME,
 			);
 

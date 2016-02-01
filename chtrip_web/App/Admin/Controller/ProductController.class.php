@@ -74,9 +74,34 @@ class ProductController extends AdminBasicController {
         }
 
         $this->_assignText();
-
         $this->display('addProduct');
 
+    }
+
+    /**
+     * 编辑产品
+     */
+    public function editPro(){
+
+        $reqData = I('request.');
+
+        if (IS_POST) {
+            $imageId = $this->_getIMGId();
+
+            $pid = $this->productModel->editProduct($imageId);
+
+            if (!$pid) {
+                $this->error(L('ERROR_EDIT_PRODUCT'));
+            }
+
+            $this->success($statu, U('Product/proList'));
+        }
+
+        $detail = $this->productModel->getProductDetail($reqData['pid']);
+
+        $this->assign('detail', $detail);
+        $this->_assignText();
+        $this->display('editPro');
     }
 
     /**
@@ -159,10 +184,9 @@ class ProductController extends AdminBasicController {
 
         $this->assign('title', L('TITLE_'.ACTION_NAME));
 
-        if (in_array(ACTION_NAME, array('addProduct'))) {
-            $this->assign('shipping_list', $this->productModel->getShipType());
-            $this->assign('saler_list', $this->productModel->getSaler());
-            $this->assign('tag_list', $this->productModel->getTags());
+        if (in_array(ACTION_NAME, array('addProduct', 'editPro'))) {
+            $this->assign('brand', $this->productModel->getProBrandCate(1));
+            $this->assign('category', $this->productModel->getProBrandCate(2));
         }
     }
 

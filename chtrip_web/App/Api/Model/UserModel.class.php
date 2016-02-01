@@ -50,6 +50,9 @@ class UserModel extends Model{
 
 		if ((int)$proPrice['price_zh_total'] == 0 || (int)$proPrice['weight_total'] == 0) return L('ERROR_PARAM');
 
+		//设置服务税 
+		$proPrice['price_zh_total'] = $this->_setPriceTax($proPrice['price_zh_total']);
+
 		$tmpPrice = $proPrice['price_zh_total'] + $addressShip['ship_price'];
 
 		$returnRes = array(
@@ -703,5 +706,13 @@ class UserModel extends Model{
 			);
 
 		return $returnRes;
+	}
+
+	/**
+	 * 设置服务税
+	 * @param double $price 商品总价
+	 */
+	private function _setPriceTax($price = 0){
+		return $price * (1 + C('SERVICE_TAX'));
 	}
 }

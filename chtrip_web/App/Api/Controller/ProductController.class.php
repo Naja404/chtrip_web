@@ -107,6 +107,9 @@ class ProductController extends ApiBasicController {
             //     $v['colorNum'] = (string)($i);
             // }
             $v['title'] = htmlspecialchars_decode($v['title']);
+            
+            if (I('request.ver') != '0.9.7') $v['title'] = str_replace('*', '', $v['title']);
+
             $v['colorNum'] = (string)($i);
             $v['activityTime'] = $this->_setActivityTime($v['activityTime']);
             $queryArr[] = $v;
@@ -153,6 +156,8 @@ class ProductController extends ApiBasicController {
         if (preg_match('/{hasPro:\w+}/', $detailRes['content'])) {
             $detailRes['content'] = $this->_formatProToHTML($detailRes['content']);
         }
+
+        $detailRes['title'] = str_replace('*', '', $detailRes['title']);
 
         $this->assign('detail', $detailRes);
 
