@@ -173,7 +173,9 @@ class UtilController extends ApiBasicController {
             );
 
         $orderInfo = $this->orderModel->where($where)->find();
-
+        // 防止重复提示
+        if ($orderInfo['pay_status'] == 1) return false;
+        
         $save = array(
                 'pay_time'   => strtotime($xml['time_end']),
                 'pay_status' => 1,
@@ -219,7 +221,9 @@ class UtilController extends ApiBasicController {
             );
 
         $orderInfo = $this->orderModel->where($where)->find();
-
+        // 防止重复提示
+        if ($orderInfo['pay_status'] == 1) return false;
+        
         $save = array(
                 'pay_time'   => strtotime($reqData['notify_time']),
                 'pay_status' => 1,
@@ -296,10 +300,11 @@ class UtilController extends ApiBasicController {
     /**
      * 发送订单付款通知邮件
      * @param array $orderInfo 订单信息
+     * @param string $payType 支付方式
      */
-    public function sendOrderMail($orderInfo = array()){
+    public function sendOrderMail($orderInfo = array(), $payType = 'alipay'){
 
-        $content = "有订单已付款:".$orderInfo['oid']."<br/>支付金额:".$orderInfo['total_fee']."RMB<br><br><a href='http://admin.nijigo.com'>进入管理后台</a>";
+        $content = "有订单已付款:".$orderInfo['oid']."<br/>支付金额:".$orderInfo['total_fee']."RMB<br><br>支付方式:".$payType."<br><br><a href='http://admin.nijigo.com'>进入管理后台</a>";
 
         $to = array(
                 'stevenwang@nijigo.com',

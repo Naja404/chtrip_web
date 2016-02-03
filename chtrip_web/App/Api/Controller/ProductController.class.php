@@ -121,7 +121,7 @@ class ProductController extends ApiBasicController {
         $adSql = "select 
                     a.type,
                     a.title,
-                    concat('http://api.atniwo.com', b.path) as path,
+                    concat('http://api.nijigo.com', b.path) as path,
                     a.url,
                     a.url_id as pid,
                     c.price_zh 

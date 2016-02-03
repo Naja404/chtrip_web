@@ -8,6 +8,30 @@ use Think\Model;
 class UserModel extends Model{
 
 	/**
+	 * 获取购物车商品数量
+	 * @param array $reqData 请求内容
+	 */
+	public function getCartTotal($reqData = array()){
+		$where = array(
+				'user_id' => $reqData['ssid'],
+			);
+
+		$queryRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+		$total = unserialize($queryRes['cart']);
+
+		if (count($total) <= 0) return 0;
+
+		foreach ($total as $k => $v) {
+			$tmp += $v['total'];
+		}
+
+		if ($tmp <= 0) return 0;
+
+		return $tmp;
+	}
+
+	/**
 	 * 检测用户支付
 	 * @param string $userId 用户id
 	 * @param array $reqData 请求内容

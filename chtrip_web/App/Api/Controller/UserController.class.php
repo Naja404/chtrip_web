@@ -25,6 +25,21 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 获取购物车数量
+     */
+    public function getCartTotal(){
+        $reqData = I('request.');
+
+        $total = $this->userModel->getCartTotal($reqData);
+
+        $outdata = array(
+                'cart_total' => (string)$total,
+            );
+
+        json_msg($outdata);
+    }
+
+    /**
      * 获取订单
      */
     public function getOrder(){
@@ -171,6 +186,18 @@ class UserController extends ApiBasicController {
 
         $this->assign('cityList', $this->userAddressModel->getCityList());
         $this->display('User/addAddress');
+    }
+
+    /**
+     * 删除收货地址
+     */
+    public function delAddress(){
+        
+        $reqData = I('request.');
+
+        $this->userAddressModel->delAddress($reqData);
+
+        return $this->getAddress();
     }
 
     /**
@@ -521,7 +548,13 @@ class UserController extends ApiBasicController {
 
         if (is_string($returnRes)) json_msg($returnRes, 1);
 
-        json_msg();
+        $total = $this->userModel->getCartTotal($reqData);
+
+        $outdata = array(
+                'cart_total' => (string)$total,
+            );
+
+        json_msg($outdata);
     }
 
     /**

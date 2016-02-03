@@ -156,6 +156,23 @@ class UserAddressModel extends Model{
         return $queryRes;
     }
 
+    /**
+     * 删除收货地址
+     * @param array $reqData 请求数据
+     */
+    public function delAddress($reqData = array()){
+        $where = array(
+                'user_id' => $reqData['ssid'],
+                'id'      => $reqData['id'],
+            );
+
+        $save = array(
+                'status' => 0,
+            );
+
+        return $this->where($where)->save($save);
+    }
+
     private function _formatCitySelect($data = array()){
         $select = "<option value='%s'>%s</option>";
 
