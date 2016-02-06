@@ -196,7 +196,7 @@ class ProductController extends ApiBasicController {
 
         $queryArr = array();
         foreach ($queryRes as $k => $v) {
-            $v['price_zh'] = $v['price_zh'].' RMB';
+            $v['price_zh'] = '￥'.$v['price_zh'];
             $v['stock_label'] = L('TEXT_ADD_CART');
             if ($v['rest'] == 0) $v['stock_label'] = L('TEXT_NOT_STOCK');
             $queryArr[] = $v;
@@ -334,7 +334,7 @@ class ProductController extends ApiBasicController {
         foreach ($queryRes as $k => $v) {
             $v['avg_rating'] = (string)10*$v['avg_rating'];
             $v['googlemap'] = sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15
-", urlencode($v['address']), $v['lat'], $v['lng']);
+", $v['address'], $v['lat'], $v['lng']);
             $queryArr[] = $v;
         }
 

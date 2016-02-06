@@ -426,12 +426,13 @@ class UserModel extends Model{
 			$userProID = array();
 		}
 
-		if (in_array($proData['pid'], array_keys($userProID)) ) {
-			return L('ERR_EXISTS_PRODUCTID');
-		}
-
 		// array_push($userProID, $proData['pid']);
-		$userProID[$proData['pid']] = 1;
+		if ($proData['type'] == 1) {
+			if (in_array($proData['pid'], array_keys($userProID)) ) return L('ERR_EXISTS_PRODUCTID');
+			$userProID[$proData['pid']] = 1;
+		}else{
+			unset($userProID[$proData['pid']]);
+		}
 
 		if (count($userProID) <= 0) {
 			return true;
@@ -440,7 +441,27 @@ class UserModel extends Model{
 		// $queryRes = $this->table(tname('user_buylist'))->where($where)->save('product_id = '.json_encode($userProID));
 		$queryRes = $this->query("UPDATE `ch_user_buylist` SET product_id = '".json_encode($userProID)."' WHERE ( `user_id` = '".$proData['ssid']."' )");
 
+		$queryRes = array(
+					'has_wantbuy' => isset($userProID[$proData['pid']]) ? '1' : '0',
+				);
+
 		return $queryRes;
+	}
+
+	/**
+	 * 检测是否加入购物清单
+	 * @param array $reqData 请求数据
+	 */
+	public function hasWantBuy($reqData = array()){
+		$where = array(
+				'user_id' => $reqData['ssid'],
+			);
+
+		$queryRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+		$proData = json_decode($queryRes['product_id'], true);
+
+		return isset($proData[$reqData['pid']]) ? '1' : '0';
 	}
 
 	/**

@@ -34,6 +34,7 @@ class UserController extends ApiBasicController {
 
         $outdata = array(
                 'cart_total' => (string)$total,
+                'has_wantbuy' => $this->userModel->hasWantBuy($reqData),
             );
 
         json_msg($outdata);
@@ -564,7 +565,8 @@ class UserController extends ApiBasicController {
 
         $reqData = array(
                 'ssid' => I('request.ssid'),
-                'pid' => I('request.pid'),
+                'pid'  => I('request.pid'),
+                'type' => I('request.type'),
             );
 
         $returnRes = $this->userModel->addBuyList($reqData);
@@ -573,7 +575,7 @@ class UserController extends ApiBasicController {
             json_msg($returnRes, 1);
         }
 
-        json_msg();
+        json_msg($returnRes);
     }
 
     /**
