@@ -609,8 +609,8 @@ class UserModel extends Model{
 		$returnRes = array(
 				'list' => is_array($productList) ? $productList : array(),
 				'selectCount' => (string)$selectCount,
-				'price_jp_total' => $priceJP ? $priceJP : '0.00',
-				'price_zh_total' => $priceZH ? $priceZH : '0.00',
+				'price_jp_total' => $priceJP ? get_price($priceJP) : '0.00',
+				'price_zh_total' => $priceZH ? get_price($priceZH) : '0.00',
 				'selectAll' => count($queryRes) == $selectCount ? '1' : '0',
 			);
 
