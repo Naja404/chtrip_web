@@ -317,10 +317,27 @@ class UtilController extends ApiBasicController {
     }
 
     /**
+     * 获取feed
+     */
+    public function fetchRss(){
+        $url = "http://mcha-cn.com/feed";
+
+        $this->_initSnoopy();
+
+        $html = $this->snoopy->fetch($url);
+
+        $html = str_replace("content:encoded", "contentencoded", $html->results);
+
+        $feed = xml_to_arr($html);
+
+        
+    }
+
+    /**
      * 实例化snoopy
      *
      */
-    private function _initSnoopy(){
+    private function _initSnoopy($className = 'Ems'){
 
         import('Extend.Snoopy');
 
@@ -329,7 +346,7 @@ class UtilController extends ApiBasicController {
 
         import('Extend.FetchHTML');
 
-        $this->fetch = new \FetchHTML('Ems');
+        $this->fetch = new \FetchHTML($className);
     }
 
 }
