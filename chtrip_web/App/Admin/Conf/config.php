@@ -83,4 +83,5 @@ return array(
         ),
 
     'PREVIEW_ALBUM' => 'http://local-api.atniwo.com/Product/showAlbum?aid=%s',
+    'PREVIEW_ALBUM_MCHA' => 'http://api.atniwo.com/Product/showMcha?id=%s',
 );

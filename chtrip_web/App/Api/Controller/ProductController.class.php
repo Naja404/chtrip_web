@@ -165,6 +165,21 @@ class ProductController extends ApiBasicController {
     }
 
     /**
+     * mcha 显示
+     * @param int $id 数据id
+     */
+    public function showMcha(){
+        
+        $id = I('request.id', 0);
+
+        $detailRes = $this->productModel->getMchaDetail($id);
+
+        $this->assign('detail', $detailRes);
+
+        $this->display('Product/mchaDetail');
+    }
+
+    /**
      * 获取产品列表
      * @param string tag 标签
      * @param int $pageSize 每页数据内容

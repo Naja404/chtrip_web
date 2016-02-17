@@ -392,6 +392,27 @@ function resizeImg($path = false, $width = 90, $height = 66, $isCut = false){
 }
 
 /**
+ * 裁剪图片
+ * @param string $path 图片路径
+ */
+function slice_image($path = false){
+	$imageInfo = getimagesize($path);
+
+	$orgWidth = $imageInfo[0];
+	$orgHeight = $imageInfo[1];
+
+	$src_x = intval(($orgWidth - $orgHeight) / 2);
+
+	$imgObj = imagecreatefromjpeg($path);
+
+	$sliceImg = imagecreatetruecolor($orgHeight, $orgHeight);
+
+	imagecopy($sliceImg, $imgObj, 0, 0, $src_x, 0, $orgHeight, $orgHeight);
+
+	return $sliceImg;
+}
+
+/**
  * 生成uuid
  */
 function mkUUID(){

@@ -23,6 +23,7 @@ class UtilController extends ApiBasicController {
         $this->userModel     = D('User');
         $this->orderModel    = D('Order');
         $this->orderShipModel = D('OrderShip');
+        $this->productImageModel = D('ProductImage');
     }
 
     /**
@@ -320,9 +321,10 @@ class UtilController extends ApiBasicController {
      * 获取feed
      */
     public function fetchRss(){
+
         $url = "http://mcha-cn.com/feed";
 
-        $this->_initSnoopy();
+        $this->_initSnoopy('Freeshop');
 
         $html = $this->snoopy->fetch($url);
 
@@ -330,7 +332,199 @@ class UtilController extends ApiBasicController {
 
         $feed = xml_to_arr($html);
 
+        $mchaModel = D('Mcha');
+
+        foreach ($feed['channel']['item'] as $k => $v) {
+
+            $where = array(
+                    'link' => $v['link'],
+                );
+
+            $hasExists = $mchaModel->where($where)->count();
+
+            if ($hasExists >= 1) continue;
+
+            $description = $this->_splitATag($v['contentencoded']);
+
+            $add = array(
+                    'title'       => $v['title'],
+                    'description' => htmlspecialchars($description),
+                    'link'        => $v['link'],
+                    'category'    => serialize($v['category']),
+                    'image_id'    => $this->_getRssImage($description),
+                    'pub_date'    => strtotime($v['pubDate']),
+                    'status'      => 0,
+                );
+
+            $mchaModel->add($add);
+        }
+    }
+
+    /**
+     * 获取网页数据
+     */
+    public function fetchWeb(){
+        exit('no pass');
+        $argv = $_SERVER["argv"];
+
+        $url = "http://tax-freeshop.jnto.go.jp/eng/locator.php?location=".$argv[2]."&lat=&lng=&keyword=&sort=shop_name_asc&page=%s";
+
+        $this->_initSnoopy('Freeshop');
+
+        $freeshopModel = D('Freeshop');
+
+        for ($i=1; $i < $argv[3]; $i++) { 
+            
+            $fetchUrl = sprintf($url, $i);
+
+            $html = $this->snoopy->fetch($fetchUrl);
+
+            $returnRes = $this->fetch->fetch($html->results, 'getInfo');
+
+            foreach ($returnRes as $k => $v) {
+
+                if (!isset($v['address'][0]) || empty($v['address'][0])) continue;
+
+                $add = array(
+                        'name'     => $v['address'][0],
+                        'address'  => serialize($v['address']),
+                        'link'     => count($v['link']) <= 0 ? '' : serialize($v['link']),
+                        'tel'      => empty($v['tel']) ? '' : $v['tel'],
+                        'credit'   => empty($v['credit']) ? '' : $v['credit'],
+                        'category' => empty($v['category']) ? '' : $v['category'],
+                        'city'     => $argv[4],
+                    );
+
+                $freeshopModel->add($add);
+            }
+        }
+    }
+
+    /**
+     * 更新免税店
+     */
+    public function upFressShop(){
+        exit('no pass');
+        $area = array(
+            'Aichi'     => '爱知',
+            'Akita'     => '秋田',
+            'Aomori'    => '青森',
+            'Chiba'     => '千叶',
+            'Ehime'     => '爱媛',
+            'Fukui'     => '福井',
+            'Fukuoka'   => '福冈',
+            'Fukushima' => '福岛',
+            'Gifu'      => '岐阜',
+            'Gunma'     => '群马',
+            'Hiroshima' => '广岛',
+            'Hokkaido'  => '北海道',
+            'Hyogo'     => '兵库',
+            'Ibaraki'   => '茨城',
+            'Ishikawa'  => '石川',
+            'Iwate'     => '岩手',
+            'Kagawa'    => '香川',
+            'Kagoshima' => '鹿儿岛',
+            'Kanagawa'  => '神奈川',
+            'Kochi'     => '高知',
+            'Kumamoto'  => '熊本',
+            'Kyoto'     => '京都',
+            'Mie'       => '三重',
+            'Miyagi'    => '宫城',
+            'Miyazaki'  => '宫崎',
+            'Nagano'    => '长野',
+            'Nagasaki'  => '长崎',
+            'Nara'      => '奈良',
+            'Niigata'   => '新泻',
+            'Oita'      => '大分',
+            'Okayama'   => '冈山',
+            'Okinawa'   => '冲绳',
+            'Osaka'     => '大阪',
+            'Saga'      => '传奇',
+            'Saitama'   => '埼玉',
+            'Shiga'     => '滋贺',
+            'Shimane'   => '岛根',
+            'Shizuoka'  => '静冈',
+            'Tochigi'   => '枥木',
+            'Tokushima' => '德岛',
+            'Tokyo'     => '东京',
+            'Tottori'   => '鸟取',
+            'Toyama'    => '富山',
+            'Wakayama'  => '和歌山',
+            'Yamagata'  => '山形',
+            'Yamaguchi' => '山口',
+            'Yamanashi' => '山梨',
+            );
+        $argv = $_SERVER["argv"];
+        $freeshopModel = D('Freeshop');
+        $salerModel = D('Saler');
+
+        $shop = $freeshopModel->limit(page($argv[2], 5000))->order('id ASC')->select();
+
+        foreach ($shop as $k => $v) {
+
+            $name = unserialize($v['address']);
+            $link = unserialize($v['link']);
+
+            $add = array(
+                    'name'       => str_replace(array('(', ')'), '', $name[1]),
+                    'name_en'    => $v['name'],
+                    'sale_url'  => isset($link[0]) ? $link[0] : '',
+                    'address'    => str_replace(array('(', ')'), '', $name[2]),
+                    'tel'        => str_replace('Tel:', '', $v['tel']),
+                    'category'   => '免税店',
+                    'area'       => $area[$v['city']],
+                    'status'     => 1,
+                    'type'       => 1,
+                    'avg_rating' => rand(4, 5),
+                );
+            
+            $salerModel->add($add);
+        }
+
+    }
+
+    /**
+     * 剥离a标签
+     * @param string $content 内容
+     */
+    public function _splitATag($content = false){
+
+        $content = preg_replace('/<a\s+href="(.*)">/', '<a>', $content);
+        $content = preg_replace('/width="\d+"|height="\d+"/', '', $content);
+
+        return $content;
+    }
+
+    /**
+     * 获取rss图片并下载
+     * @param string $content 内容
+     */
+    public function _getRssImage($content = false){
+
+        $imageUrl = $this->fetch->fetch($content, 'getRssImage');
+
+        if (is_array($imageUrl) && isset($imageUrl[0])) $imageUrl = $imageUrl[0];
         
+        $filePath = 'Public/uploads/album/'.mkUUID().'.jpg';
+
+        downloadImage($imageUrl, $filePath);
+
+        if (!file_exists($filePath)) return false;
+
+        $imgObj = slice_image($filePath);
+
+        imagejpeg($imgObj, $filePath);
+
+        $add = array(
+                'parent_id' => 0,
+                'path'      => '/'.$filePath,
+                'type'      => 0,
+                'created'   => NOW_TIME,
+            );
+
+        $gid = $this->productImageModel->add($add);
+
+        return $gid;
     }
 
     /**

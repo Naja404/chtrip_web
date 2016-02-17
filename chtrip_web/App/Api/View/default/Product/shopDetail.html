@@ -15,7 +15,11 @@
 
 <div class="shop">
     <div class="kvImg">
+        <?php if($detail['pic_url']){?>
         <img src="{$detail.pic_url}">
+        <?php }else{ ?>
+        <img src="/Public/html/images/defaultPicHorizontal.png">
+        <?php } ?>
     </div>
     <div class="shopContent">
         <?php if(count($detail['tag_name']) > 0){?>
@@ -35,6 +39,9 @@
             <?php }?>
             <?php if(!empty($detail['address'])){?>
             <p>地址：<?php echo $detail['address'];?></p>
+            <?php }?>
+            <?php if(!empty($detail['sale_url'])){?>
+            <p>官网：<?php echo $detail['sale_url'];?></p>
             <?php }?>
             <p>
                 <?php if(!empty($detail['address_img'])){?>

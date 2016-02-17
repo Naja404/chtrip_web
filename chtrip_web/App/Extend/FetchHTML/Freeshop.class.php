@@ -25,8 +25,8 @@ class Freeshop {
 
 				if ($j != 0) {
 					$category = pq($m)->text();
-					$category = trim(str_replace("Tokyo /", "", $category[0]));
-					$tmpInfo['category'] = $this->_pregTrim($category);
+					$category = trim(str_replace($_SERVER["argv"][4]." /", "", $category[0]));
+					$tmpInfo['category'] = str_replace(' ', '', $this->_pregTrim($category));
 					continue;
 				}
 
@@ -179,6 +179,16 @@ class Freeshop {
 		}
 
 		return $info;
+	}
+
+	/**
+	 * 获取rss图片
+	 */
+	public function getRssImage(){
+
+		$imageArr = pq()->find('img')->attr('src');
+
+		return $imageArr;
 	}
 }
 

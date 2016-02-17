@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="apple-itunes-app" content="app-id=983120452">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta id="vp" name="viewport" content="width=device-width, user-scalable=no,maximum-scale=1.0,initial-scale=1">
+		<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.js"></script>
+		<link rel="stylesheet" type="text/css" href="{:C('API_WEBSITE')}/Public/html/css/album_style.css">
+		<title>{$detail.title}</title>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="post">
+				<div class="content">
+					<span style="font-size:18px;">{$detail.title}</span>
+					<br>
+					<span style="font-size:14px;color:#CAC3C3;">{$detail.pub_date|date="Y-m-d H:i:s",###} Power By <a href="{$detail.link}"><strong style="color:#337FE5;">Mcha</strong></a></span> 
+					<!-- <img src="{:show_image($detail['path'])}" alt="" /> -->
+					<p>
+						<?php echo $detail['description'];?>
+					</p>
+					<p>&nbsp;</p>
+					<div id="share-tip" class="share-tip">
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			function wantBuy(uid, pid){
+				$.ajax({
+					type:"POST",
+					url:"{:U('User/addBuyList')}",
+					data:{ssid:uid, pid:pid},
+					beforeSend:function(XMLHttpRequest){
+
+					},
+					success:function(data){
+						if (data.status == '0') {
+							alert('添加成功');
+						}else{
+							alert(data.error);
+						}
+					},complete:function(XMLHttpRequest){
+
+					}
+				});
+			}
+
+			function wantGo(uid, sid){
+				$.ajax({
+					type:"POST",
+					url:"{:U('User/addWantGo')}",
+					data:{ssid:uid, sid:sid},
+					beforeSend:function(XMLHttpRequest){
+
+					},
+					success:function(data){
+						if (data.status == '0') {
+							alert('添加成功');
+						}else{
+							alert(data.error);
+						}
+					},complete:function(XMLHttpRequest){
+
+					}
+				});
+			}
+
+			function showMap(sid){
+				$("#saler_"+sid).toggle(function(){
+					
+				},function(){
+					
+				});
+			}
+
+			function willBeSoon(){
+				alert('功能开发中,敬请期待');
+			}
+		</script>
+	</body>
+</html>

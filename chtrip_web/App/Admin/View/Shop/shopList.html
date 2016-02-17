@@ -35,7 +35,7 @@
 	                  <td>{$item.address}</td>
 	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
 	                  <td>正常</td>
-	                  <td><button class="btn btn-inverse btn-mini" onclick="window.location.href('{:U('Product/proDel', array('pid' => $item.pid))}');">{:L('TEXT_DELETE')}</button></td>
+	                  <td><button class="btn btn-inverse btn-mini" onclick="window.location.href = '{:U('Shop/delShop', array('id' => $item['saler_id']))}';">{:L('TEXT_DELETE')}</button></td>
 	                </tr>
 	            	</volist>
 	              </tbody>

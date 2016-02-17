@@ -33,6 +33,27 @@ class AlbumController extends AdminBasicController {
     }
 
     /**
+     * mcha rss 数据列表
+     */
+    public function mchaList(){
+        
+        $count = $this->albumModel->getMchaCount();
+        
+        $page = new \Think\Page($count, C('PAGE_LIMIT'));
+
+        $p = I('request.p', 1);
+
+        $data = array(
+                    'page' => $p.','.C('PAGE_LIMIT'),
+            );
+
+        $this->assign('page_show', $page->showAdmin());
+        $this->assign('list', $this->albumModel->getMchaList($data));
+
+        $this->display('mchaList');
+    }
+
+    /**
      * 滚动栏目
      */
     public function listAd(){

@@ -27,7 +27,8 @@ class ShopModel extends Model{
 	 * @param int $id 商户id
 	 */
 	public function delShop($id = 0){
-		return $this->table(tname('saler'))->where(array('id' => (int)$id))->delete();
+
+		return $this->table(tname('saler'))->where(array('saler_id' => (int)$id))->save(array('status' => 0));
 	}
 
 	/**

@@ -6,7 +6,9 @@ namespace Api\Model;
 use Think\Model;
 
 class ProductModel extends Model{
-
+	
+	const DB_MCHA = 'ch_mcha';
+	
 	/**
 	 * 更新店铺信息
 	 * @param int $sid 店铺id
@@ -262,6 +264,24 @@ class ProductModel extends Model{
 		$queryRes[0]['content'] = htmlspecialchars_decode($queryRes[0]['content']);
 		
 		return $queryRes[0];
+	}
+
+	/**
+	 * 获取mcha详细内容
+	 * @param int $id 数据id
+	 */
+	public function getMchaDetail($id = 0){
+
+		$where = array(
+				'id' => $id,
+			);
+
+		$queryRes = $this->table(self::DB_MCHA)->where($where)->find();
+
+		$queryRes['description'] = htmlspecialchars_decode($queryRes['description']);
+
+		return $queryRes;
+
 	}
 
 	/**

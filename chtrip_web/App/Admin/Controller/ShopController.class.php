@@ -54,7 +54,7 @@ class ShopController extends AdminBasicController {
 
         $this->shopModel->delShop($id);
 
-        $this->redirect('Shop/delShop');
+        $this->redirect('Shop/shopList');
     }
 
     /**

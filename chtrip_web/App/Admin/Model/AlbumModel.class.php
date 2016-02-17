@@ -8,7 +8,33 @@ use Think\Model;
 
 class AlbumModel extends Model{
 
+	const DB_MCHA = 'ch_mcha';
+	const DB_IMAGE = 'ch_product_image';
+
 	public function _initialize(){
+
+	}
+
+	/**
+	 * 获取mcha总数据
+	 */
+	public function getMchaCount(){
+		return $this->table(self::DB_MCHA)->count();
+	}
+
+	/**
+	 * 获取mcha数据
+	 * @param array $data 查询数据
+	 */
+	public function getMchaList($data = array()){
+		
+		$join = self::DB_IMAGE." AS B ON B.gid = A.image_id ";
+
+		$field = "A.*, B.path";
+
+		$queryRes = $this->field($field)->table(self::DB_MCHA.' AS A')->join($join)->limit($data['page'])->select();
+
+		return $queryRes;
 	}
 
 	/**
