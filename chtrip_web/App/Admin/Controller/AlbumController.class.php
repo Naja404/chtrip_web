@@ -54,6 +54,22 @@ class AlbumController extends AdminBasicController {
     }
 
     /**
+     * 发布rss
+     */
+    public function publishRss(){
+
+        if (!IS_AJAX) $this->ajaxReturn($this->ajaxRes);
+
+        $id = I('request.id');
+
+        $status = $this->albumModel->publishRss($id);
+
+        if ($status === true) $this->ajaxRes = array('status' => '0');
+
+        $this->ajaxReturn($this->ajaxRes);
+    }
+
+    /**
      * 滚动栏目
      */
     public function listAd(){

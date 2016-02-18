@@ -278,7 +278,9 @@ class ProductModel extends Model{
 
 		$queryRes = $this->table(self::DB_MCHA)->where($where)->find();
 
-		$queryRes['description'] = htmlspecialchars_decode($queryRes['description']);
+		$queryRes['content'] = htmlspecialchars_decode($queryRes['description']);
+		$queryRes['create_time'] = $queryRes['pub_date'];
+		unset($queryRes['description']);
 
 		return $queryRes;
 

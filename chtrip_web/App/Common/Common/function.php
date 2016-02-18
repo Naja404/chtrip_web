@@ -171,7 +171,7 @@ function show_image($path = false, $size = false){
 	$new_path = str_replace('.'.$extension, '_'.$size.'.'.$extension, $path);
 
 	if (!file_exists('.'.$new_path)) {
-		return false;
+		return $path;
 	}
 
 	return C('API_WEBSITE').$new_path;

@@ -10,9 +10,45 @@ class AlbumModel extends Model{
 
 	const DB_MCHA = 'ch_mcha';
 	const DB_IMAGE = 'ch_product_image';
+	const DB_ALBUM = 'ch_album';
 
 	public function _initialize(){
 
+	}
+
+	/**
+	 * 发布rss
+	 * @param int $id 
+	 */
+	public function publishRss($id = false){
+		
+		$where = array(
+				'id' => $id,
+			);
+
+		$queryRes = $this->table(self::DB_MCHA)->where($where)->find();
+
+		if (!isset($queryRes['link']) || empty($queryRes['link'])) return false;
+
+		$add = array(
+				'title'        => $queryRes['title'],
+				'content'      => $queryRes['description'],
+				'type'         => 1,
+				'gid'          => $queryRes['image_id'],
+				'source'       => 1,
+				'status'       => 1,
+				'link'         => $queryRes['link'],
+				'create_time' => NOW_TIME,
+				'update_time'  => NOW_TIME,
+			);
+
+		$aid = $this->table(self::DB_ALBUM)->add($add);
+
+		if ($aid <= 0 || !$aid) return false;
+
+		$this->table(self::DB_MCHA)->where($where)->save(array('status' => 1)); 
+
+		return true;
 	}
 
 	/**
@@ -32,7 +68,7 @@ class AlbumModel extends Model{
 
 		$field = "A.*, B.path";
 
-		$queryRes = $this->field($field)->table(self::DB_MCHA.' AS A')->join($join)->limit($data['page'])->select();
+		$queryRes = $this->field($field)->table(self::DB_MCHA.' AS A')->join($join)->limit($data['page'])->order('A.pub_date DESC')->select();
 
 		return $queryRes;
 	}
@@ -271,7 +307,17 @@ class AlbumModel extends Model{
 	 */
 	public function getAlbumList($data = array()){
 
-		$sql = "SELECT a.*, b.path, c.name AS typename FROM ch_album AS a 
+		$sql = "SELECT  a.id,
+						a.title, 
+						a.recommend, 
+						a.status, 
+						a.start_time, 
+						a.end_time, 
+						a.create_time, 
+						a.update_time, 
+						a.source, 
+						b.path, 
+						c.name AS typename FROM ch_album AS a 
 				LEFT JOIN ch_product_image AS b ON b.gid = a.gid 
 				LEFT JOIN ch_album_type AS c ON c.id = a.type 
 				WHERE a.status = 1 

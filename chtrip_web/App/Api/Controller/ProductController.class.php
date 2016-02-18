@@ -161,7 +161,12 @@ class ProductController extends ApiBasicController {
 
         $this->assign('detail', $detailRes);
 
-        $this->display('Product/albumDetail');
+        if ($detailRes['source'] == 1) {
+            $this->display('Product/mchaDetail');
+        }else{
+            $this->display('Product/albumDetail');
+        }
+        
     }
 
     /**
