@@ -16,7 +16,7 @@
 <div class="shop">
     <div class="kvImg">
         <?php if($detail['pic_url']){?>
-        <img src="{$detail.pic_url}">
+        <img src="<?php echo $detail['pic_url'];?>">
         <?php }else{ ?>
         <img src="/Public/html/images/defaultPicHorizontal.png">
         <?php } ?>

@@ -44,7 +44,7 @@ class AlbumController extends AdminBasicController {
         $p = I('request.p', 1);
 
         $data = array(
-                    'page' => $p.','.C('PAGE_LIMIT'),
+                    'page' => page($p, C('PAGE_LIMIT')),
             );
 
         $this->assign('page_show', $page->showAdmin());
@@ -197,7 +197,7 @@ class AlbumController extends AdminBasicController {
         $p = I('request.p', 1);
 
         $data = array(
-                    'page' => $p.','.C('PAGE_LIMIT'),
+                    'page' => page($p, C('PAGE_LIMIT')),
             );
 
         $this->assign('page_show', $page->showAdmin());

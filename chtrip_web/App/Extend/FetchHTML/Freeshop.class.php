@@ -190,6 +190,7 @@ class Freeshop {
 
 		return $imageArr;
 	}
+
 }
 
 ?>

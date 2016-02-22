@@ -322,7 +322,7 @@ class AlbumModel extends Model{
 				LEFT JOIN ch_album_type AS c ON c.id = a.type 
 				WHERE a.status = 1 
 				ORDER BY a.id DESC
-				LIMIT ".page($data['page'], 15);
+				LIMIT ".$data['page'];
 
 		$queryRes = $this->query($sql);
 
