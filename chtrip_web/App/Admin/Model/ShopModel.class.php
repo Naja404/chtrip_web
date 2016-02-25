@@ -7,6 +7,22 @@ use Think\Model;
 
 class ShopModel extends Model{
 
+	const DB_SALER = 'ch_saler';
+
+	/**
+	 * 获取区域内容
+	 */
+	public function getArea(){
+		return $this->table(self::DB_SALER)->field('area')->where('area != "" ')->group('area')->select();
+	}
+
+	/**
+	 * 获取分类
+	 */
+	public function getCategory(){
+		return $this->table(self::DB_SALER)->field('category')->where('category !="" ')->group('category')->select();
+	}
+
 	/**
 	 * 获取商家总数
 	 */
@@ -37,13 +53,22 @@ class ShopModel extends Model{
 	 */
 	public function addShop($imagePath = 0){
 		$add = array(
-			'name'        => I('post.title'),
-			'description' => I('post.shopDescription'),
-			'sale_url'    => I('post.sale_url'),
-			'img_url'     => $imagePath,
-			'address'     => I('post.address'),
-			'status'      => 1,
-			'created'     => NOW_TIME,
+				'name'        => I('post.title'),
+				'description' => I('post.shopDescription'),
+				'sale_url'    => I('post.sale_url'),
+				'img_url'     => $imagePath,
+				'pic_url'     => C('API_WEBSITE').$imagePath,
+				'address'     => I('post.address'),
+				'open_time'   => I('post.open_time'),
+				'tel'         => I('post.tel'),
+				'avg_price'   => I('post.avg_price'),
+				'avg_rating'  => I('post.avg_rating'),
+				'tag_name'    => I('post.tag_name'),
+				'type'        => I('post.type'),
+				'category'    => I('post.category'),
+				'area'        => I('post.area'),
+				'status'      => 1,
+				'created'     => NOW_TIME,
 		);
 
 		$sid = $this->table(tname('saler'))->add($add);

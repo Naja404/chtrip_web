@@ -61,7 +61,7 @@ class ShopController extends AdminBasicController {
      * 添加商家
      */
     public function addShop(){
-        
+
         if (IS_POST) {
 
             $imageId = $this->_getIMGPath();
@@ -74,6 +74,15 @@ class ShopController extends AdminBasicController {
 
             $this->success($statu, U('Shop/shopList'));
         }
+            
+        $area = $this->shopModel->getArea();
+        $category = $this->shopModel->getCategory();
+
+
+        $this->assign('area',$area);
+        $this->assign('category', $category);
+
+        $this->_assignTitle();
 
         $this->display();
     }
@@ -91,4 +100,11 @@ class ShopController extends AdminBasicController {
         return false;
     }
 
+    /**
+     * 标题定义
+     */
+    private function _assignTitle(){
+
+        $this->assign('title', L(ACTION_NAME));
+    }
 }

@@ -19,7 +19,7 @@
 				<div class="content">
 					<span style="font-size:18px;">{$detail.title}</span>
 					<br>
-					<span style="font-size:14px;color:#CAC3C3;">{$detail.create_time|date="Y-m-d H:i:s",###} Power By <a href="{$detail.link}"><strong style="color:#337FE5;">Mcha</strong></a></span> 
+					<span style="font-size:14px;color:#CAC3C3;">{$detail.create_time|date="Y-m-d H:i:s",###} Power By <a href="{$detail.link}"><strong style="color:#337FE5;">Matcha</strong></a></span> 
 					<!-- <img src="{:show_image($detail['path'])}" alt="" /> -->
 					<p>
 						<?php echo htmlspecialchars_decode($detail['content']);?>
@@ -30,6 +30,12 @@
 				</div>
 			</div>
 		</div>
+		<?php if(isset($_REQUEST['type'])){?>
+		<div>
+			<center>扫描二维码下载<span style="color:red;"><strong>彩虹Go</strong></span></center>
+			<center><img src="/Public/html/nijigo/img/app_download.png" style="width:50%"></center>
+		</div>
+		<?php }?>
 		<script type="text/javascript">
 			function wantBuy(uid, pid){
 				$.ajax({

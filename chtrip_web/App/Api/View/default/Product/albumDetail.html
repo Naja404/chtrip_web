@@ -30,6 +30,12 @@
 				</div>
 			</div>
 		</div>
+		<?php if(isset($_REQUEST['type'])){?>
+		<div>
+			<center>扫描二维码下载<span style="color:red;"><strong>彩虹Go</strong></span></center>
+			<center><img src="/Public/html/nijigo/img/app_download.png" style="width:50%"></center>
+		</div>
+		<?php }?>
 		<script type="text/javascript">
 			function wantBuy(uid, pid){
 				$.ajax({
