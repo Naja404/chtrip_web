@@ -391,6 +391,23 @@ class ProductController extends ApiBasicController {
     }
 
     /**
+     * 商户详情 json
+     * @param int $sid 商户id
+     */
+    public function shopDetail(){
+        $sid = I('request.sid', false);
+
+        $queryRes = $this->productModel->getShopDetail($sid);
+
+        if (empty($queryRes['address_img'])) $queryRes['address_img'] = $this->_getMapImg($queryRes);
+
+        $data = $this->_formatShopDetail($queryRes);
+
+        json_msg($data);
+
+    }
+
+    /**
      * 关于我们
      */
     public function aboutme(){
@@ -527,5 +544,65 @@ class ProductController extends ApiBasicController {
         $this->productModel->upSalerInfo($addRes['saler_id'], $update); 
 
         return $filePath;
+    }
+
+    /**
+     * 格式化商家详情
+     * @param array $data 商家数据
+     */
+    private function _formatShopDetail($data = array()){
+
+        $normal = array(
+                array(
+                    'icon' => 'shopAddressICON',
+                    'title' => '商户地址:',
+                    ),
+                array(
+                    'icon' => 'shopTelICON',
+                    'title' => '联系电话:',
+                    ),
+                array(
+                    'icon' => 'shopTimeICON',
+                    'title' => '营业时间:',
+                    ),
+            );
+        
+        $unset = array();
+
+        foreach ($normal as $k => $v) {
+
+            switch ($k) {
+                case 0:
+                    if(!empty($data['address'])) $normal[$k]['content'] = $data['address'];
+                    break;
+                case 1:
+                    if (!empty($data['tel'])) $normal[$k]['content'] = $data['tel'];
+                    break;
+                case 2:
+                    if (!empty($data['open_time'])) $normal[$k]['content'] = $data['open_time'];
+                    break;
+                default:
+                    break;
+            }
+
+            if (!isset($normal[$k]['content'])) $unset[] = $k;
+        }
+
+        foreach ($unset as $k) {
+            unset($normal[$k]);
+        }
+
+        $returnData = array(
+                'shop_name' => $data['name'],
+                'address'   => $data['address'],
+                'thumb'     => $data['pic_url'],
+                'rating'    => $data['avg_rating'] * 10,
+                'category'  => $data['area'].' '.$data['category'].' '.$data['avg_price'],
+                'map_thumb' => C('API_WEBSITE').$data['address_img'],
+                'googlemap' => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $data['address'], $data['lat'], $data['lng']),
+                'normal'    => array_merge($normal),
+            );
+
+        return $returnData;
     }
 }
