@@ -600,6 +600,7 @@ class ProductController extends ApiBasicController {
                 'category'  => $data['area'].' '.$data['category'].' '.$data['avg_price'],
                 'map_thumb' => C('API_WEBSITE').$data['address_img'],
                 'googlemap' => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $data['address'], $data['lat'], $data['lng']),
+                'share_url' => sprintf("%s/Product/showShopDetail/sid/%s.html?type=app", C('API_WEBSITE'), $data['saler_id']),
                 'normal'    => array_merge($normal),
             );
 

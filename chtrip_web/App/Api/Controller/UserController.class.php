@@ -566,7 +566,7 @@ class UserController extends ApiBasicController {
         $reqData = array(
                 'ssid' => I('request.ssid'),
                 'pid'  => I('request.pid'),
-                'type' => I('request.type'),
+                'type' => isset($_REQUEST['type']) ? I('request.type') : 1,
             );
 
         $returnRes = $this->userModel->addBuyList($reqData);

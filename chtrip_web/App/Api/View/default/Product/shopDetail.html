@@ -30,7 +30,7 @@
         </div>
         <?php } ?>
         <div class="shopText">
-            <p>{$detail.description}</p>
+            <p>{:htmlspecialchars_decode($detail['description'])}</p>
             <?php if(!empty($detail['open_time'])){?>
             <p>营业时间：<?php echo $detail['open_time'];?></p>
             <?php }?>
