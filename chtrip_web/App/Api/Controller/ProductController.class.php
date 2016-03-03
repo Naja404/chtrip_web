@@ -23,6 +23,8 @@ class ProductController extends ApiBasicController {
 
         $this->productModel = D('Product');
 
+        $this->salerModel = D('Saler');
+
         $this->adModel = D('Ad');
 
         $this->reqURI = md5($_SERVER['REQUEST_URI']);
@@ -334,6 +336,13 @@ class ProductController extends ApiBasicController {
         $category = I('request.category', 'all');
         $sort = I('request.sort', '0');
 
+        // 判断是否是美食 2016-3-2
+        if ($shopType == 2){
+            $checkRes = $this->_checkCityWithGnav($cityName);
+            if ($checkRes != false) return $this->getRestWithGnav($checkRes);
+        } 
+
+
         $queryData = array(
                 'page'  => make_page($pageNum, $pageSize),
                 'where' => array('type' => (int)$shopType, 'status' => 1),
@@ -353,8 +362,7 @@ class ProductController extends ApiBasicController {
 
         foreach ($queryRes as $k => $v) {
             $v['avg_rating'] = (string)10*$v['avg_rating'];
-            $v['googlemap'] = sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15
-", $v['address'], $v['lat'], $v['lng']);
+            $v['googlemap'] = sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $v['address'], $v['lat'], $v['lng']);
             $queryArr[] = $v;
         }
 
@@ -365,6 +373,107 @@ class ProductController extends ApiBasicController {
             );
 
         json_msg($outPut);
+
+    }
+
+    /**
+     * 通过gnav获取美食
+     * @param array $area 区域信息
+     */
+    public function getRestWithGnav($area = array()){
+        
+        $pageSize = I('request.pageSize', C('PAGE_LIMIT'));
+        $pageNum  = I('request.pageNum', 1);
+
+        $url = "http://api.gnavi.co.jp/ForeignRestSearchAPI/20150630/?keyid=5aeef30c300c1575ebf4226f6ff336f6&area=%s&pref=%s&sort=1&lang=zh_cn&format=json&offset_page=%s&hit_per_page=%s";
+
+        $result = json_decode(@file_get_contents(sprintf($url, $area['area_code'], $area['pref_code'], $pageNum, $pageSize)), true);
+
+        foreach ($result['rest'] as $k => $v) {
+
+            $queryArr[]  = array(
+                    'saler_id'   => $v['id'],
+                    'name'       => trim($v['name']['name']),
+                    'pic_url'    => $v['image_url']['thumbnail'],
+                    'avg_price'  => sprintf('円%s', $v['budget']),
+                    'avg_rating' => 50,
+                    'category'   => $v['categories']['category_name_l'][0],
+                    'area'       => $v['location']['area']['district'],
+                    'address'    => $v['contacts']['address'],
+                    'lat'        => $v['location']['latitude'],
+                    'lng'        => $v['location']['longitude'],
+                    'googlemap'  => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $v['contacts']['address'], $v['lat'], $v['lng']),
+                    );
+        }
+
+        $outPut = array(
+                'shopList'    => $queryArr,
+                'hasMore'     => ($result['total_hit_count'] - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
+                'nextPageNum' => ($result['total_hit_count'] - make_page($pageNum, $pageSize, 1)) > 0 ? (string)++$pageNum : '1',
+            );
+
+        json_msg($outPut);
+    }
+
+    /**
+     * 通过gnav获取美食详情
+     * @param string $sid 商户id
+     */
+    public function getRestDetailWithGnav($sid = false){
+
+        $where = array(
+                'gnav_id' => $sid,
+            );
+
+        $queryRes = $this->salerModel->where($where)->find();
+
+        if ($queryRes['gnav_id'] == $sid) {
+
+            $newRes = $queryRes;
+            $newRes['saler_id'] = $sid;
+
+        }else{
+            
+            $url = "http://api.gnavi.co.jp/ForeignRestSearchAPI/20150630/?keyid=5aeef30c300c1575ebf4226f6ff336f6&lang=zh_cn&format=json&id=%s";
+
+            $result = json_decode(@file_get_contents(sprintf($url, $sid)), true);
+            
+            $detail = $result['rest'];
+
+            $description = str_replace('<BR>', '', $detail['sales_points']['pr_long']);
+
+            $queryRes = array(
+                    'gnav_id'     => $detail['id'],
+                    'name'        => trim($detail['name']['name']),
+                    'description' => empty($description) ? '暂无简介' : $description,
+                    'sale_url'   => $detail['url'],
+                    'pic_url'     => str_replace('?g=80', '', $detail['image_url']['thumbnail']),
+                    'address'     => $detail['contacts']['address'],
+                    'open_time'   => str_replace('<BR>', '', $detail['business_hour']),
+                    'tel'         => $detail['contacts']['tel'],
+                    'avg_price'   => '円'.$detail['budget'],
+                    'avg_rating'  => 5,
+                    'status'      => 1,
+                    'type'        => 2,
+                    'category'    => $detail['categories']['category_name_l'][0],
+                    'area'        => $detail['location']['area']['prefname'],
+                    'created'     => NOW_TIME,
+                );
+
+            $id = $this->salerModel->add($queryRes);
+            $queryRes['saler_id'] = $id;
+
+            $newRes = $queryRes;
+            $newRes['saler_id'] = $sid;
+        }
+
+
+
+        if (empty($queryRes['address_img'])) $queryRes['address_img'] = $this->_getMapImg($newRes);
+
+        $data = $this->_formatShopDetail($queryRes);
+
+        json_msg($data);
 
     }
 
@@ -396,6 +505,8 @@ class ProductController extends ApiBasicController {
      */
     public function shopDetail(){
         $sid = I('request.sid', false);
+
+        if (!is_numeric($sid)) return $this->getRestDetailWithGnav($sid);
 
         $queryRes = $this->productModel->getShopDetail($sid);
 
@@ -447,13 +558,13 @@ class ProductController extends ApiBasicController {
      * 获取星级数字
      * @param string 星级中文
      */
-    private function _getAvgRating($rating = '五星'){
+    private function _getAvgRating($rating = '五分'){
         $arr = array(
-                '一星' => 1,
-                '二星' => 2,
-                '三星' => 3,
-                '四星' => 4,
-                '五星' => 5,
+                '一分' => 1,
+                '二分' => 2,
+                '三分' => 3,
+                '四分' => 4,
+                '五分' => 5,
             );
 
         return $arr[$rating];
@@ -593,17 +704,37 @@ class ProductController extends ApiBasicController {
         }
 
         $returnData = array(
-                'shop_name' => $data['name'],
-                'address'   => $data['address'],
-                'thumb'     => $data['pic_url'],
-                'rating'    => $data['avg_rating'] * 10,
-                'category'  => $data['area'].' '.$data['category'].' '.$data['avg_price'],
-                'map_thumb' => C('API_WEBSITE').$data['address_img'],
-                'googlemap' => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $data['address'], $data['lat'], $data['lng']),
-                'share_url' => sprintf("%s/Product/showShopDetail/sid/%s.html?type=app", C('API_WEBSITE'), $data['saler_id']),
-                'normal'    => array_merge($normal),
+                'shop_name'   => $data['name'],
+                'description' => strip_tags($data['description']),
+                'address'     => $data['address'],
+                'thumb'       => $data['pic_url'],
+                'rating'      => $data['avg_rating'] * 10,
+                'category'    => $data['area'].' '.$data['category'].' '.$data['avg_price'],
+                'map_thumb'   => C('API_WEBSITE').$data['address_img'],
+                'googlemap'   => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $data['address'], $data['lat'], $data['lng']),
+                'share_url'   => sprintf("%s/Product/showShopDetail/sid/%s.html?type=app", C('API_WEBSITE'), $data['saler_id']),
+                'normal'      => array_merge($normal),
             );
 
         return $returnData;
+    }
+
+    /**
+     * 检测城市是否在gnav范围
+     * @param string $city 城市名
+     */
+    private function _checkCityWithGnav($city = false){
+        
+        $cityModel = M('SalerCity');
+
+        $where = array(
+                'name' => $city,
+            );
+
+        $queryRes = $cityModel->field('pref_code, area_code')->where($where)->find();
+
+        if (!empty($queryRes['pref_code']) && !empty($queryRes['area_code'])) return $queryRes;
+
+        return false;
     }
 }

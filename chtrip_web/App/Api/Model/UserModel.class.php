@@ -81,7 +81,7 @@ class UserModel extends Model{
 
 		$returnRes = array(
 				'address'             => $address,
-				'product_price_total' => $proPrice['price_zh_total'],
+				'product_price_total' => get_price($proPrice['price_zh_total']),
 				'weight_total'        => $proPrice['weight_total'],
 				'shipping_type'       => $addressShip['list'],
 				'shipping_price'	  => $addressShip['ship_price'],
