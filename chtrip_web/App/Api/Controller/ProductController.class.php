@@ -361,9 +361,10 @@ class ProductController extends ApiBasicController {
         $queryArr = array();
 
         foreach ($queryRes as $k => $v) {
+            $v['is_gnav']    = '0';
             $v['avg_rating'] = (string)10*$v['avg_rating'];
-            $v['googlemap'] = sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $v['address'], $v['lat'], $v['lng']);
-            $queryArr[] = $v;
+            $v['googlemap']  = sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $v['address'], $v['lat'], $v['lng']);
+            $queryArr[]      = $v;
         }
 
         $outPut = array(
@@ -381,7 +382,7 @@ class ProductController extends ApiBasicController {
      * @param array $area 区域信息
      */
     public function getRestWithGnav($area = array()){
-        
+
         $pageSize = I('request.pageSize', C('PAGE_LIMIT'));
         $pageNum  = I('request.pageNum', 1);
 
@@ -393,6 +394,7 @@ class ProductController extends ApiBasicController {
 
             $queryArr[]  = array(
                     'saler_id'   => $v['id'],
+                    'is_gnav'    => '1',
                     'name'       => trim($v['name']['name']),
                     'pic_url'    => $v['image_url']['thumbnail'],
                     'avg_price'  => sprintf('円%s', $v['budget']),
@@ -704,6 +706,9 @@ class ProductController extends ApiBasicController {
         }
 
         $returnData = array(
+                'saler_id'    => $data['saler_id'],
+                'is_gnav'     => !empty($data['gnav_id']) ? '1' : '0',
+                'gnav_url'    => $data['sale_url'],
                 'shop_name'   => $data['name'],
                 'description' => strip_tags($data['description']),
                 'address'     => $data['address'],
