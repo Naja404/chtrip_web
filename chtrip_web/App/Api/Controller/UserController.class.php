@@ -611,6 +611,24 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 设置 我想去
+     */
+    public function setWantGo(){
+        $reqData = array(
+                'ssid' => I('request.ssid'),
+                'sid'  => I('request.sid'),
+            );
+        
+        $returnRes = $this->userModel->setWantGo($reqData);
+
+        if (is_string($returnRes)) {
+            json_msg($returnRes, 1);
+        }
+
+        return $this->getWantList();
+    }
+
+    /**
      * 检测ssid
      * @param array $reqData 请求数据
      */

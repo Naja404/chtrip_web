@@ -475,7 +475,7 @@ class UserModel extends Model{
 		$pidArr = json_decode($queryRes['product_id'], true);
 
 		switch ($reqData['type']) {
-			// 删除
+			// 取消选中
 			case '0':
 				if ( in_array($reqData['pid'], array_keys($pidArr)) ) $pidArr[$reqData['pid']] = 0;
 				break;
@@ -483,7 +483,7 @@ class UserModel extends Model{
 			case '1':
 				if ( in_array($reqData['pid'], array_keys($pidArr)) ) $pidArr[$reqData['pid']] = 1;
 				break;
-			// 取消选中
+			// 删除
 			case '2':
 				if ( in_array($reqData['pid'], array_keys($pidArr)) ) unset($pidArr[$reqData['pid']]);
 				break;
@@ -540,6 +540,30 @@ class UserModel extends Model{
 		}
 
 		// $queryRes = $this->table(tname('user_buylist'))->where($where)->save('product_id = '.json_encode($userProID));
+		$queryRes = $this->query("UPDATE `ch_user_buylist` SET saler_id = '".json_encode($salerID)."' WHERE ( `user_id` = '".$reqData['ssid']."' )");
+
+		return $queryRes;
+	}
+
+	/**
+	 * 设置 我想去
+	 * @param array $reqData 请求数据
+	 */
+	public function setWantGo($reqData = array()){
+		$where = array(
+				'user_id' => $reqData['ssid'],
+			);
+
+		$queryRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+		$salerID = json_decode($queryRes['saler_id'], true);
+
+		$key = array_search($reqData['sid'], $salerID);
+		
+		if ($key !== false) array_splice($salerID, $key, 1);
+
+		if (count($salerID) <= 0) $salerID = array();
+
 		$queryRes = $this->query("UPDATE `ch_user_buylist` SET saler_id = '".json_encode($salerID)."' WHERE ( `user_id` = '".$reqData['ssid']."' )");
 
 		return $queryRes;
@@ -634,6 +658,7 @@ class UserModel extends Model{
 		
 		foreach ($queryRes as $k => $v) {
 			// $v['avg_rating'] = intval(17 * $v['avg_rating']);
+			$v['is_gnav'] = $v['gnav_id'] ? "1" : "0";
 			$v['avg_rating'] = (string)(10*$v['avg_rating']);
 			$returnRes[] = $v;
 		}
