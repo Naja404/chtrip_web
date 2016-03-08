@@ -18,6 +18,8 @@ class OrderModel extends Model{
 
 		if (isset($reqData['status']) && is_numeric($reqData['status'])) $where['A.status'] = (int)$reqData['status'];
 
+		if ($where['A.status'] == 10) $where['A.status'] = array('in', '0, 1');
+
 		$field = "A.oid, 
 				A.ship_fee, 
 				A.total_fee, 
