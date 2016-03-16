@@ -77,8 +77,18 @@ class OrderController extends ApiBasicController {
                 'user_id' => $userId,
             );
 
+        $queryRes = $this->userBuyModel->where($where)->find();
+
+        $tmpCart = array();
+
+        foreach (unserialize($queryRes['cart']) as $k => $v) {
+            if ($v['select'] == 0) {
+                $tmpCart[$k] = $v;
+            }
+        }
+
         $save = array(
-                'cart' => '',
+                'cart' => serialize($tmpCart),
             );
 
         return $this->userBuyModel->where($where)->save($save);
@@ -263,6 +273,9 @@ class OrderController extends ApiBasicController {
         $addAll = array();
 
         foreach ($cartInfo['list'] as $k => $v) {
+
+            if ($v['select'] != 1) continue; 
+
             $where = array(
                     'pid' => $v['pid'],
                 );

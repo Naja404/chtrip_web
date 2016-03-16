@@ -281,6 +281,9 @@ class UserController extends ApiBasicController {
             );
         $outdata['hasBand'] = $outdata['user_info'][2] == L('TEXT_MOBILE_NOT_BIND') ? '0' : '1';
 
+        // 迁移 游客数据至注册用户
+        $this->userModel->mergeUserInfo($reqData['ssid'], $ssid);
+
         json_msg($outdata);
     }
 
@@ -320,6 +323,9 @@ class UserController extends ApiBasicController {
             );
         
         $outdata['hasBand'] = $outdata['user_info'][2] == L('TEXT_MOBILE_NOT_BIND') ? '0' : '1';
+
+        // 迁移 游客数据至注册用户
+        $this->userModel->mergeUserInfo($reqData['ssid'], $userInfo['user_id']);
 
         json_msg($outdata);
 
@@ -425,6 +431,9 @@ class UserController extends ApiBasicController {
             }
         }
         
+        // 迁移 游客数据至注册用户
+        $this->userModel->mergeUserInfo($reqData['ssid'], $userId);
+
         $this->_returnUserInfo($userId);
     }
 
@@ -724,5 +733,4 @@ class UserController extends ApiBasicController {
 
         json_msg($outdata);
     }
-
 }

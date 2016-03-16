@@ -135,7 +135,7 @@ class ProductController extends ApiBasicController {
         $adList = $this->adModel->query($adSql);
 
         $outPut = array(
-                'adList'      => $adList,
+                'adList'      => $this->_formatAd($adList),
                 'albumList'   => $queryArr,
                 'hasMore'     => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? '1' : '0',
                 'nextPageNum' => ($count - make_page($pageNum, $pageSize, 1)) > 0 ? (string)++$pageNum : '1',
@@ -741,5 +741,18 @@ class ProductController extends ApiBasicController {
         if (!empty($queryRes['pref_code']) && !empty($queryRes['area_code'])) return $queryRes;
 
         return false;
+    }
+
+    /**
+     * 格式化滚动图
+     * @param array $data 滚动图数组
+     */
+    private function _formatAd($data = array()){
+
+        foreach ($data as $k => $v) {
+            $data[$k]['title'] = htmlspecialchars_decode($v['title']);
+        }
+
+        return $data;
     }
 }

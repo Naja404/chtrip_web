@@ -666,6 +666,75 @@ class UserModel extends Model{
 		return $returnRes;
 	}
 
+    /**
+     * 迁移 游客数据至注册用户
+     * @param string $oldSSID 游客ssid
+     * @param string $newSSID 注册用户ssid
+     */
+    public function mergeUserInfo($oldSSID = false, $newSSID = false){
+        
+        if ($oldSSID == $newSSID) return true;
+
+        $where = array(
+        		'user_id' => $oldSSID,
+        	);
+        
+        $queryRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+        if (count($queryRes) <= 0) return false;
+        
+        $where['user_id'] = $newSSID;
+
+        $regUserRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+        $wantBuy = json_decode($queryRes['product_id'], true);
+        $wantGo = json_decode($queryRes['saler_id'], true);
+        $cart = unserialize($queryRes['cart']);
+
+		$regWantBuy = json_decode($regUserRes['product_id'], true);
+        // 我想买
+        if (is_array($wantBuy) && count($wantBuy) > 0) {
+        	foreach ($wantBuy as $k => $v) {
+				if (!in_array($k, array_keys($regWantBuy))) {
+					$regWantBuy[$k] = $v;
+				}
+        	}
+        }
+		
+		$regWantGo = json_decode($regUserRes['saler_id'], true);
+        // 我想去
+        if (is_array($wantGo) && count($wantGo) > 0) {
+        	foreach ($wantGo as $k => $v) {
+        		if (!in_array($v, $regWantGo)) {
+        			array_push($regWantGo, $v);
+        		}
+        	}
+        }
+        
+        $regCart = unserialize($regUserRes['cart']);
+        // 购物车
+        if (is_array($cart) && count($cart) > 0) {
+        	foreach ($cart as $k => $v) {
+        		if (!in_array($k, array_keys($regCart))) {
+        			$regCart[$k] = $v;
+        		}else{
+        			$regCart[$k]['total'] += $v['total'];
+        		}
+        	}
+        }
+
+        $regWantBuy = json_encode($regWantBuy);
+        $regWantGo = json_encode($regWantGo);
+        $regCart = serialize($regCart);
+
+        $sql = "UPDATE ".tname('user_buylist')." SET product_id = '".$regWantBuy."', saler_id = '".$regWantGo."', cart = '".$regCart."' ";
+
+
+		$result = $this->query($sql);
+
+		return $result;
+    }
+
 	/**
 	 * 创建扫货清单
 	 * @param string $userId 用户id
