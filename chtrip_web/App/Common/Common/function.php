@@ -565,11 +565,11 @@ function format_xml($data = array()){
  * @param string $xml 
  */
 function xml_to_arr($xml){	
-	if(!$xml) throw new WxPayException("xml数据异常！");
+	if(!$xml) return array();
 	//将XML转为array
 	libxml_disable_entity_loader(true);
 	
-	$arr = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+	$arr = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);	
 	
 	return $arr;
 }
