@@ -328,9 +328,14 @@ class UtilController extends ApiBasicController {
 
         $html = $this->snoopy->fetch($url);
 
-        $html = str_replace("content:encoded", "contentencoded", $html->results);
+        $html = str_replace("content:encoded", "contentencoded", trim($html->results));
 
-        $feed = xml_to_arr($html);
+        $feed = xml_to_arr(trim($html));
+
+        if (I('request.test')) {
+            echo '<pre>';
+            print_r($feed);exit('==');
+        }
 
         $mchaModel = D('Mcha');
 
