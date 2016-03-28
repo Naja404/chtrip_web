@@ -43,12 +43,17 @@
 		<tbody>
 			<tr>
 				<td>
-					<input type="text" name="name" placeholder="收件人" value="{$detail.name}">
+					<input type="text" name="name" placeholder="收件人" value="{$detail.name}" maxlength="12">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="tel" name="mobile" placeholder="手机号" value="{$detail.mobile}">
+					<input type="text" name="id_card" placeholder="身份证" value="{$detail.id_card}" maxlength="18">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="tel" name="mobile" placeholder="手机号" value="{$detail.mobile}" maxlength="11">
 				</td>
 			</tr>
 			<tr>
@@ -86,12 +91,12 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="address" placeholder="详细地址" value="{$detail.address}">
+					<input type="text" name="address" placeholder="详细地址" value="{$detail.address}" maxlength="32">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="tel" name="post" placeholder="邮政编码" value="{$detail.post}">
+					<input type="tel" name="post" placeholder="邮政编码" value="{$detail.post}" maxlength="12">
 				</td>
 			</tr>
 			<?php if((int)$detail['default'] != 1){?>
@@ -130,7 +135,7 @@
 		    /* Init your app here */
 
 		    bridge.init(function(message, responseCallback) {
-		    	var defaultData = {"status":"1"};
+		    	var defaultData = {"status":"1", "msg":"请填写完整数据"};
 		    	if (message == "editAddress"){
 		    		checkInput();
 		    		if (validateStat) {
@@ -154,6 +159,9 @@
 		function checkInput(){
 
 			if ($("input[name=name]").val() == "") return setBTN(false);
+
+			if ($("input[name=id_card]").val() == "") return setBTN(false);
+
 
 			if ($("input[name=mobile]").val() == "") return setBTN(false);
 

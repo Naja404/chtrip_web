@@ -49,6 +49,32 @@ function check_mobile($mobile = false){
 }
 
 /**
+ * 验证身份证号
+ * @param string $id
+ */
+function check_id_card($id = false){
+    
+    $set = array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2);
+    $ver = array('1','0','x','9','8','7','6','5','4','3','2');
+    $arr = str_split($id);
+    $sum = 0;
+
+    for ($i = 0; $i < 17; $i++) {
+        if (!is_numeric($arr[$i]))
+        {
+            return false;
+        }
+        $sum += $arr[$i] * $set[$i];
+    }
+    
+    $mod = $sum % 11;
+    
+    if (strcasecmp($ver[$mod],$arr[17]) != 0) return false;
+
+    return true;
+}
+
+/**
  * 验证密码
  * @param string $passwd 
  */

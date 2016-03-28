@@ -58,6 +58,27 @@ class UserAddressModel extends Model{
     }
 
     /**
+     * 验证收货地址信息
+     * @param array $reqData 地址信息
+     */
+    public function verifyAddress($reqData = array()){
+
+        if (empty($reqData['name'])) return L('ERR_USER_NAME');
+
+        if (!check_mobile($reqData['mobile'])) return L('ERR_MOBILE');
+
+        if (!check_id_card($reqData['id_card'])) return L('ERR_ID_CARD');
+
+        if (empty($reqData['province'])) return L('ERR_PROVINCE');
+
+        if (empty($reqData['address'])) return L('ERR_DETAIL_ADDRESS');
+
+        if (empty($reqData['post'])) return L('ERR_POST_CODE');
+
+        return true;
+    }
+
+    /**
      * 检测用户地址
      * @param array $reqData 请求数据
      */
@@ -91,6 +112,7 @@ class UserAddressModel extends Model{
         $add = array(
                 'user_id' => $reqData['ssid'],
                 'name'    => $reqData['name'],
+                'id_card' => $reqData['id_card'],
                 'mobile'  => $reqData['mobile'],
                 'pid'     => $reqData['province'],
                 'cid'     => $reqData['city'],
@@ -118,6 +140,7 @@ class UserAddressModel extends Model{
 
         $save = array(
                 'name'    => $reqData['name'],
+                'id_card' => $reqData['id_card'],
                 'mobile'  => $reqData['mobile'],
                 'pid'     => $reqData['province'],
                 'cid'     => $reqData['city'],

@@ -43,12 +43,17 @@
 		<tbody>
 			<tr>
 				<td>
-					<input type="text" name="name" placeholder="收件人">
+					<input type="text" name="name" placeholder="收件人" maxlength="12" required>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="tel" name="mobile" placeholder="手机号">
+					<input type="text" name="id_card" placeholder="身份证" maxlength="18">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="tel" name="mobile" placeholder="手机号" maxlength="11">
 				</td>
 			</tr>
 			<tr>
@@ -80,12 +85,12 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" name="address" placeholder="详细地址">
+					<input type="text" name="address" placeholder="详细地址" maxlength="32">
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<input type="tel" name="post" placeholder="邮政编码">
+					<input type="tel" name="post" placeholder="邮政编码" maxlength="12">
 				</td>
 			</tr>
 		</tbody>
@@ -113,7 +118,7 @@
 		    /* Init your app here */
 
 		    bridge.init(function(message, responseCallback) {
-		    	var defaultData = {"status":"1"};
+		    	var defaultData = {"status":"1", "msg":"请填写完整数据"};
 		    	if (message == "subAddress"){
 		    		if (validateStat) {
 						$.ajax({
@@ -149,6 +154,8 @@
 			$("#addForm").bind("input propertychange", function(){
 
 					if ($("input[name=name]").val() == "") return setBTN(false);
+
+					if ($("input[name=id_card]").val() == "") return setBTN(false);
 
 					if ($("input[name=mobile]").val() == "") return setBTN(false);
 

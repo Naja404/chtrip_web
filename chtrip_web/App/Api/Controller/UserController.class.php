@@ -163,21 +163,34 @@ class UserController extends ApiBasicController {
                 $this->ajaxReturn($ajax);
             }elseif ($reqData['type'] == 'add') {
                 
-                // $checkRes = $this->userAddressModel->checkAdd($reqData);
+                $checkRes = $this->userAddressModel->verifyAddress($reqData);
 
-                // if ($checkRes !== true) {
-                //     $ajax = array(
-                //             'status' => 1,
-                //             'msg'    => $checkRes,
-                //         );
-                //     $this->ajaxReturn($ajax);
-                // }
+                if ($checkRes !== true) {
+                    $ajax = array(
+                            'status' => '1',
+                            'msg'    => $checkRes,
+                        );
+                    $this->ajaxReturn($ajax);
+                    exit;
+                }
 
                 $this->userAddressModel->setAddress($reqData);
 
                 $this->ajaxReturn($ajax);
 
             }elseif($reqData['type'] == 'edit'){
+
+                $checkRes = $this->userAddressModel->verifyAddress($reqData);
+
+                if ($checkRes !== true) {
+                    $ajax = array(
+                            'status' => '1',
+                            'msg'    => $checkRes,
+                        );
+                    $this->ajaxReturn($ajax);
+                    exit;
+                }
+                
                 $res = $this->userAddressModel->saveAddress($reqData);
 
                 $this->ajaxReturn($ajax);
