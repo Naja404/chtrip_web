@@ -61,6 +61,8 @@ class OrderModel extends Model{
 					'ship_url'     => sprintf(C('SHIP_URL'), $reqData['ssid'], $v[0]['oid']),
 					'total_fee'    => '￥'.$v[0]['total_fee'],
 					'created'      => date('Y-m-d H:i:s', time()),
+					'has_comment'  => $v[0]['status'] == 1 ? '1' : '0',
+					'comment_url'  => $v[0]['status'] == 1 ? $this->_getCommentUrl($v[0]['oid'], $reqData['ssid']) : '',
 					'pro'          => $v,
 				);
 
@@ -154,5 +156,14 @@ class OrderModel extends Model{
 		$this->query($sql);
 
 		return $newOid;
+	}
+
+	/**
+	 * 获取评价链接
+	 * @param int $oid 订单号
+	 * @param string $userID 用户id
+	 */
+	private function _getCommentUrl($oid = false, $userID = false){
+		return sprintf(C('PUBLISH_COMMENT_URL'), 1, $oid, $userID);
 	}
 }

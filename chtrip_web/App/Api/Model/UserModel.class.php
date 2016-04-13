@@ -8,6 +8,42 @@ use Think\Model;
 class UserModel extends Model{
 
 	/**
+	 * 获取待评价内容
+	 * @param array $reqData 请求内容
+	 */
+	public function getCommentType($reqData = array()){
+		if ($reqData['type'] == 1) {
+			
+			$where = array(
+					'oid'     => $reqData['id'],
+					'user_id' => $reqData['ssid'],
+				);
+
+			$order = $this->table(tname('order'))->where($where)->find();
+
+			if ($order['status'] != 1 && $order['comment'] != 0) return false;
+
+			$where = array(
+					'A.oid' => $reqData['id'],
+				);
+
+			$queryRes = $this->table(tname('order_detail').' AS A')
+				 ->join(tname('product_image').' AS B ON B.gid = A.image_id')
+				 ->where($where)
+				 ->select();
+		}else{
+
+			$where = array(
+					'saler_id' => $reqData['id'],
+				);
+
+			$queryRes = $this->table(tname('saler'))->where($where)->find();
+		}
+
+		return $queryRes;
+	}
+
+	/**
 	 * 获取购物车商品数量
 	 * @param array $reqData 请求内容
 	 */

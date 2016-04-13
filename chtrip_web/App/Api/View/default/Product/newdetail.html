@@ -12,6 +12,11 @@
 	<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/swipe.js"></script>
 	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/swiper.css">
 	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/style.css">
+    <style type="text/css">
+    body{
+        overflow: hidden;
+    }
+    </style>
 </head>
 <body>
 
@@ -31,7 +36,76 @@
         <div class="swiper-pagination"></div>
     </div>
   </div>
-  <div class="titleHeader">
+  <!-- title & description -->
+  <br>
+  <div class="headerContent">
+    <div class="headerTitle">
+        {$detail.title_zh}
+    </div>
+    <div class="headerPrice">
+        <span class="salePrice">
+            ￥{$detail.price_zh}
+        </span>
+        <span class="originPrice">
+            <s>
+            ￥<?php echo $detail['price_zh'] + 50;?>
+            </s>
+        </span>
+        <span class="hotFlag">
+            {$detail.summary_zh}
+        </span>
+    </div>
+  </div>
+  
+  <div class="descriptionContent">
+    {$detail.description_zh}
+  </div>
+
+  <div class="sliceLine"></div>
+
+<!--   <div class="comment">
+    <div class="commentTitle">
+        使用评价(13)
+    </div>
+    <div class="commentList">
+        <div class="commentUser">
+            <div class="userAvatar">
+                <img src="http://api.nijigo.com/Public/uploads/images/20151105/1453368105.png" class="avatar">
+                <div class="userName">
+                    贝勒爷
+                </div>
+            </div>
+            <div class="commentContent">
+                提高细胞的保湿机能，缔造具有保湿力且水润的高保湿着哩状面膜。 作为睡眠面膜使用效果更佳。 作为睡眠面膜进行诉求。 提高保湿，润泽效果。 追加配合能够在睡眠中修护肌肤的成分。
+            </div>
+        </div>
+
+        <div class="commentUser">
+            <div class="userAvatar">
+                <img src="http://api.nijigo.com/Public/uploads/images/20151105/1453368105.png" class="avatar">
+                <div class="userName">
+                    贝勒爷
+                </div>
+            </div>
+            <div class="commentContent" style="border-bottom:none;">
+                提高细胞的保湿机能，缔造具有保湿力且水润的高保湿着哩状面膜。 作为睡眠面膜使用效果更佳。 作为睡眠面膜进行诉求。 提高保湿，润泽效果。 追加配合能够在睡眠中修护肌肤的成分。
+            </div>
+        </div>
+    </div>
+    <div class="commentMore">
+        查看全部评价
+    </div>
+  </div> -->
+
+  <div class="fixBar">
+    <!-- <img src="http://api.nijigo.com/Public/html/images/product_detail_bg.jpg"> -->
+    <ul>
+        <li><img src="/Public/html/images/product_detail_icon_1.png"><br><span>正品保障</span></li>
+        <li><img src="/Public/html/images/product_detail_icon_2.png"><br><span>闪电发货</span></li>
+        <li><img src="/Public/html/images/product_detail_icon_3.png"><br><span>海外直供</span></li>
+    </ul>
+  </div>
+<!--   <div class="titleHeader">
     <p>{$detail.title_zh}</p>
     <p style="color:red;">{$detail.title_jp}</p>
     <br>
@@ -45,7 +119,7 @@
     <p>
         {$detail.description_jp}
     </p>
-  </div>
+  </div> -->
 
 <!--   <div class="priceFooter">
     <div class="priceText">
@@ -62,8 +136,6 @@
   </div>
 </div>
     <script>
-    document.body.style.webkitUserSelect='none'; 
-    
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true

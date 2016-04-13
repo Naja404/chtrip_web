@@ -257,6 +257,27 @@ class ProductController extends ApiBasicController {
     }
 
     /**
+     * 显示产品详细页介绍 v0.9.8
+     * @param int $pid 产品id
+     */
+    public function showProDetailNew(){
+
+        $pid = I('request.pid', false);
+
+        $queryRes = $this->productModel->getProductDetail($pid);
+
+        if (is_array($queryRes) && count($queryRes)) {
+            $queryRes['description_zh'] = htmlspecialchars_decode($queryRes['description_zh']);
+            $queryRes['description_jp'] = htmlspecialchars_decode($queryRes['description_jp']);
+            $queryRes['tag_name']    = explode(',', $queryRes['tag_name']);
+        }
+
+        $this->assign('detail', $queryRes);
+        $this->display('Product/newdetail');
+
+    }
+
+    /**
      * 产品详细介绍
      * @param int $pid 产品id
      */

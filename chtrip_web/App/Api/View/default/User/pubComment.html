@@ -1,0 +1,98 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta id="vp" name="viewport" content="width=device-width, user-scalable=no,maximum-scale=1.0,initial-scale=1">
+	<title>发表评价</title>
+	<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.js"></script>
+    <script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/ajaxUpload.js"></script>
+	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/style.css">
+</head>
+<body>
+<form id="uploadForm" method="post" enctype="multipart/form-data">
+<div class="pubComment">
+    <volist name="detail" id="item">
+    <div class="sliceLine" style="border-top: solid 1px #E0E1E2;"></div>
+    <div class="commentBody">
+        <div class="commentProHeader">
+            <img src="http://api.nijigo.com{$item.path}" />
+            <span>{$detail.title_zh}</span>
+        </div>
+        
+        <div class="commentInput">
+            <textarea name="comment_{$item.pid}" placeholder="请在次输入评价内容" maxlength="140"></textarea>
+        </div>
+
+        <div class="commentUploadPic">
+            <div class="commentPicList">
+            </div>
+            <span class="uploadBTN">
+                <input type="file" name="image_{$item.pid}[]" id="fileImage" />添加图片
+            </span>
+        </div>
+    </div>
+    </volist>
+    <div class="clearFooter">
+    </div>
+    <input type="submit">
+</div>
+</form>
+<script>
+var params = {
+    fileInput: $("#fileImage").get(0),
+    url: $("#uploadForm").attr("action"),
+    filter: function(files) {
+        var arrFiles = [];
+        for (var i = 0, file; file = files[i]; i++) {
+            if (file.type.indexOf("image") == 0) {
+                if (file.size >= 512000*10) {
+                    // alert('您这张"'+ file.name +'"图片大小过大，应小于1024k');    
+                } else {
+                    arrFiles.push(file);    
+                }           
+            } else {
+                // alert('文件"' + file.name + '"不是图片。');    
+            }
+        }
+        return arrFiles;
+    },
+    onSelect: function(files) {
+        var html = '', i = 0;
+        $(".commentPicList").html('');
+        var funAppendImage = function() {
+            file = files[i];
+            if (file) {
+                var reader = new FileReader()
+                reader.onload = function(e) {
+                    html = html + '<div class="commentPic" id="uploadList_'+ i +'"><img src="' + e.target.result + '" /><div class="commentClosePic" title="移除" data-index="'+ i +'">移除</div></div>';
+                   
+                    i++;
+                    funAppendImage();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $(".commentPicList").html(html);
+                if (html) {
+                    //删除方法
+                    $(".commentClosePic").click(function() {
+                        ZXXFILE.funDeleteFile(files[parseInt($(this).attr("data-index"))]);
+                        return false;   
+                    });  
+                }
+            }
+        };
+        funAppendImage();       
+    },
+    onDelete: function(file) {
+        $("#uploadList_" + file.index).fadeOut();
+    }
+};
+ZXXFILE = $.extend(ZXXFILE, params);
+ZXXFILE.init();
+</script>
+</body>
+</html>

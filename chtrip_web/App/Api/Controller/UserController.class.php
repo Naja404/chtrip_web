@@ -25,6 +25,27 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 用户发布评论 2016-4-11
+     */
+    public function pubComment(){
+
+        if (IS_POST) {
+            echo '<pre>';
+            print_r($_FILES);exit();
+        }
+
+        $reqData = I('request.');
+
+        $type = I('request.type', 1);
+
+        $queryRes = $this->userModel->getCommentType($reqData);
+
+        $this->assign('detail', $queryRes);
+        
+        $this->display('User/pubComment');
+    }
+
+    /**
      * 获取购物车数量
      */
     public function getCartTotal(){

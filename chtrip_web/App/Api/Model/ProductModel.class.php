@@ -151,6 +151,7 @@ class ProductModel extends Model{
 		$field = "a.pid, 
 					b.title_zh, 
 					b.title_jp, 
+					b.summary_zh, 
 					b.price_zh, 
 					b.price_jp,
 					b.buy_url, 

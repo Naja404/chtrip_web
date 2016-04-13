@@ -1,5 +1,7 @@
+
 body {
   color: #828384;
+  margin: 0px;
 }
 img {
   width: 100%;
@@ -47,7 +49,7 @@ img {
 .proImg {
   width: 100%;
   top: 12px;
-  position: relative;
+  /*position: relative;*/
 }
 .proImg img {
   padding: 0;
@@ -180,4 +182,188 @@ img {
 .willGo span {
   top: 15px;
   position: relative;
+}
+
+.headerContent {
+  background-color: #F9FAFB;
+  border-top: solid 1px #E0E1E2;
+}
+
+.headerTitle {
+  /*padding: 1rem 0.5rem 0.5rem 0.5rem;*/
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  color: #333435;
+  font-size: 1.2rem;
+}
+.headerPrice {
+  /*padding: 0rem 0.5rem 1rem 0.5rem;*/
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.salePrice {
+  color: #FF362A;
+  font-size: 1.6rem;
+}
+.originPrice {
+  color: #656667;
+  font-size: 0.8rem;
+}
+.hotFlag {
+  color: white;
+  background-color: #FF362A;
+  font-size: 0.8rem;
+  vertical-align: text-top;
+  margin: 0.5rem;
+}
+.descriptionContent {
+  color: #656667;
+  font-size: 1rem;
+  background-color: white;
+  padding: 1rem 0.5rem;
+  border-bottom: solid 1px #E0E1E2;
+  line-height: 1.3rem;
+}
+.sliceLine {
+  background-color: #F9FAFB;
+  height: 0.5rem;
+}
+.comment {
+  background-color: white;
+}
+.commentTitle {
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #333435;
+}
+.userAvatar {
+  padding:0.5rem;
+  font-size: 1rem;
+  color: #333435;
+}
+.avatar {
+  width: 3rem;
+  border-radius: 1.5rem;
+}
+.userName {
+  padding:0.5rem;
+  font-size: 1rem;
+  color: #333435;
+  display: inline;
+  vertical-align: top;
+  position: relative;
+  top: 1.1rem;
+}
+.commentContent {
+  color: #656667;
+  font-size: 1rem;
+  background-color: white;
+  padding: 0rem 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: solid 1px #E0E1E2;
+  line-height: 1.3rem;
+}
+.commentMore {
+  text-align: center;
+  color: #FDBC01;
+  border: solid 2px #FDBC01;
+  display: inline-block;
+  border-radius: 20px;
+  width: 116px;
+  height: 20px;
+  position: relative;
+  left: calc(50% - 68px);
+  line-height: 20px;
+}
+.fixBar {
+  height: 50px;
+  box-sizing: border-box;
+  background: rgba(71,71,82,.85);
+  color: #fff;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 14px;
+  z-index: 9999;
+}
+.fixBar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  height: 100%;
+  background-color: #FBFBF0;
+}
+.fixBar li {
+  list-style: none;
+  flex:1;
+  text-align: center;
+}
+.fixBar li img {
+  width: 20px;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+.fixBar li span {
+  font-size: 10px;
+  color: #FDBC01;
+}
+.commentProHeader img{
+  width: 9rem;
+  height: 6rem;
+  padding: 0.5rem;
+}
+.commentProHeader span {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #656667;
+}
+.commentInput textarea {
+  width: 100%;
+  border: 0px;
+  resize:none;
+  font-size: 1rem;
+  color: #656667;
+  background-color: #F9FAFB;
+  padding: 0.5rem;
+}
+.commentUploadPic span {
+  text-align: center;
+  color: #FDBC01;
+  border: solid 2px #FDBC01;
+  display: inline-block;
+  border-radius: 20px;
+  width: 116px;
+  height: 20px;
+  position: relative;
+  left: calc(50% - 68px);
+  line-height: 20px;
+  margin: 1rem;
+}
+.commentPicList {
+  display: flex;
+  flex-direction:row;
+}
+.commentPicList img{
+  width: 5rem;
+}
+.commentClosePic {
+  display: inline-block;
+  vertical-align: top;
+}
+.commentPic {
+  flex:1;
+}
+.uploadBTN input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
 }
