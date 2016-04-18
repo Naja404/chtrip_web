@@ -59,6 +59,37 @@ class UtilController extends ApiBasicController {
     }
 
     /**
+     * 上传图片
+     */
+    public function uploadImage(){
+
+        $ajaxRes = array(
+                'state' => 1,
+                'msg'   => L('ERROR_PARAM'),
+            );
+
+        if (!IS_POST) {
+            echo json_encode($ajaxRes);exit;
+        }
+
+        $reqData = I('request.');
+
+        $imgRes = $this->uploadModel->uploadFile();
+
+        if (!$imgRes['path']) {
+            $ajaxRes['msg'] = L('ERR_UPLOAD');
+        }else{
+            $ajaxRes = array(
+                    'state' => 0,
+                    'thumb' => str_replace('.png', '_200_200.png', C('API_WEBSITE').$imgRes['path']),
+                    'path'  => $imgRes['path'],
+                );
+        }
+
+        echo json_encode($ajaxRes);exit;
+    }
+
+    /**
      * 下载图片并裁剪
      */
     public function downloadImg(){

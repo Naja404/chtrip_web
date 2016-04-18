@@ -9,8 +9,9 @@
 	<meta id="vp" name="viewport" content="width=device-width, user-scalable=no,maximum-scale=1.0,initial-scale=1">
 	<title>发表评价</title>
 	<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.js"></script>
-    <script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/ajaxUpload.js"></script>
 	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/style.css">
+    <script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/comment-star.js"></script>
+    <script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.ajaxfileupload.js"></script>
 </head>
 <body>
 <form id="uploadForm" method="post" enctype="multipart/form-data">
@@ -27,11 +28,20 @@
             <textarea name="comment_{$item.pid}" placeholder="请在次输入评价内容" maxlength="140"></textarea>
         </div>
 
-        <div class="commentUploadPic">
-            <div class="commentPicList">
+        <div class="commentStar">
+            <div style="margin:20px auto;">
+                <div id="star_{$item.pid}"></div>
+                <div id="result_{$item.pid}"></div>
+                <input type="hidden" name="rate_{$item.pid}" value="0">
             </div>
-            <span class="uploadBTN">
-                <input type="file" name="image_{$item.pid}[]" id="fileImage" />添加图片
+        </div>
+        <div class="commentUploadPic">
+            <div class="commentPicList" id="commentPic">
+                <img src="" id="commentPic_{$item.pid}">
+                <input type="hidden" id="commentPicValue_{$item.pid}" name="commentPicValue_{$item.pid}" value="" >
+            </div>
+            <span class="uploadBTN" id="uploadBTN_{$item.pid}">
+                <input type="file" name="image_{$item.pid}" id="bgImage_{$item.pid}" />添加图片
             </span>
         </div>
     </div>
@@ -41,58 +51,92 @@
     <input type="submit">
 </div>
 </form>
-<script>
-var params = {
-    fileInput: $("#fileImage").get(0),
-    url: $("#uploadForm").attr("action"),
-    filter: function(files) {
-        var arrFiles = [];
-        for (var i = 0, file; file = files[i]; i++) {
-            if (file.type.indexOf("image") == 0) {
-                if (file.size >= 512000*10) {
-                    // alert('您这张"'+ file.name +'"图片大小过大，应小于1024k');    
-                } else {
-                    arrFiles.push(file);    
-                }           
-            } else {
-                // alert('文件"' + file.name + '"不是图片。');    
+<script type="text/javascript">
+
+        $(document).ready(function() {
+            $(".spinner").hide();
+            $(".grayBg").show();
+            var interval;
+            var formState = false;
+
+            function applyAjaxFileUpload(element, filePath, fileSpan, textInfo) {
+
+                $(element).AjaxFileUpload({
+                    action: "<?php echo U('Util/uploadImage');?>"+"&form=tpl1&sign="+$(fileSpan).attr("name"),
+                    onChange: function(filename) {
+                        var $span = $(textInfo).text('上传中');
+
+                        interval = window.setInterval(function() {
+                            var text = $span.text();
+                            if (text.length < 13) {
+                                $span.text(text + ".");
+                            } else {
+                                $span.text("上传中");
+                            }
+                        }, 200);
+                    },
+                    onSubmit: function(filename) {
+                        return true;
+                    },
+                    onComplete: function(filename, response) {
+                        window.clearInterval(interval);
+                        console.log(response);
+                        var $span = $("span." + $(this).attr("id")).text(filename + " "),
+                            $fileInput = $("<input />")
+                                .attr({
+                                    type: "file",
+                                    name: $(this).attr("name"),
+                                    id: $(this).attr("id")
+                                });
+
+                        if (response.state) {
+                            alert(response.msg);
+                        }else{
+                            $(filePath).attr("src", response.thumb);
+                            $(fileSpan).val(response.path);
+
+                            if (response.msg) alert(response.msg);
+
+                        }
+                        
+                        $(textInfo).text('重置照片');
+                    }
+                });
             }
-        }
-        return arrFiles;
-    },
-    onSelect: function(files) {
-        var html = '', i = 0;
-        $(".commentPicList").html('');
-        var funAppendImage = function() {
-            file = files[i];
-            if (file) {
-                var reader = new FileReader()
-                reader.onload = function(e) {
-                    html = html + '<div class="commentPic" id="uploadList_'+ i +'"><img src="' + e.target.result + '" /><div class="commentClosePic" title="移除" data-index="'+ i +'">移除</div></div>';
-                   
-                    i++;
-                    funAppendImage();
-                }
-                reader.readAsDataURL(file);
-            } else {
-                $(".commentPicList").html(html);
-                if (html) {
-                    //删除方法
-                    $(".commentClosePic").click(function() {
-                        ZXXFILE.funDeleteFile(files[parseInt($(this).attr("data-index"))]);
-                        return false;   
-                    });  
-                }
+            <?php foreach($detail as $k => $v){?>
+                applyAjaxFileUpload("#bgImage_<?php echo $v['pid'];?>", "#commentPic_<?php echo $v['pid'];?>", "#commentPicValue_<?php echo $v['pid'];?>", "#uploadBTN_<?php echo $v['pid'];?>");  
+            <?php }?>
+            
+        });
+
+<?php foreach ($detail as $k => $v) {?>
+    rat('<?php echo $v["pid"];?>', 1);
+<?php }?>
+
+
+
+    function rat(id, m){
+
+        star= '#star_' + id;
+        result= '#result_' + id;
+        $(result).hide();
+
+        $(star).raty({
+            hints: ['1', '2', '3', '4', '5'],
+            number: 5,
+            path: "http://api.nijigo.com/Public/html/images",
+            starOff: 'star-off-big.png',
+            starOn: 'star-on-big.png',
+            size: 24,
+            start: 40,
+            showHalf: true,
+            target: result,
+            targetKeep : true,
+            click: function (score, evt) {
+                $("input[name=rate_"+id+"]").val(score*m);
             }
-        };
-        funAppendImage();       
-    },
-    onDelete: function(file) {
-        $("#uploadList_" + file.index).fadeOut();
+        });
     }
-};
-ZXXFILE = $.extend(ZXXFILE, params);
-ZXXFILE.init();
 </script>
 </body>
 </html>

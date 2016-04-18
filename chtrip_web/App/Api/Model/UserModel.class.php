@@ -118,7 +118,7 @@ class UserModel extends Model{
 		$returnRes = array(
 				'address'             => $address,
 				'product_price_total' => get_price($proPrice['price_zh_total']),
-				'weight_total'        => $proPrice['weight_total'],
+				'weight_total'        => $proPrice['weight_total'] + C('SHIPPING_WEIGHT'),
 				'shipping_type'       => $addressShip['list'],
 				'shipping_price'	  => $addressShip['ship_price'],
 				'price_total' 		  => get_price($tmpPrice), 
@@ -851,6 +851,8 @@ class UserModel extends Model{
 	private function _getShipping($weight = 0, $ship = 1){
 
 		$ship = (int)$ship <= 0 ? 1 : $ship;
+
+		$weight += C('SHIPPING_WEIGHT');
 
 		$sql = "SELECT 
 					B.id,

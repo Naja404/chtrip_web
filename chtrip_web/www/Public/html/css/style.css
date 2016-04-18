@@ -351,6 +351,7 @@ img {
 }
 .commentPicList img{
   width: 5rem;
+  height: 5rem;
 }
 .commentClosePic {
   display: inline-block;
@@ -366,4 +367,7 @@ img {
   top: 0;
   opacity: 0;
   cursor: pointer;
+}
+.commentStar img {
+  width: 24px;
 }

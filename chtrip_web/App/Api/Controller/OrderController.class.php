@@ -99,7 +99,7 @@ class OrderController extends ApiBasicController {
      * @param array $reqData 请求数据内容
      */
     public function getWXPayKey($reqData = array()){
-        $reqData['total_fee'] = 0.01;
+        // $reqData['total_fee'] = 0.01;
         $wxpayReq = array(
                 'appid'            => C('WXPAY_CONF.APP_ID'),
                 'body'             => '彩虹Go-商品',
@@ -184,7 +184,7 @@ class OrderController extends ApiBasicController {
      * @param string $payType 支付类型 app,wap
      */
     private function _confAlipay($order = array(), $payType = 'WAP'){
-        $order['total_fee'] = '0.01';
+        // $order['total_fee'] = '0.01';
         $conf = array(
                 'partner'             => C('ALIPAY_CONF.PARTNER_ID'),
                 'seller_id'           => C('ALIPAY_CONF.SELLER_ID'),

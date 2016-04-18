@@ -31,7 +31,7 @@ class UserController extends ApiBasicController {
 
         if (IS_POST) {
             echo '<pre>';
-            print_r($_FILES);exit();
+            print_r($_POST);exit();
         }
 
         $reqData = I('request.');

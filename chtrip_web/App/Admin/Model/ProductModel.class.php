@@ -342,7 +342,7 @@ class ProductModel extends Model{
 				'category'       => I('post.category'),
 				'price_zh'       => trim(I('post.priceZH')),
 				'price_jp'       => trim(I('post.priceJP')),
-				'shipping_type'  => I('post.shippingTypeZH'),
+				'shipping_type'  => 1,//I('post.shippingTypeZH'),
 				'comments'       => I('post.comments'),
 				'sales'          => I('post.sales'),
 				'views'          => I('post.views'),
