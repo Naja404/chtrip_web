@@ -1,0 +1,67 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Product/prodList')}" >{:L('TITLE_PRODUCT')}</a> <a class="current">品牌/分类列表</a> </div>
+	  </div>
+	  <div class="container-fluid">
+	    <div class="row-fluid">
+	      <div class="span12">
+	        <div class="widget-box">
+	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
+	            <h5>品牌/分类列表</h5>
+	          </div>
+	          <div class="widget-content nopadding">
+	            <table class="table table-bordered table-striped">
+	              <thead>
+	                <tr>
+	                  <th>id</th>
+	                  <th>名称</th>
+	                  <th>类别</th>
+	                  <th>{:L('TEXT_ACTION')}</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	              	<volist name="list" id="item">
+	                <tr class="odd gradeX">
+	                  <td>{$item.id}</td>
+	                  <td>{$item.name}</td>
+	                  <td>
+	                  	<?php echo $item['type'] == 1 ? '品牌' : '分类';?>
+	                  </td>
+	                  <td>
+	                  	<a class="btn" href="{:U('Product/editCate', array('id' => $item['id']))}" >编辑</a>
+	                  	<button onclick="delCate('{$item.id}');">删除</button>
+	                  </td>
+	                </tr>
+	            	</volist>
+	              </tbody>
+	            </table>
+	          </div>
+	        </div>
+	      </div>
+			<div class="pagination alternate" style="float:right;">
+				{$page_show}
+			</div>
+	    </div>
+	  </div>
+	</div>
+<script type="text/javascript">
+	function delCate(id){
+		if (!confirm('是否确认删除该条数据?')) return false;
+
+		$.ajax({
+			type:"POST",
+			url:"{:U('Product/delCate')}",
+			data:{id:id},
+			success:function(data){
+				if (data.status == '0') {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+			}
+		});
+	}
+</script>
+<include file="Public:footer" />

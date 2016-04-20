@@ -4,10 +4,13 @@
 */
 return array(
 		//title
-		'TITLE_PRODUCT'                   => '产品',
-		'TITLE_PRODUCT_LIST'              => '产品列表',
-		'TITLE_ADDPRODUCT'                => '添加产品|彩虹Go - 产品',
-		'TITLE_ADD_PRODUCT'               => '添加产品',
+		'TITLE_PRODUCT'      => '产品',
+		'TITLE_PRODUCT_LIST' => '产品列表',
+		'TITLE_ADDPRODUCT'   => '添加产品|彩虹Go - 产品',
+		'TITLE_ADD_PRODUCT'  => '添加产品',
+		'TITLE_ADDCATE'      => '添加品牌/分类', 
+		'TITLE_CATELIST'     => '品牌/分类列表',
+		'TITLE_EDITCATE'     => '编辑品牌/分类',
 		
 		//text
 		'TEXT_LANGUAGE_ZH'                => '中文',

@@ -54,7 +54,7 @@ class ShopModel extends Model{
 	public function addShop($imagePath = 0){
 		$add = array(
 				'name'        => I('post.title'),
-				'description' => htmlspecialchars(I('post.shopDescription')),
+				'description' => strip_tags(I('post.shopDescription')),
 				'sale_url'    => I('post.sale_url'),
 				'img_url'     => $imagePath,
 				'pic_url'     => C('API_WEBSITE').$imagePath,

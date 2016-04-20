@@ -100,6 +100,7 @@ class ProductModel extends Model{
 		$stock = intval(I('post.stock'));
 
 		$addData = array(
+				'sku'       => I('post.sku'),
 				'tag'       => strlen($tag) <= 1 ? '' : $tag,
 				'sort'      => intval(I('post.sort', 0)),
 				'recommend' => I('post.recommend', 0) ? 1 : 0,
@@ -148,6 +149,33 @@ class ProductModel extends Model{
 		$queryRes = $this->table(tname('products_copy'))->where($where)->save($save);
 
 		return $queryRes ? true : false;
+	}
+
+	/**
+	 * 添加多张图片
+	 * @param array $images 图片数组
+	 */
+	public function setImagesId($images = array()){
+
+		if (count($images) <= 0) return false;
+		
+		$gid = 0;
+
+		foreach ($images as $k => $v) {
+
+			$add = array(
+					'parent_id' => $gid,
+					'created'   => NOW_TIME,
+					'path'      => $v,
+				);
+
+			$aid = $this->table(tname('product_image'))->add($add);
+
+			if ($k == 0) $gid = $aid;
+		}
+
+		return $gid;
+
 	}
 
 	/**
@@ -240,7 +268,7 @@ class ProductModel extends Model{
 				'type' => intval($type),
 			);
 
-		$queryRes = $this->table(tname('product_brand'))->where($where)->select();
+		$queryRes = $this->table(tname('product_brand'))->where($where)->order('id DESC')->select();
 
 		return $queryRes;
 	}
@@ -274,13 +302,25 @@ class ProductModel extends Model{
 					B.price_zh, 
 					B.price_jp, 
 					B.weight,
-					CONCAT('".C('API_WEBSITE')."', REPLACE(C.path, '.', '_100_100.')) AS thumb";
+					C.gid,
+					CONCAT('".C('API_WEBSITE')."', REPLACE(C.path, '.', '_100_100.')) AS thumb, 
+					C.path ";
 
 		$detail = $this->table(tname('products_copy')." AS A")
 						->field($field)
 						->join($joinDetail)
 						->join($joinImg)
 						->where($where)->find();
+
+		$imagesPath = $this->table(tname('product_image'))->field('path')->where(array('parent_id' => $detail['gid']))->select();
+
+		$path[] = $detail['path'];
+
+		foreach ($imagesPath as $k => $v) {
+			$path[] = $v['path'];
+		}
+
+		$detail['path'] = $path;
 
 		return $detail;
 	}
@@ -296,6 +336,7 @@ class ProductModel extends Model{
 			);
 
 		$savePro = array(
+				'sku'      => I('post.sku'),
 				'stock'    => I('post.stock'),
 				'limit'    => I('post.limit'),
 				'image_id' => $imageId ? $imageId : I('post.image_id'),

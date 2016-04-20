@@ -55,6 +55,45 @@ class OrderController extends AdminBasicController {
     }
 
     /**
+     * 取消订单
+     */
+    public function cancelOrder(){
+        
+        if (!IS_AJAX) return false;
+        
+        $this->orderModel->where(array('oid' => I('request.oid')))->save(array('status' => 0));
+        
+        $this->ajaxRes = array('status' => '0');
+
+        $this->ajaxReturn($this->ajaxRes);
+    }
+
+    /**
+     * 完成订单
+     */
+    public function confirmOrder(){
+
+        if (!IS_AJAX) return false;
+
+        $where = array(
+                    'oid' => I('request.oid'),
+                    );
+
+        $save = array(
+                'status' => 1,
+            );
+
+        $this->orderModel->where($where)->save($save);
+        
+        $this->orderShipModel->where($where)->save($save);
+
+        $this->ajaxRes = array('status' => '0');
+
+        $this->ajaxReturn($this->ajaxRes);
+
+    }
+
+    /**
      * 订单详情
      */
     public function detail(){

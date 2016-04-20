@@ -15,6 +15,14 @@
 		          <button class="btn btn-mini" onclick="selectForm('jp');return false;" id="jpSelectFormBtn">{:L('TEXT_LANGUAGE_JP')}</button>
 		        </div>
 		        <div class="widget-content nopadding" id="zhAddProForm" style="display:block;">
+		            
+		            <div class="control-group">
+		              <label class="control-label">SKU</label>
+		              <div class="controls">
+		                <input type="text" name="sku" id="sku" placeholder="请输入sku" class="span11" maxlength="16" value="{$detail.sku}">
+		              </div>
+		            </div>
+
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_TITLE')}</label>
 		              <div class="controls">
@@ -157,8 +165,20 @@
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_ADD_PRODUCT_IMAGE')}</label>
 		              <div class="controls">
-		                <input type="file" name="image" />
-		                <input type="hidden" name="image_id" value="{$detail.image_id}">
+							<div id="preview">
+								<volist name="detail.path" id="item">
+								<div style="display:inline-block;">
+									<a href="javascript:" title="删除" onclick="removeImg($(this))">删除</a>
+									<br>
+									<img src="http://admin.nijigo.com/{$item}" style="width:200px;padding:20px;">
+									<input type="hidden" name="imagePath[]" value="{$item}">
+								</div>
+								</volist>
+							</div>
+			            <div class="uploadBTN" >
+			                <input type="file" name="image" id="bgImage" />
+			                <span id="uploadBTN">添加图片</span>
+			            </div>
 		                <input type="hidden" name="pid" value="{$detail.pid}">
 		              </div>
 		            </div>
@@ -293,7 +313,68 @@
 <link rel="stylesheet" href="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/themes/default/default.css" />
 <script charset="utf-8" src="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/kindeditor-min.js"></script>
 <script charset="utf-8" src="{:C('ADMIN_WEBSITE')}__PUBLIC__kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.ajaxfileupload.js"></script>
 <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            function applyAjaxFileUpload(element, filePath, fileSpan, textInfo) {
+
+                $(element).AjaxFileUpload({
+                    action: "<?php echo U('Product/uploadImage');?>"+"&form=tpl1&sign="+$(fileSpan).attr("name"),
+                    onChange: function(filename) {
+                        var $span = $(textInfo).text('上传中');
+
+                        interval = window.setInterval(function() {
+                            var text = $span.text();
+                            if (text.length < 13) {
+                                $span.text(text + ".");
+                            } else {
+                                $span.text("上传中");
+                            }
+                        }, 200);
+                    },
+                    onSubmit: function(filename) {
+                        return true;
+                    },
+                    onComplete: function(filename, response) {
+                        window.clearInterval(interval);
+                        console.log(response);
+                        var $span = $("span." + $(this).attr("id")).text(filename + " "),
+                            $fileInput = $("<input />")
+                                .attr({
+                                    type: "file",
+                                    name: $(this).attr("name"),
+                                    id: $(this).attr("id")
+                                });
+
+                        if (response.state) {
+                            alert(response.msg);
+                        }else{
+
+							html = '<div style="display:inline-block;"><a href="javascript:" title="删除" onclick="removeImg($(this))">删除</a><br /><img src="' + response.thumb + '" style="width:200px;padding:20px;" /><input type="hidden" name="imagePath[]" value="'+response.path+'"></div>';
+
+                        	$("#preview").append(html);
+
+                            $(filePath).attr("src", response.thumb);
+                            $(fileSpan).val(response.path);
+
+                        }
+                        
+                        $(textInfo).text('添加图片');
+                    }
+                });
+            }
+			applyAjaxFileUpload("#bgImage", "#showPic", "#showPicValue", "#uploadBTN"); 
+            
+        });
+	
+	function removeImg(img){
+		img.parent().fadeOut(1000, function(){
+			img.parent().remove();
+		});
+	}
+
 	function selectForm(selectForm){
 		if (selectForm == 'zh') {
 			$('#zhAddProForm').show();

@@ -27,6 +27,8 @@ class ProductController extends ApiBasicController {
 
         $this->adModel = D('Ad');
 
+        $this->commentModel = D('Comment');
+
         $this->reqURI = md5($_SERVER['REQUEST_URI']);
     }
 
@@ -270,6 +272,13 @@ class ProductController extends ApiBasicController {
             $queryRes['description_zh'] = htmlspecialchars_decode($queryRes['description_zh']);
             $queryRes['description_jp'] = htmlspecialchars_decode($queryRes['description_jp']);
             $queryRes['tag_name']    = explode(',', $queryRes['tag_name']);
+        }
+
+        $comment = $this->commentModel->getProductComment($pid);
+
+        if (count($comment) > 0) {
+            $this->assign('comment', $comment);
+            $this->assign('commentCount', count($comment));
         }
 
         $this->assign('detail', $queryRes);

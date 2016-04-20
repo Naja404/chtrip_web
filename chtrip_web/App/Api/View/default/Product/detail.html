@@ -23,9 +23,11 @@
   <div class="proImg">
     <div class="swiper-container">
         <div class="swiper-wrapper">
+            <volist name="detail.path" id="item">
             <div class="swiper-slide">
-                <img src="{$detail.path}" />
+                <img src="{$item}" />
             </div>
+            </volist>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>

@@ -24,11 +24,104 @@ class ProductController extends AdminBasicController {
         
         $this->uploadModel   = D('Upload');
         $this->productModel = D('Product');
+        $this->cateModel = D('ProductBrand');
 
         $this->ajaxRes = array(
                 'status' => '1',
                 'msg'    => L('error_operation'),
             );
+    }
+
+    /**
+     * 品牌、分类列表
+     * @param type item
+     */
+    public function cateList(){
+        $count = $this->cateModel->getCateTotal();
+        
+        $page = new \Think\Page($count, C('PAGE_LIMIT'));
+
+        $p = I('request.p', 1);
+
+        $data = array(
+                    'page' => $p.','.C('PAGE_LIMIT'),
+            );
+
+        $this->assign('page_show', $page->showAdmin());
+        $this->assign('list', $this->cateModel->getCateList($data));
+
+        $this->display();
+    }
+
+    /**
+     * 添加品牌、分类
+     */
+    public function addCate(){
+
+        if (IS_AJAX) {
+            
+            $reqData = I('request.');
+
+            $checkRes = $this->cateModel->checkCate($reqData, 0);
+
+            if (!$checkRes) {
+                json_msg('品牌、分类名已存在', 1);
+                exit;
+            }
+
+            $this->cateModel->add($reqData);
+
+            json_msg();
+            exit;
+        }
+
+        $this->display();
+    }
+
+    /**
+     * 编辑品牌、分类
+     */
+    public function editCate(){
+        
+        $reqData = I('request.');
+
+        if (IS_AJAX) {
+            
+            $checkRes = $this->cateModel->checkCate($reqData, 1);
+
+            if (!$checkRes) {
+                json_msg('品牌、分类名已存在', 1);
+                exit;
+            }
+
+            $where = array(
+                    'id' => $reqData['id']
+                );
+
+            $this->cateModel->where($where)->save($reqData);
+
+            json_msg();
+            exit;
+        }
+
+        $this->assign('detail', $this->cateModel->getCateById($reqData['id']));
+        $this->display();
+    }
+
+    /**
+     * 删除品牌、分类
+     */
+    public function delCate(){
+        
+        if (!IS_AJAX) return false;
+
+        $where = array(
+                'id' => I('request.id'),
+            );
+
+        $this->cateModel->where($where)->delete();
+
+        json_msg();
     }
 
     /**
@@ -62,7 +155,7 @@ class ProductController extends AdminBasicController {
 
         if (IS_POST) {
 
-            $imageId = $this->_getIMGId();
+            $imageId = $this->_saveImages(I('request.imagePath'));
 
             $pid = $this->productModel->addProduct($imageId);
 
@@ -86,7 +179,8 @@ class ProductController extends AdminBasicController {
         $reqData = I('request.');
 
         if (IS_POST) {
-            $imageId = $this->_getIMGId();
+            
+            $imageId = $this->_saveImages(I('request.imagePath'));
 
             $pid = $this->productModel->editProduct($imageId);
 
@@ -159,6 +253,45 @@ class ProductController extends AdminBasicController {
             );
         
         $this->ajaxReturn($returnRes);
+    }
+
+    /**
+     * 上传图片
+     */
+    public function uploadImage(){
+
+        $ajaxRes = array(
+                'state' => 1,
+                'msg'   => L('ERROR_PARAM'),
+            );
+
+        if (!IS_POST) {
+            echo json_encode($ajaxRes);exit;
+        }
+
+        $reqData = I('request.');
+
+        $imgRes = $this->uploadModel->uploadFile();
+
+        if (!$imgRes['path']) {
+            $ajaxRes['msg'] = L('ERR_UPLOAD');
+        }else{
+            $ajaxRes = array(
+                    'state' => 0,
+                    'thumb' => C('API_WEBSITE').$imgRes['path'],
+                    'path'  => $imgRes['path'],
+                );
+        }
+
+        echo json_encode($ajaxRes);exit;
+    }
+
+    /**
+     * 多张图片上传
+     * @param array $images 图片路径数组
+     */
+    private function _saveImages($images = array()){
+        return $this->productModel->setImagesId($images);
     }
 
     /**

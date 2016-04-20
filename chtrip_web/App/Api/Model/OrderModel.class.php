@@ -26,6 +26,7 @@ class OrderModel extends Model{
 				A.created, 
 				A.pay_status, 
 				A.status, 
+				A.comment,
 				B.title_zh, 
 				CONCAT('￥', B.price_zh) AS price_zh, 
 				CONCAT('共', B.quantity,'件') AS quantity, 
@@ -61,7 +62,7 @@ class OrderModel extends Model{
 					'ship_url'     => sprintf(C('SHIP_URL'), $reqData['ssid'], $v[0]['oid']),
 					'total_fee'    => '￥'.$v[0]['total_fee'],
 					'created'      => date('Y-m-d H:i:s', time()),
-					'has_comment'  => $v[0]['status'] == 1 ? '1' : '0',
+					'has_comment'  => $v[0]['comment'] == 1 ? '1' : '0',
 					'comment_url'  => $v[0]['status'] == 1 ? $this->_getCommentUrl($v[0]['oid'], $reqData['ssid']) : '',
 					'pro'          => $v,
 				);

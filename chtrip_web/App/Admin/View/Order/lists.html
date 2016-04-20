@@ -39,7 +39,15 @@
 	                	<td><span class="label label-<?php echo $item['pay_status'] ? 'success' : 'danger';?>">{:L('TEXT_PAY_STATUS_'.$item['pay_status'])}</span></td>
 	                	<td><span class="{:L('CSS_ORDER_STATUS_'.$item['status'])}">{:L('TEXT_ORDER_STATUS_'.$item['status'])}</span></td>
 	                	<td>{:date('Y-m-d H:i:s', $item['created'])}</td>
-	                	<td></td>
+	                	<td>
+	                		<?php if(!in_array($item['status'], array(0, 1))){?>
+	                			<span class="label label-inverse" onclick="cancelOrder('<?php echo $item['oid'];?>')">取消</span>
+	                		<?php }?>
+
+	                		<?php if($item['status'] == 3){?>
+	                			<span class="label label-info" onclick="confirmOrder('<?php echo $item['oid'];?>')">确认收货</span>
+	                		<?php }?>
+	                	</td>
 	                </tr>
 	            	</volist>
 	              </tbody>
@@ -54,6 +62,43 @@
 	  </div>
 	</div>
 <script type="text/javascript">
+
+	function cancelOrder(oid){
+		if (!confirm('是否确认取消该“'+oid+'”订单数据?')) return false;
+
+		$.ajax({
+			type:"POST",
+			url:"{:U('Order/cancelOrder')}",
+			data:{oid:oid},
+			success:function(data){
+				if (data.status == '0') {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+			}
+		});
+	}
+
+	function confirmOrder(oid){
+
+		if (!confirm('是否确认收货该 “'+oid+'” 订单数据?')) return false;
+
+		$.ajax({
+			type:"POST",
+			url:"{:U('Order/confirmOrder')}",
+			data:{oid:oid},
+			success:function(data){
+				if (data.status == '0') {
+					window.location.reload();
+				}else{
+					alert(data.msg);
+				}
+			}
+		});
+
+	}
+
 	function delPro(pid){
 		if (!confirm('是否确认删除该条数据?')) return false;
 

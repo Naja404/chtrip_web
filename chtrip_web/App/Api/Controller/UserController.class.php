@@ -21,7 +21,8 @@ class UserController extends ApiBasicController {
         $this->userSNSModel = D('UserSns');
         $this->userAddressModel = D('UserAddress');
         $this->orderModel = D('Order');
-
+        $this->commentModel = D('Comment');
+        $this->commentImageModel = D('CommentImage');
     }
 
     /**
@@ -29,20 +30,80 @@ class UserController extends ApiBasicController {
      */
     public function pubComment(){
 
-        if (IS_POST) {
-            echo '<pre>';
-            print_r($_POST);exit();
-        }
-
         $reqData = I('request.');
 
         $type = I('request.type', 1);
 
+        $where = array(
+                'user_id' => $reqData['ssid'],
+            );
+
+        $type == 1 ? $where['oid'] = $reqData['id'] : $where['saler_id'] = $reqData['id'];
+
+        $isComment = $this->commentModel->where($where)->count();
+
+        if ($isComment >= 1) {
+            if (IS_AJAX) {
+                json_msg('评论错误', 1);
+                exit();
+            }
+            $this->display('User/errorComment');
+            exit();
+        }
+
         $queryRes = $this->userModel->getCommentType($reqData);
 
-        $this->assign('detail', $queryRes);
-        
-        $this->display('User/pubComment');
+        if (IS_AJAX) {
+
+            $comment = array();
+
+            foreach ($queryRes as $k => $v) {
+                
+                $commentText = strip_tags($reqData['comment_'.$v['pid']]);
+
+                if (empty($commentText)){
+                    json_msg('请填写评论内容', 1);
+                    exit();
+                }
+
+                $comment[] = array(
+                        'comment' => array(
+                            'user_id'  => $reqData['ssid'],
+                            'type'     => (int)$type,
+                            'comment'  => $commentText,
+                            'rate'     => $reqData['rate_'.$v['pid']],
+                            'oid'      => $type == 1 ? $reqData['id'] : '',
+                            'pid'      => isset($v['pid']) ? $v['pid'] : '',
+                            'saler_id' => isset($v['saler_id']) ? $v['saler_id'] : '',
+                            'created'  => NOW_TIME,
+                            ),
+                        'image' => array(
+                                'path' => $reqData['commentPicValue_'.$v['pid']],
+                            ),
+                    );
+            }
+
+            foreach ($comment as $k => $v) {
+                $cid = $this->commentModel->add($v['comment']);
+                
+                $v['image']['cid'] = $cid;
+                
+                if ($cid && !empty($v['image']['path'])) $this->commentImageModel->add($v['image']);
+            }
+
+            if ($type == 1) $this->orderModel->where(array('oid' => $reqData['id']))->save(array('comment' => 1));
+
+            json_msg();exit;
+        }else{
+            if (!$queryRes) {
+                $this->display('User/errorComment');
+            }else{
+                $this->assign('detail', $queryRes);
+                
+                $this->display('User/pubComment');
+            }
+        }
+
     }
 
     /**

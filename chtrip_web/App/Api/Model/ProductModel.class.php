@@ -165,7 +165,8 @@ class ProductModel extends Model{
 				  f.sale_url, 
 				  a.created, 
 				  a.sort, 
-				  a.recommend ";
+				  a.recommend,
+				  c.gid ";
 
 		$queryRes = $this->table(tname('products_copy').' AS a')
 							->field($field)
@@ -176,6 +177,16 @@ class ProductModel extends Model{
 		if (!is_array($queryRes)) {
 			return array();
 		}
+
+		$imagesPath = $this->table(tname('product_image'))->field('path')->where(array('parent_id' => $queryRes['gid']))->select();
+
+		$path[] = $queryRes['path'];
+
+		foreach ($imagesPath as $k => $v) {
+			$path[] = C('API_WEBSITE').$v['path'];
+		}
+
+		$queryRes['path'] = $path;
 
 		return $queryRes;
 	}

@@ -28,9 +28,11 @@
   <div class="proImg">
     <div class="swiper-container">
         <div class="swiper-wrapper">
+            <volist name="detail.path" id="item">
             <div class="swiper-slide">
-                <img src="{$detail.path}" />
+                <img src="{$item}" />
             </div>
+            </volist>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
@@ -62,41 +64,31 @@
   </div>
 
   <div class="sliceLine"></div>
-
-<!--   <div class="comment">
+  <?php if(count($comment) > 0){?>
+  <div class="comment">
     <div class="commentTitle">
-        使用评价(13)
+        使用评价(<?php echo $commentCount;?>)
     </div>
     <div class="commentList">
+        <volist name="comment" id="item">
         <div class="commentUser">
             <div class="userAvatar">
-                <img src="http://api.nijigo.com/Public/uploads/images/20151105/1453368105.png" class="avatar">
+                <img src="{$item.avatar}" class="avatar">
                 <div class="userName">
-                    贝勒爷
+                    {$item.name}
                 </div>
             </div>
             <div class="commentContent">
-                提高细胞的保湿机能，缔造具有保湿力且水润的高保湿着哩状面膜。 作为睡眠面膜使用效果更佳。 作为睡眠面膜进行诉求。 提高保湿，润泽效果。 追加配合能够在睡眠中修护肌肤的成分。
+                {$item.comment}
             </div>
         </div>
-
-        <div class="commentUser">
-            <div class="userAvatar">
-                <img src="http://api.nijigo.com/Public/uploads/images/20151105/1453368105.png" class="avatar">
-                <div class="userName">
-                    贝勒爷
-                </div>
-            </div>
-            <div class="commentContent" style="border-bottom:none;">
-                提高细胞的保湿机能，缔造具有保湿力且水润的高保湿着哩状面膜。 作为睡眠面膜使用效果更佳。 作为睡眠面膜进行诉求。 提高保湿，润泽效果。 追加配合能够在睡眠中修护肌肤的成分。
-            </div>
-        </div>
+        </volist>
     </div>
-    <div class="commentMore">
+<!--     <div class="commentMore">
         查看全部评价
-    </div>
-  </div> -->
-
+    </div> -->
+  </div>
+  <?php }?>
   <div class="fixBar">
     <!-- <img src="http://api.nijigo.com/Public/html/images/product_detail_bg.jpg"> -->
     <ul>

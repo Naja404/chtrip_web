@@ -14,7 +14,7 @@
     <script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.ajaxfileupload.js"></script>
 </head>
 <body>
-<form id="uploadForm" method="post" enctype="multipart/form-data">
+<form id="uploadForm" >
 <div class="pubComment">
     <volist name="detail" id="item">
     <div class="sliceLine" style="border-top: solid 1px #E0E1E2;"></div>
@@ -32,7 +32,7 @@
             <div style="margin:20px auto;">
                 <div id="star_{$item.pid}"></div>
                 <div id="result_{$item.pid}"></div>
-                <input type="hidden" name="rate_{$item.pid}" value="0">
+                <input type="hidden" name="rate_{$item.pid}" value="5">
             </div>
         </div>
         <div class="commentUploadPic">
@@ -40,15 +40,19 @@
                 <img src="" id="commentPic_{$item.pid}">
                 <input type="hidden" id="commentPicValue_{$item.pid}" name="commentPicValue_{$item.pid}" value="" >
             </div>
-            <span class="uploadBTN" id="uploadBTN_{$item.pid}">
-                <input type="file" name="image_{$item.pid}" id="bgImage_{$item.pid}" />添加图片
-            </span>
+            <div class="uploadBTN" >
+                <input type="file" name="image_{$item.pid}" id="bgImage_{$item.pid}" />
+                <span id="uploadBTN_{$item.pid}">添加图片</span>
+            </div>
         </div>
     </div>
     </volist>
+    <div class="subComment" onclick="sub()">
+        <span>发表评价</span>
+    </div>
     <div class="clearFooter">
     </div>
-    <input type="submit">
+    <!-- <a href="javascript:" onclick="sub()" >提交</a> -->
 </div>
 </form>
 <script type="text/javascript">
@@ -113,7 +117,24 @@
     rat('<?php echo $v["pid"];?>', 1);
 <?php }?>
 
-
+    function sub(){
+        $.ajax({
+            type:"POST",
+            url:"{:U('User/pubComment', array('id' => I('request.id'), 'ssid' => I('request.ssid'), 'type' => 1))}",
+            data:$("#uploadForm").serialize(),
+            success:function(data){
+                console.log(data);
+                if (data.status == '0') {
+                    alert("提交成功");
+                    // responseCallback(data);
+                }else{
+                    alert(data.error);
+                    // responseCallback("no");
+                }
+                return false;
+            }
+        });
+    }
 
     function rat(id, m){
 
@@ -128,7 +149,7 @@
             starOff: 'star-off-big.png',
             starOn: 'star-on-big.png',
             size: 24,
-            start: 40,
+            start: 5,
             showHalf: true,
             target: result,
             targetKeep : true,
