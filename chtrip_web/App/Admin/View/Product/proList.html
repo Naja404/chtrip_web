@@ -18,6 +18,7 @@
 	                  <th>{:L('TEXT_TITLE')}</th>
 	                  <th>{:L('TEXT_IMAGE')}</th>
 	                  <th>{:L('TEXT_PRICE')}</th>
+	                  <th>{:L('TEXT_PRODUCT_STOCK')}/{:L('TEXT_PRODUCT_LIMIT')}</th>
 	                  <th>{:L('TEXT_CREATED')}</th>
 	                  <th>{:L('TEXT_ACTION')}</th>
 	                </tr>
@@ -32,6 +33,7 @@
 	                  	<br>
 	                  	日元：{$item.price_jp}
 	                  </td>
+	                  <td><span class="label label-<?php echo $item['rest'] > 0 ? 'success' : 'danger';?>" style="font-size:20px;">{$item.rest}</span> / <span class="label label-danger"><?php echo $item['limit'] > 0 ? '每单限购'.$item['limit'].'件' : '不限购';?></span></td>
 	                  <td>{$item.created|date="Y-m-d H:i:s",###}</td>
 	                  <td>
 	                  	<a class="btn" href="{:U('Product/editPro', array('pid' => $item['pid']))}" >编辑</a>

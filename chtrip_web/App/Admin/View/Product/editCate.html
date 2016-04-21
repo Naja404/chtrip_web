@@ -30,6 +30,14 @@
 		                <input type="text" name="name" id="cate_name" placeholder="请输入品牌\分类" class="span11" maxlength="16" value="{$detail.name}" required >
 		              </div>
 		            </div>
+		            
+		            <div class="control-group">
+		              <label class="control-label">是否显示在APP上</label>
+		              <div class="controls">
+		              		<input type="checkbox" name="app_display" <?php echo $detail['app_display'] == 1 ? 'checked' : '';?> >
+		              </div>
+		            </div>
+
 		            <input type="hidden" name="id" value="{$detail.id}">
 		            <div class="form-actions">
 		              <span class="btn btn-success" onclick="addCate()">Save</span>

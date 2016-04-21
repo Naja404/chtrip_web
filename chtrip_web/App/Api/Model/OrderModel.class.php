@@ -84,7 +84,24 @@ class OrderModel extends Model{
 
 		if ($queryRes['status'] != 4) return L('ERROR_PARAM');
 
+
 		$res = $this->query("UPDATE `".tname('order')."` SET status = '0', opera = '".$reqData['ssid']."' WHERE ( `user_id` = '".$reqData['ssid']."' AND `oid` = '".$reqData['oid']."')");
+
+		if ($res !== false) {
+			
+			$where = array(
+					'oid' => $reqData['oid'],
+				);
+
+			$proArr = $this->table(tname('order_detail'))->field('pid, quantity')->where($where)->select();
+
+			foreach ($proArr as $k => $v) {
+				
+				$sql = "UPDATE `".tname('products_copy')."` SET rest = rest + ".$v['quantity']." WHERE (`pid` = ".$v['pid'].")";
+				
+				$this->query($sql);
+			}
+		}
 
 		return $res !== false ? true : L('ERROR_PARAM');
 	}

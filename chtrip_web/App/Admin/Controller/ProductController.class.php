@@ -46,7 +46,7 @@ class ProductController extends AdminBasicController {
         $data = array(
                     'page' => $p.','.C('PAGE_LIMIT'),
             );
-
+        $this->_assignText();
         $this->assign('page_show', $page->showAdmin());
         $this->assign('list', $this->cateModel->getCateList($data));
 
@@ -62,6 +62,8 @@ class ProductController extends AdminBasicController {
             
             $reqData = I('request.');
 
+            $reqData['app_display'] = isset($reqData['app_display']) && $reqData['app_display'] ? 1 : 0;
+
             $checkRes = $this->cateModel->checkCate($reqData, 0);
 
             if (!$checkRes) {
@@ -74,7 +76,7 @@ class ProductController extends AdminBasicController {
             json_msg();
             exit;
         }
-
+        $this->_assignText();
         $this->display();
     }
 
@@ -86,7 +88,9 @@ class ProductController extends AdminBasicController {
         $reqData = I('request.');
 
         if (IS_AJAX) {
-            
+
+            $reqData['app_display'] = isset($reqData['app_display']) && $reqData['app_display'] == 'on' ? 1 : 0;
+
             $checkRes = $this->cateModel->checkCate($reqData, 1);
 
             if (!$checkRes) {
@@ -103,7 +107,7 @@ class ProductController extends AdminBasicController {
             json_msg();
             exit;
         }
-
+        $this->_assignText();
         $this->assign('detail', $this->cateModel->getCateById($reqData['id']));
         $this->display();
     }
@@ -213,6 +217,8 @@ class ProductController extends AdminBasicController {
         $data = array(
                     'page' => $p.','.C('PAGE_LIMIT'),
             );
+
+        $this->_assignText();
 
         $this->assign('page_show', $page->showAdmin());
         $this->assign('list', $this->productModel->getProductList($data));

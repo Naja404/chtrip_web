@@ -18,8 +18,11 @@ class OrderController extends AdminBasicController {
     public function _initialize(){
         parent::_initialize();
 
-        $this->orderModel = D('Order');
-        $this->orderShipModel = D('OrderShip');
+        $this->orderModel       = D('Order');
+        $this->orderShipModel   = D('OrderShip');
+        $this->orderDetailModel = D('OrderDetail');
+        $this->productModel     = D('ProductsCopy');
+
         $this->_assignText();
 
         $this->ajaxRes = array(
@@ -61,8 +64,26 @@ class OrderController extends AdminBasicController {
         
         if (!IS_AJAX) return false;
         
-        $this->orderModel->where(array('oid' => I('request.oid')))->save(array('status' => 0));
+        $where = array(
+                    'oid' => I('request.oid')
+                    );
+
+        $res = $this->orderModel->where($where)->save(array('status' => 0));
         
+        // 取消订单后 返回库存量
+        if ($res !== false) {
+
+            $proArr = $this->orderDetailModel->field('pid, quantity')->where($where)->select();
+
+            foreach ($proArr as $k => $v) {
+                $proWhere = array(
+                        'pid' => $v['pid'],
+                    );
+
+                $this->productModel->where($proWhere)->setInc('rest', $v['quantity']);
+            }
+        }
+
         $this->ajaxRes = array('status' => '0');
 
         $this->ajaxReturn($this->ajaxRes);

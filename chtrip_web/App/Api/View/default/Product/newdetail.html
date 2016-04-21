@@ -48,11 +48,13 @@
         <span class="salePrice">
             ￥{$detail.price_zh}
         </span>
+        <?php if($detail['origin_price_zh'] > 0){?>
         <span class="originPrice">
             <s>
-            ￥<?php echo $detail['price_zh'] + 50;?>
+            ￥<?php echo $detail['origin_price_zh'];?>
             </s>
         </span>
+        <?php }?>
         <span class="hotFlag">
             {$detail.summary_zh}
         </span>

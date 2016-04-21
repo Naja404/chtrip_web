@@ -7,10 +7,12 @@ return array(
 		'TITLE_PRODUCT'      => '产品',
 		'TITLE_PRODUCT_LIST' => '产品列表',
 		'TITLE_ADDPRODUCT'   => '添加产品|彩虹Go - 产品',
+		'TITLE_EDITPRO'      => '编辑产品|彩虹Go - 产品',
 		'TITLE_ADD_PRODUCT'  => '添加产品',
 		'TITLE_ADDCATE'      => '添加品牌/分类', 
 		'TITLE_CATELIST'     => '品牌/分类列表',
 		'TITLE_EDITCATE'     => '编辑品牌/分类',
+		'TITLE_PROLIST'      => '产品列表',
 		
 		//text
 		'TEXT_LANGUAGE_ZH'                => '中文',
@@ -20,6 +22,7 @@ return array(
 		'TEXT_ADD_PRODUCT_WEIGHT'         => '重量',
 		'TEXT_ADD_PRODUCT_TITLE_JP'       => '日文标题',
 		'TEXT_ADD_PRODUCT_PRICE'          => '人名币',
+		'TEXT_ADD_PRODUCT_ORIGIN_PRICE'   => '人民币原价',
 		'TEXT_ADD_PRODUCT_PRICE_JP'       => '日币',
 		'TEXT_ADD_PRODUCT_SHIPPING'       => '邮费',
 		'TEXT_ADD_PRODUCT_COMMENTS'       => '评论数',
@@ -49,6 +52,7 @@ return array(
 		//input
 		'INPUT_ADD_PRODUCT_TITLE'         => '请输入标题',
 		'INPUT_ADD_PRODUCT_PRICE'         => '请输入价格',
+		'INPUT_ADD_PRODUCT_ORIGIN_PRICE'  => '请输入原价',
 		'INPUT_ADD_PRODUCT_SHIPPING'      => '',
 		'INPUT_ADD_PRODUCT_COMMENTS'      => '',
 		'INPUT_ADD_PRODUCT_SALES'         => '',

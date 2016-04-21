@@ -67,7 +67,9 @@ class ProductModel extends Model{
 				tname('product_image').' AS c ON c.gid = a.image_id ',
 			);
 
-		$field = "b.pid,
+		$field = "a.rest,
+					a.limit,
+					b.pid,
 					b.title_zh,
 					b.summary_zh,
 					b.brand,
@@ -287,6 +289,7 @@ class ProductModel extends Model{
 		$joinImg = tname('product_image')." AS C ON C.gid = A.image_id";
 
 		$field = "A.pid, 
+					A.sku,
 					A.image_id, 
 					A.stock, 
 					A.rest, 
@@ -300,6 +303,7 @@ class ProductModel extends Model{
 					B.brand, 
 					B.category, 
 					B.price_zh, 
+					B.origin_price_zh, 
 					B.price_jp, 
 					B.weight,
 					C.gid,
@@ -345,16 +349,17 @@ class ProductModel extends Model{
 		$proStatus = $this->table(tname('products_copy'))->where($where)->save($savePro);
 
 		$saveDetail = array(
-				'title_zh'       => trim(I('post.titleZH')),
-				'title_jp'       => trim(I('post.titleJP')),
-				'summary_zh'     => trim(I('post.summary_zh')),
-				'description_zh' => I('post.descriptionZH', '', 'htmlspecialchars'),
-				'description_jp' => I('post.descriptionJP', '', 'htmlspecialchars'),
-				'brand'          => I('post.brand'),
-				'category'       => I('post.category'),
-				'price_zh'       => trim(I('post.priceZH')),
-				'price_jp'       => trim(I('post.priceJP')),
-				'weight'         => I('post.weight'),
+				'title_zh'        => trim(I('post.titleZH')),
+				'title_jp'        => trim(I('post.titleJP')),
+				'summary_zh'      => trim(I('post.summary_zh')),
+				'description_zh'  => I('post.descriptionZH', '', 'htmlspecialchars'),
+				'description_jp'  => I('post.descriptionJP', '', 'htmlspecialchars'),
+				'brand'           => I('post.brand'),
+				'category'        => I('post.category'),
+				'price_zh'        => trim(I('post.priceZH')),
+				'origin_price_zh' => trim(I('post.originPriceZH')),
+				'price_jp'        => trim(I('post.priceJP')),
+				'weight'          => I('post.weight'),
 			);
 	
 		$detailStatus = $this->table(tname('product_detail_copy'))->where($where)->save($saveDetail);
@@ -382,6 +387,7 @@ class ProductModel extends Model{
 				'brand'          => I('post.brand'),
 				'category'       => I('post.category'),
 				'price_zh'       => trim(I('post.priceZH')),
+				'origin_price_zh' => trim(I('post.originPriceZH')),
 				'price_jp'       => trim(I('post.priceJP')),
 				'shipping_type'  => 1,//I('post.shippingTypeZH'),
 				'comments'       => I('post.comments'),

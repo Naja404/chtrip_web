@@ -29,6 +29,8 @@ class ProductController extends ApiBasicController {
 
         $this->commentModel = D('Comment');
 
+        $this->productBrandModel = D('ProductBrand');
+
         $this->reqURI = md5($_SERVER['REQUEST_URI']);
     }
 
@@ -37,6 +39,25 @@ class ProductController extends ApiBasicController {
      */
     public function userProtocol(){
         $this->display('Product/protocol');
+    }
+
+    /**
+     * 分类列表
+     */
+    public function cateList(){
+
+        $where = array(
+                'type'        => 2,
+                'app_display' => 1,
+            );
+
+        $queryRes = $this->productBrandModel->field('name')->where($where)->order('sort DESC')->select();
+
+        foreach ($queryRes as $k => $v) {
+            $outPut[] = $v['name'];
+        }
+
+        json_msg($outPut);
     }
 
     /**
@@ -573,7 +594,7 @@ class ProductController extends ApiBasicController {
             "1万以上"     => " >= 10000",
             );
 
-        if (!empty($cate) && !in_array($cate, array('类别'))) $where[] = " AND b.category = '".$cate."'";
+        if (!empty($cate) && !in_array($cate, array('类别', '热销hot'))) $where[] = " AND b.category = '".$cate."'";
 
         if (!empty($brand) && !in_array($brand, array('品牌'))) $where[] = " AND b.brand LIKE '%".$brand."%'";
 
