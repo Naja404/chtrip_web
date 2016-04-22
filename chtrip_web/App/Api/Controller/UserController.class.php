@@ -696,6 +696,20 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 获取 收藏专辑 列表
+     */
+    public function getAlbumList(){
+        
+        $returnRes = $this->userModel->getAlbumList(I('request.ssid'));
+
+        if (count($returnRes) > 0 ) {
+            json_msg($returnRes);
+        }
+
+        json_msg();
+    }
+
+    /**
      * 添加 我想去
      * @param int $sid
      */
@@ -730,6 +744,41 @@ class UserController extends ApiBasicController {
         }
 
         return $this->getWantList();
+    }
+
+    /**
+     * 设置 专辑  收藏
+     */
+    public function setAlbum(){
+        
+        $reqData = array(
+                'ssid'   => I('request.ssid'),
+                'aid'    => I('request.aid'),
+                'type'   => I('request.type', 1), // 1.添加 2.删除
+                'islist' => I('request.islist', 0),
+            );
+
+        $returnRes = $this->userModel->setAlbum($reqData);
+
+        if (is_string($returnRes)) {
+            json_msg($returnRes, 1);
+        }
+
+        if ($reqData['islist']) return $this->getAlbumList();
+
+        json_msg();
+    }
+
+    /**
+     * 是否收藏 专辑
+     */
+    public function isCollectAlbum(){
+        
+        $reqData = I('request.');
+
+        $isCollect = $this->userModel->isCollectAlbum($reqData);
+
+        json_msg($isCollect);
     }
 
     /**

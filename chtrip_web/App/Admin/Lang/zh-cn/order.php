@@ -34,12 +34,19 @@ return array(
 		'TEXT_CONTENT'        => '内容',
 		'TEXT_AREA'           => '地点',
 		'TEXT_CITY'           => '城市',
-
-		'CSS_ORDER_STATUS_0' => 'label label-warning',
-		'CSS_ORDER_STATUS_1' => 'label label-success',
-		'CSS_ORDER_STATUS_2' => 'label label-inverse',
-		'CSS_ORDER_STATUS_3' => 'label label-info',
-		'CSS_ORDER_STATUS_4' => 'label label-important',
-
-		'BTN_ADD_SHIPID' => '添加物流单号',
+		'TEXT_SHIP_ID'        => '物流单号',
+		'BTN_SEARCH_ORDER'    => '条件查询',
+		'PLACEHOLDER_ORDER'   => '请输入订单号',
+		'PLACEHOLDER_SHIPID'  => '请输入物流单号',
+		'BTN_CANCEL'          => '取消',
+		'BTN_SUBMIT'          => '提交',
+		'BTN_UPDATE_SHIPID'   => '变更物流单号'
+		
+		'CSS_ORDER_STATUS_0'  => 'label label-warning',
+		'CSS_ORDER_STATUS_1'  => 'label label-success',
+		'CSS_ORDER_STATUS_2'  => 'label label-inverse',
+		'CSS_ORDER_STATUS_3'  => 'label label-info',
+		'CSS_ORDER_STATUS_4'  => 'label label-important',
+		
+		'BTN_ADD_SHIPID'      => '添加物流单号',
 );

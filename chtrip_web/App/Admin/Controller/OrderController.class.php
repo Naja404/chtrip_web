@@ -36,7 +36,9 @@ class OrderController extends AdminBasicController {
      */
     public function lists(){
 
-        $total = $this->orderModel->getOrderTotal();
+        $where = $this->_getListWhere();
+
+        $total = $this->orderModel->getOrderTotal($where);
 
         $page = new \Think\Page($total, C('PAGE_LIMIT'));
 
@@ -45,6 +47,7 @@ class OrderController extends AdminBasicController {
         $data = array(
                     'page'  => page($p, C('PAGE_LIMIT')),
                     'order' => 'A.created DESC',
+                    'where' => $where,
             );
 
         $list = $this->orderModel->getOrderList($data);
@@ -141,19 +144,25 @@ class OrderController extends AdminBasicController {
 
         $status = $this->orderModel->checkShipId($reqData);
 
-        if ($status !== true) $this->ajaxReturn($this->ajaxRes);
+        if ($status !== true) {
+            $save = array(
+                    'sid' => $reqData['ship_id'],
+                );
 
-        $add = array(
-                'oid'     => $reqData['oid'],
-                'sid'     => $reqData['ship_id'],
-                'content' => '',
-                'created' => time(),
-                'lasted'  => time(),
-            );
+            $sid = $this->orderShipModel->where(array('oid' => $reqData['oid']))->save($save);
+        }else{
+            $add = array(
+                    'oid'     => $reqData['oid'],
+                    'sid'     => $reqData['ship_id'],
+                    'content' => '',
+                    'created' => time(),
+                    'lasted'  => time(),
+                );
 
-        $sid = $this->orderShipModel->add($add);
+            $sid = $this->orderShipModel->add($add);
 
-        if ($sid) $this->orderModel->upOrderStatus($reqData['oid'], 3);
+            if ($sid) $this->orderModel->upOrderStatus($reqData['oid'], 3);
+        }
 
         $this->ajaxRes = array('status' => '0');
 
@@ -164,4 +173,24 @@ class OrderController extends AdminBasicController {
         $this->assign('title', L('title_'.ACTION_NAME));
     }
 
+    /**
+     * 订单列表查询条件
+     */
+    public function _getListWhere(){
+        $reqData = I('request.');
+
+        $where = array();
+
+        if (isset($reqData['oid']) && !empty($reqData['oid'])) $where['A.oid'] = $reqData['oid'];
+
+        if (isset($reqData['sid']) && !empty($reqData['sid'])) $where['C.sid'] = $reqData['sid'];
+
+        if (isset($reqData['pay']) && in_array($reqData['pay'], array('0', '1'))) $where['A.pay_status'] = intval($reqData['pay']);
+
+        if (isset($reqData['status']) && in_array($reqData['status'], array('0', '1', '2', '3', '4'))) $where['A.status'] = intval($reqData['status']);
+
+        if (count($where) > 1) $where['_logic'] = 'OR';
+
+        return $where;
+    }
 }

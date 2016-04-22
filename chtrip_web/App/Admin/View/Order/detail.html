@@ -61,7 +61,14 @@
 						<span class="label label-<?php echo $detail['pay_status'] ? 'success' : 'danger';?>">{:L('TEXT_PAY_STATUS_'.$detail['pay_status'])}</span>
 		              </div>
 		            </div>
-
+		            <?php if($detail['status'] == 3){?>
+		            <div class="control-group">
+		              <label class="control-label"><?php echo L('TEXT_SHIP_ID');?></label>
+		              <div class="controls">
+						<input type="text" name="ship_id" placeholder="<?php echo L('TEXT_ADD_SHIPID');?>" value="<?php echo $detail['sid'];?>"><button onclick="subShipId('<?php echo $detail["oid"];?>');return false;"><?php echo L('BTN_UPDATE_SHIPID');?></button>
+		              </div>
+		            </div>
+		            <?php }?>
 		            <div class="control-group">
 		              <label class="control-label">{:L('TEXT_SHIP_STATUS')}</label>
 		              <div class="controls">

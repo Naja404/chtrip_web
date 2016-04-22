@@ -9,9 +9,21 @@ class OrderModel extends Model{
 
 	/**
 	 * 获取订单总数
+	 * @param array $where 查询条件
 	 */
-	public function getOrderTotal(){
-		return $this->table(tname('order'))->count();
+	public function getOrderTotal($where = array()){
+
+		$joinAddress = tname('user_address')." AS B ON B.id = A.address_id";
+		$joinShip = "LEFT JOIN ".tname('order_ship')." AS C ON C.oid = A.oid";
+
+		$total = $this->table(tname('order').' AS A')
+						 ->join($joinAddress)
+						 ->join($joinShip)
+						 ->where($where)
+						 ->order($reqData['order'])
+						 ->count();
+
+		return $total;
 	}
 
 	/**
@@ -20,11 +32,14 @@ class OrderModel extends Model{
 	 */
 	public function getOrderList($reqData = array()){
 
-		$jsonAddress = tname('user_address')." AS B ON B.id = A.address_id";
+		$joinAddress = tname('user_address')." AS B ON B.id = A.address_id";
+		$joinShip = "LEFT JOIN ".tname('order_ship')." AS C ON C.oid = A.oid";
 
 		$queryList = $this->table(tname('order').' AS A')
-						 ->field('A.*, B.name, B.mobile, B.address')
-						 ->join($jsonAddress)
+						 ->field('A.*, B.name, B.mobile, B.address, C.sid')
+						 ->join($joinAddress)
+						 ->join($joinShip)
+						 ->where($reqData['where'])
 						 ->limit($reqData['page'])
 						 ->order($reqData['order'])
 						 ->select();
@@ -43,10 +58,12 @@ class OrderModel extends Model{
 			);
 
 		$joinAddress = tname('user_address')." AS B ON B.id = A.address_id";
+		$joinShip = "LEFT JOIN ".tname('order_ship')." AS C ON C.oid = A.oid";
 
 		$orderInfo = $this->table(tname('order').' AS A')
-							 ->field('A.*, B.name, B.mobile, B.address')
+							 ->field('A.*, B.name, B.mobile, B.address, C.sid')
 							 ->join($joinAddress)
+						 	 ->join($joinShip)
 							 ->where($where)
 							 ->find();
 

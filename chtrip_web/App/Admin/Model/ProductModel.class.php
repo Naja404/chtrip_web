@@ -342,6 +342,7 @@ class ProductModel extends Model{
 		$savePro = array(
 				'sku'      => I('post.sku'),
 				'stock'    => I('post.stock'),
+				'rest'     => I('post.stock'),
 				'limit'    => I('post.limit'),
 				'image_id' => $imageId ? $imageId : I('post.image_id'),
 			);

@@ -10,6 +10,9 @@
 	        <div class="widget-box">
 	          <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
 	            <h5>{:L('TITLE_LISTS')}</h5>
+	            <span class="label label-info">
+	            	<a data-toggle="modal" href="#modal-search-order" id="modal_show" style="color:white;"><i class="icon-plus icon-white"></i>{:L('BTN_SEARCH_ORDER')}</a>
+	            </span>
 	          </div>
 	          <div class="widget-content nopadding">
 	            <table class="table table-bordered table-striped">
@@ -23,6 +26,7 @@
 	                  <th>{:L('TEXT_SHIP_FEE')}</th>
 	                  <th>{:L('TEXT_PAY_STATUS')}</th>
 	                  <th>{:L('TEXT_DEAL_STATUS')}</th>
+	                  <th>{:L('TEXT_SHIP_ID')}</th>
 	                  <th>{:L('TEXT_ORDER_CREATED')}</th>
 	                  <th>{:L('TEXT_OPERATION')}</th>
 	                </tr>
@@ -38,6 +42,7 @@
 	                	<td>{$item.ship_fee}</td>
 	                	<td><span class="label label-<?php echo $item['pay_status'] ? 'success' : 'danger';?>">{:L('TEXT_PAY_STATUS_'.$item['pay_status'])}</span></td>
 	                	<td><span class="{:L('CSS_ORDER_STATUS_'.$item['status'])}">{:L('TEXT_ORDER_STATUS_'.$item['status'])}</span></td>
+	                	<td>{$item.sid}</td>
 	                	<td>{:date('Y-m-d H:i:s', $item['created'])}</td>
 	                	<td>
 	                		<?php if(!in_array($item['status'], array(0, 1))){?>
@@ -61,7 +66,71 @@
 	    </div>
 	  </div>
 	</div>
+
+	<div class="modal hide" id="modal-search-order">
+		<form action="http://admin.nijigo.com/Order/lists.html" method="get" id="searchOrder">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" id="close_modal_btn">×</button>
+		  <h3>{:L('BTN_SEARCH_ORDER')}</h3>
+		</div>
+		<div class="modal-body">
+
+			<p>{:L('TEXT_ORDER_ID')}</p>
+			<p>
+				<input type="text" name="oid" value="{:I('get.oid')}" placeholder="{:L('PLACEHOLDER_ORDER')}" />
+			</p> 
+
+			<p>{:L('TEXT_SHIP_ID')}</p>
+			<p>
+				<input type="text" name="sid" value="{:I('get.sid')}" placeholder="{:L('PLACEHOLDER_SHIPID')}" />
+			</p> 
+
+			<p>{:L('TEXT_PAY_STATUS')}</p>
+			<p>
+				<select name="pay" style="width:100px;">
+					<option value="" >全部</option>
+					<option value="1">{:L('TEXT_PAY_STATUS_1')}</option>
+					<option value="0">{:L('TEXT_PAY_STATUS_0')}</option>
+				</select>
+			</p> 
+
+			<p>{:L('TEXT_DEAL_STATUS')}</p>
+			<p>
+				<select name="status" style="width:100px;">
+					<option value="" >全部</option>
+					<option value="0">{:L('TEXT_ORDER_STATUS_0')}</option>
+					<option value="1">{:L('TEXT_ORDER_STATUS_1')}</option>
+					<option value="3">{:L('TEXT_ORDER_STATUS_2')}</option>
+					<option value="4">{:L('TEXT_ORDER_STATUS_3')}</option>
+					<option value="5">{:L('TEXT_ORDER_STATUS_4')}</option>
+				</select>
+			</p> 
+
+			<input type="hidden" name="id" value="" />
+		</div>
+		<div class="modal-footer"> 
+			<a href="#" class="btn" data-dismiss="modal" id="dismiss_modal">{:L('btn_cancel')}</a> <a href="#" id="search-order-submit" class="btn btn-primary">{:L('btn_submit')}</a>
+		</div>
+		</form>
+	</div>
 <script type="text/javascript">
+	$(document).ready(function(){
+
+		$("#search-order-submit").click(function(){
+			$("#searchOrder").submit();
+		});
+
+		$("#close_modal_btn").click(function(){
+			$("input[name='id']").val("");
+			$('#searchOrder')[0].reset();
+		});
+
+		$("#modal_show").click(function(event, isNew){
+			if (!isNew) {
+				$('#searchOrder')[0].reset();
+			}
+		});
+	});
 
 	function cancelOrder(oid){
 		if (!confirm('是否确认取消该“'+oid+'”订单数据?')) return false;

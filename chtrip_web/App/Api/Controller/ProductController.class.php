@@ -594,7 +594,7 @@ class ProductController extends ApiBasicController {
             "1万以上"     => " >= 10000",
             );
 
-        if (!empty($cate) && !in_array($cate, array('类别', '热销hot'))) $where[] = " AND b.category = '".$cate."'";
+        if (!empty($cate) && !in_array($cate, array('类别', '全部'))) $where[] = " AND b.category = '".$cate."'";
 
         if (!empty($brand) && !in_array($brand, array('品牌'))) $where[] = " AND b.brand LIKE '%".$brand."%'";
 

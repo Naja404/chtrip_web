@@ -305,7 +305,7 @@ class UtilController extends ApiBasicController {
      */
     public function fetchShipInfo($shipId = 0){
         // $shipId = 'el033486996jp';
-        // $shipId = 'CD232922995JP';
+        $shipId = 'EG478850831JP';
         
         $this->_initSnoopy();
 

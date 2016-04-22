@@ -771,6 +771,130 @@ class UserModel extends Model{
 		return $result;
     }
 
+    /**
+     * 设置专辑
+     * @param array $reqData 请求内容
+     */
+    public function setAlbum($reqData = array()){
+		$where = array(
+				'user_id' => $reqData['ssid'],
+			);
+
+		$queryRes = $this->table(tname('user_buylist'))->where($where)->find();
+
+		if (!$queryRes['user_id']) {
+			$this->creatBuyList($reqData['ssid']);
+		}
+
+		$album = json_decode($queryRes['album'], true);
+
+		// 添加收藏
+		if ($reqData['type'] == 1) {
+			
+			if (!is_array($album) || count($album) <= 0) $album = array(); 
+
+			if (in_array($reqData['aid'], $album)) {
+				return L('ERR_EXISTS_ALBUM');
+			}
+
+			array_push($album, (int)$reqData['aid']);
+
+			if (count($album) <= 0) return true;
+		}
+		// 取消收藏
+		if ($reqData['type'] == 2) {
+
+			if (!in_array($reqData['aid'], $album)) {
+				return true;
+			}
+
+			$key = array_search($reqData['aid'], $album);
+			
+			if ($key !== false) array_splice($album, $key, 1);
+
+			if (count($album) <= 0) $album = array();
+		}
+
+		$sql = "UPDATE `ch_user_buylist` SET album = '".json_encode($album)."' WHERE (`user_id` = '".$reqData['ssid']."')";
+
+		$queryRes = $this->query($sql);
+
+		return $queryRes;
+    }
+
+    /**
+     * 获取用户收藏专辑列表
+     * @param string $userId 用户id
+     */
+    public function getAlbumList($userId = false){
+
+    	$where = array(
+    			'user_id' => $userId,
+    		);
+
+    	$album = $this->table(tname('user_buylist'))->field('album')->where($where)->find();
+
+    	$album = json_decode($album['album'], true);
+
+    	if (count($album) <= 0) return array();
+
+    	$album = implode(",", $album);
+
+    	$joinType = tname('album_type')." AS b ON b.id = a.type";
+    	$join = tname('product_image')." AS c ON c.gid = a.gid";
+
+    	$where = array(
+    			'a.id' => array('IN', $album),
+    		);
+    	
+    	$field = "a.id AS aid, a.title, a.title_btn, a.address_title, b.name AS type_name, c.path";
+
+    	$queryRes = $this->table(tname('album').' AS a')->field($field)->join($joinType)->join($join)->where($where)->select();
+
+        $queryArr = array();
+
+        $i = 0;
+
+        foreach ($queryRes as $k => $v) {
+            $i++;
+
+            $v['path'] = C('API_WEBSITE').$v['path'];
+
+            $v['title'] = htmlspecialchars_decode($v['title']);
+            
+            if (I('request.ver') != '0.9.7') $v['title'] = str_replace('*', '', $v['title']);
+
+            $v['colorNum'] = (string)($i);
+
+            $queryArr[] = $v;
+
+            if ($i == 4) $i = 0;
+
+        }
+
+    	return $queryArr;
+    }
+
+    /**
+     * 是否收藏 专辑
+     * @param array $reqData 查询内容
+     */
+    public function isCollectAlbum($reqData = array()){
+    	$where = array(
+    			'user_id' => $reqData['ssid'],
+    		);
+
+    	$queryRes = $this->table(tname('user_buylist'))->field('album')->where($where)->find();
+
+    	$album = json_decode($queryRes['album'], true);
+
+    	$returnRes = array('is_collect' => '0');
+
+    	if (in_array($reqData['aid'], $album)) $returnRes['is_collect'] = '1';
+
+    	return $returnRes;
+    }
+
 	/**
 	 * 创建扫货清单
 	 * @param string $userId 用户id
