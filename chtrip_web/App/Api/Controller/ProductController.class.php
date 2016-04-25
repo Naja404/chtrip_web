@@ -566,6 +566,8 @@ class ProductController extends ApiBasicController {
         if (empty($queryRes['address_img'])) $queryRes['address_img'] = $this->_getMapImg($queryRes);
 
         $data = $this->_formatShopDetail($queryRes);
+        
+        $data['description'] = strip_tags(htmlspecialchars_decode($data['description']));
 
         json_msg($data);
 

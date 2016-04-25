@@ -847,7 +847,7 @@ class UserModel extends Model{
     			'a.id' => array('IN', $album),
     		);
     	
-    	$field = "a.id AS aid, a.title, a.title_btn, a.address_title, b.name AS type_name, c.path";
+    	$field = "a.id AS aid, a.title, a.title_btn, a.address_title, b.name AS type_name, c.path, (a.end_time - UNIX_TIMESTAMP(NOW()) ) AS activityTime ";
 
     	$queryRes = $this->table(tname('album').' AS a')->field($field)->join($joinType)->join($join)->where($where)->select();
 
@@ -865,6 +865,8 @@ class UserModel extends Model{
             if (I('request.ver') != '0.9.7') $v['title'] = str_replace('*', '', $v['title']);
 
             $v['colorNum'] = (string)($i);
+
+			$v['activityTime'] = $this->_setActivityTime($v['activityTime']);
 
             $queryArr[] = $v;
 
@@ -1016,4 +1018,21 @@ class UserModel extends Model{
 	private function _setPriceTax($price = 0){
 		return $price * (1 + C('SERVICE_TAX'));
 	}
+
+    /**
+     * 计算剩余时间
+     * @param int $activityTime 活动剩余时间差
+     */
+    private function _setActivityTime($activityTime = 0){
+
+        if ($activityTime <= 0) {
+            return '0';
+        }
+
+        if ($activityTime < 3600*24) {
+            return sprintf('剩:%s小时', ceil($activityTime / 3600));
+        }else{
+            return sprintf('剩:%s天', ceil($activityTime / 3600 / 24));
+        }
+    }
 }
