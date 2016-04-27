@@ -598,7 +598,13 @@ class ProductController extends ApiBasicController {
 
         $field = "A.id AS aid, A.title, CONCAT('".C('API_WEBSITE')."', B.path) AS path";
 
-        $queryRes = $this->albumModel->table(tname('album')." AS A ")->field($field)->where($where)->join($join)->limit(5)->select();
+        $queryRes = $this->albumModel->table(tname('album')." AS A ")
+                                     ->field($field)
+                                     ->where($where)
+                                     ->join($join)
+                                     ->order('update_time DESC')
+                                     ->limit(5)
+                                     ->select();
 
         return count($queryRes) > 0 ? $queryRes : array();
     }
