@@ -23,6 +23,35 @@ class SettingController extends AdminBasicController {
     }
 
     /**
+     * 常规配置
+     */
+    public function normalConf(){
+
+        if (IS_POST) {
+
+            $reqData = I('post.');
+
+            if (!empty($reqData['jpy'])) $this->settingModel->where(array('name' => 'jpy'))->save(array('content' => $reqData['jpy']));
+
+            if (!empty($reqData['gift_weight'])) $this->settingModel->where(array('name' => 'gift_weight'))->save(array('content' => $reqData['gift_weight']));
+
+        }
+
+        $list = $this->settingModel->select();
+
+        $detail = array();
+
+        foreach ($list as $k => $v) {
+            if ($v['name'] == 'jpy') $detail['jpy'] = $v['content'];
+            if ($v['name'] == 'gift_weight') $detail['gift_weight'] = $v['content'];
+        }
+
+        $this->assign('detail', $detail);
+
+        $this->display();
+    }
+
+    /**
      * 后台菜单列表
      *
      */

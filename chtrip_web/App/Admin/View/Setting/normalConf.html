@@ -1,0 +1,42 @@
+<include file="Public:header" />
+<include file="Public:leftMenu" />
+	<div id="content">
+	  <div id="content-header">
+	    <div id="breadcrumb"> <a href="{:U('Index/index')}" title="{:L('text_goto_home')}" class="tip-bottom"><i class="icon-home"></i> {:L('TEXT_HOME')}</a> <a href="{:U('Setting/menuList')}" >{:L('TITLE_SETTING')}</a> <a class="current">{:L('TITLE_NORMAL_CONF')}</a> </div>
+	  </div>
+	  <div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span8">
+		      <div class="widget-box">
+		         <form method="post" class="form-horizontal" enctype="multipart/form-data">
+		        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+		          <h5>{:L('TITLE_NORMAL_CONF')}</h5>
+		        </div>
+		        <div class="widget-content nopadding">
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_JPY')}</label>
+		              <div class="controls">
+		                <input type="text" name="jpy" placeholder="{:L('INPUT_JPY')}" class="span11" value="{$detail.jpy}">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
+		              <label class="control-label">{:L('TEXT_GIFT_WEIGHT')}</label>
+		              <div class="controls">
+		                <input type="text" name="gift_weight" placeholder="{:L('INPUT_GIFT_WEIGHT')}" class="span11" value="{$detail.gift_weight}">g
+		              </div>
+		            </div>
+
+		            <div class="form-actions">
+		              <button type="submit" class="btn btn-success">Save</button>
+		            </div>
+		        </div>
+
+		    	</form>
+		      </div>
+			</div>
+		</div>
+	  </div>
+	</div>
+
+<include file="Public:footer" />

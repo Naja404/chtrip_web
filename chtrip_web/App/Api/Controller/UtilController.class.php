@@ -301,11 +301,51 @@ class UtilController extends ApiBasicController {
     }
 
     /**
-     * 运单爬虫
+     * 获取需要查询的物流单号
      */
-    public function fetchShipInfo($shipId = 0){
+    public function shipList(){
+        
+        $where = array(
+                'status' => 0,
+            );
+
+        $list = $this->orderShipModel->where($where)->select();
+
+        foreach ($list as $k => $v) {
+            $hasDone = $this->fetchShipInfo($v['sid'], $v['oid']);
+
+            // 已签收 发邮件
+            if ($hasDone == 1) {
+                $where = array(
+                        'oid' => $v['oid'],
+                    );
+                $save = array('status' => 1, 'opera' => 'system-by-crontab');
+                // 更改交易状态
+                $this->orderModel->where($where)->save($save);
+
+                $content = '订单单号:'.$v['oid'].'<br>快递单号:'.$v['sid'];
+
+                $to = array(
+                        'stevenwang@nijigo.com',
+                        'jeffzhang@nijigo.com',
+                        'zhengyu@nijigo.com',
+                    );
+
+                $subject = '已签收 - 单号:'.$v['oid'].' - Nijigo';
+
+                send_mail($to, $subject, $content);   
+            }
+        }
+    }
+
+    /**
+     * 运单爬虫
+     * @param string $shipId 物流单号id
+     * @param int $oid 订单号id
+     */
+    public function fetchShipInfo($shipId = 0, $oid = 0){
         // $shipId = 'el033486996jp';
-        $shipId = 'EG478850831JP';
+        // $shipId = 'EG478850831JP';
         
         $this->_initSnoopy();
 
@@ -317,16 +357,32 @@ class UtilController extends ApiBasicController {
 
         if (count($returnRes) <= 0) return false;
 
+        // 判断是否签收
+        $hasDone = 0;
+
+        foreach (array_reverse($returnRes) as $k => $v) {
+            foreach ($v as $j) {
+                if ($j === 'お届け済み') {
+                    $hasDone = 1;
+                    break;
+                }
+            }
+        }
+
         $save = array(
                 'content' => serialize($returnRes),
                 'lasted'  => time(),
+                'status'  => $hasDone,
             );
 
         $where = array(
                 'sid' => $shipId,
+                'oid' => $oid,
             );
 
         $this->orderShipModel->where($where)->save($save);
+
+        return $hasDone;
     }
 
     /**

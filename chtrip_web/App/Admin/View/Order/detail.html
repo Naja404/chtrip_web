@@ -76,7 +76,7 @@
 		              	<?php if($detail['status'] == 2) {?>
 		              		<input type="text" name="ship_id" placeholder="<?php echo L('TEXT_ADD_SHIPID');?>"><button onclick="subShipId('<?php echo $detail["oid"];?>');return false;"><?php echo L('BTN_ADD_SHIPID');?></button>
 		              	<!-- 待收货 -->
-		              	<?php }elseif ($detail['status'] == 3) {?>
+		              	<?php }elseif ($detail['status'] == 3 || $detail['status'] == 1) {?>
 		              		<?php if ($detail['ship_info']){?>
 					            <table class="table table-bordered table-striped">
 					              <thead>

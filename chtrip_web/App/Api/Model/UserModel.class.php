@@ -115,10 +115,12 @@ class UserModel extends Model{
 
 		$tmpPrice = $proPrice['price_zh_total'] + $addressShip['ship_price'];
 
+		$giftWeight = $this->_getGiftWeight();
+
 		$returnRes = array(
 				'address'             => $address,
 				'product_price_total' => get_price($proPrice['price_zh_total']),
-				'weight_total'        => $proPrice['weight_total'] + C('SHIPPING_WEIGHT'),
+				'weight_total'        => $proPrice['weight_total'] + $giftWeight,
 				'shipping_type'       => $addressShip['list'],
 				'shipping_price'	  => $addressShip['ship_price'],
 				'price_total' 		  => get_price($tmpPrice), 
@@ -977,13 +979,17 @@ class UserModel extends Model{
 	private function _getShipping($weight = 0, $ship = 1){
 
 		$ship = (int)$ship <= 0 ? 1 : $ship;
+		
+		$giftWeight = $this->_getGiftWeight();
 
-		$weight += C('SHIPPING_WEIGHT');
+		$weight += $giftWeight;
+
+		$jpy = $this->_getJPY();
 
 		$sql = "SELECT 
 					B.id,
 					A.weight, 
-					FORMAT((A.shipping_jpy * ".C('JPY')."), 2) AS shipping_zh, 
+					FORMAT((A.shipping_jpy * ".$jpy."), 2) AS shipping_zh, 
 					B.name, 
 					B.ship_day, 
 					B.note, 
@@ -1034,5 +1040,25 @@ class UserModel extends Model{
         }else{
             return sprintf('剩:%s天', ceil($activityTime / 3600 / 24));
         }
+    }
+
+    /**
+     * 获取日元汇率
+     */
+    private function _getJPY(){
+
+    	$queryRes = $this->table(tname('setting'))->where(array('name' => 'jpy'))->find();
+
+    	return $queryRes['content'] ? $queryRes['content'] : C('JPY');
+    }
+
+    /**
+     * 获取包装纸盒重量
+     */
+    private function _getGiftWeight(){
+    	
+    	$queryRes = $this->table(tname('setting'))->where(array('name' => 'gift_weight'))->find();
+
+    	return $queryRes['content'] ? $queryRes['content'] : C('SHIPPING_WEIGHT');
     }
 }

@@ -26,7 +26,7 @@ class ProductModel extends Model{
 	 * 获取所有城市列表
 	 */
 	public function getAllCityList(){
-		$sql = "SELECT a.name, IF(a.image_id > 0, CONCAT('http://api.atniwo.com', b.path), '') AS pic_url 
+		$sql = "SELECT a.name, IF(a.image_id > 0, CONCAT('http://api.nijigo.com', b.path), '') AS pic_url 
 					FROM ch_saler_city AS a 
 					LEFT JOIN ch_product_image AS b ON b.gid = a.image_id ";
 

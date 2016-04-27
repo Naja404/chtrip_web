@@ -9,6 +9,8 @@ return array(
 		'TITLE_SUEMAIL'				 => '绑定邮箱设置|彩虹Go - 设置',
 		'TITLE_MENULIST'			 => '用户组管理|彩虹Go - 设置',
 		'TITLE_USERLIST'			 => '用户管理|彩虹Go - 设置',
+		'TITLE_NORMALCONF'			 => '常规配置|彩虹Go - 设置',
+		'TITLE_NORMAL_CONF'			 => '常规配置',
 
 		// TEXT
 		'TEXT_SETTING_SUEMAIL'       => '绑定邮箱设置',
@@ -51,6 +53,8 @@ return array(
 		'TEXT_GROUP_DEL_CONFIRM'	 => '是否确认删除当前用户组?',
 		'TEXT_GROUP_RULE'			 => '=>权限<=',
 		'TEXT_ALL_CHECK'			 => '全选',
+		'TEXT_JPY'					 => '日元汇率',
+		'TEXT_GIFT_WEIGHT'			 => '包装纸箱重量',
 		
 		//INPUT
 		'INPUT_SETTING_HOST'         => '如: IMAP.163.COM 或 POP.163.COM',
@@ -64,6 +68,8 @@ return array(
 		'INPUT_USER_EMAIL'			 => '如: USER@WITHTRIP.COM',
 		'INPUT_GROUP_MODULE'		 => '如: SERVICE',
 		'INPUT_GROUP_TITLE'			 => '如: 客服',
+		'INPUT_JPY'					 => '请输入日元汇率',
+		'INPUT_GIFT_WEIGHT'			 => '请输入包装纸箱重量, 单位g',
 		
 		//BUTTON
 		'BTN_ADD_SUEMAIL'            => '添加支持邮箱',

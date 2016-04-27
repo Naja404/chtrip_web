@@ -30,6 +30,8 @@ class ProductController extends ApiBasicController {
         $this->commentModel = D('Comment');
 
         $this->productBrandModel = D('ProductBrand');
+        
+        $this->albumModel = D('Album');
 
         $this->reqURI = md5($_SERVER['REQUEST_URI']);
     }
@@ -149,7 +151,7 @@ class ProductController extends ApiBasicController {
                     concat('http://api.nijigo.com', b.path) as path,
                     a.url,
                     a.url_id as pid,
-                    c.price_zh 
+                    c.price_zh  
                      from ch_ad as a
                     left join ch_product_image as b on b.gid = a.image_id 
                     left join ch_product_detail_copy as c on c.pid = a.url_id
@@ -565,6 +567,8 @@ class ProductController extends ApiBasicController {
 
         if (empty($queryRes['address_img'])) $queryRes['address_img'] = $this->_getMapImg($queryRes);
 
+        $queryRes['album'] = $this->_getAlbumWithShop($sid);
+
         $data = $this->_formatShopDetail($queryRes);
         
         $data['description'] = strip_tags(htmlspecialchars_decode($data['description']));
@@ -578,6 +582,25 @@ class ProductController extends ApiBasicController {
      */
     public function aboutme(){
         $this->display('Product/aboutme');
+    }
+
+    /**
+     * 获取专辑中含有的商家
+     * @param int $salerId 商户id
+     */
+    private function _getAlbumWithShop($salerId = 0){
+        
+        $where = array(
+                'A.saler_id' => array('IN', $salerId),
+            );
+
+        $join = tname('product_image')." AS B ON B.gid = A.gid ";
+
+        $field = "A.id AS aid, A.title, CONCAT('".C('API_WEBSITE')."', B.path) AS path";
+
+        $queryRes = $this->albumModel->table(tname('album')." AS A ")->field($field)->where($where)->join($join)->limit(5)->select();
+
+        return count($queryRes) > 0 ? $queryRes : array();
     }
 
     /**
@@ -772,6 +795,7 @@ class ProductController extends ApiBasicController {
                 'googlemap'   => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $data['address'], $data['lat'], $data['lng']),
                 'share_url'   => sprintf("%s/Product/showShopDetail/sid/%s.html?type=app", C('API_WEBSITE'), $data['saler_id']),
                 'normal'      => array_merge($normal),
+                'album'       => $data['album'],
             );
 
         return $returnData;

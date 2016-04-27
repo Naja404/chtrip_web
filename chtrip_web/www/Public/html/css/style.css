@@ -205,6 +205,7 @@ img {
 .salePrice {
   color: #FF362A;
   font-size: 1.6rem;
+  font-family: "Arial";
 }
 .originPrice {
   color: #656667;
@@ -301,6 +302,7 @@ img {
   list-style: none;
   flex:1;
   text-align: center;
+  line-height: 12px;
 }
 .fixBar li img {
   width: 20px;

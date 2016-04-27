@@ -228,6 +228,12 @@ class AlbumModel extends Model{
 				'create_time'   => time(),
 				'update_time'   => time(),
 			);
+		// 判断专辑中是否有 商品、店铺
+		$proSaler = $this->_checkProSaler(I('request.content'));
+
+		if (count($proSaler['pid']) > 0) $add['pid'] = implode(",", ($proSaler['pid']));
+
+		if (count($proSaler['saler_id']) > 0) $add['saler_id'] = implode(",", ($proSaler['saler_id']));
 
 		return $this->add($add);
 
@@ -257,6 +263,13 @@ class AlbumModel extends Model{
 		$where = array(
 				'id' => $reqData['aid'],
 			);
+
+		// 判断专辑中是否有 商品、店铺
+		$proSaler = $this->_checkProSaler(I('request.content'));
+
+		if (count($proSaler['pid']) > 0) $edit['pid'] = implode(",", ($proSaler['pid']));
+
+		if (count($proSaler['saler_id']) > 0) $edit['saler_id'] = implode(",", ($proSaler['saler_id']));
 
 		return $this->where($where)->save($edit);
 	}
@@ -335,6 +348,34 @@ class AlbumModel extends Model{
 	 */
 	public function getAlbumType(){
 		return $this->table(tname('album_type'))->select();
+	}
+
+	/**
+	 * 获取专辑中的 产品、商家
+	 * @param string $content 专辑内容
+	 */
+	private function _checkProSaler($content = false){
+		
+		$res = array(
+				'pid'      => array(),
+				'saler_id' => array(),
+			);
+
+		preg_match_all('/{hasPro:\w+}/', $content, $pregArr);
+
+        if (count($pregArr[0]) <= 0) return $res;
+
+        foreach ($pregArr[0] as $k => $v) {
+        	preg_match('/\d+/', $v, $pid);
+
+	        if (preg_match('/{hasPro:pid_\\d+}/', $v)) {
+	        	$res['pid'][] = $pid[0];
+	        }else{
+	        	$res['saler_id'][] = $pid[0];
+	        }
+        }
+
+        return $res;
 	}
 
 }

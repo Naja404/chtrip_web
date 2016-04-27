@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/jquery.js"></script>
 	<script type="text/javascript" src="{:C('API_WEBSITE')}/Public/html/js/swipe.js"></script>
 	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/swiper.css">
-	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/style.css">
+	<link type="text/css" rel="stylesheet" href="{:C('API_WEBSITE')}/Public/html/css/style.css?20160426">
     <style type="text/css">
     body{
         overflow: hidden;
@@ -82,6 +82,10 @@
             </div>
             <div class="commentContent">
                 {$item.comment}
+                <?php if(!empty($item['path'])){?>
+                    <br>
+                    <img src="<?php echo $item['path'];?>" style="width:100px;">
+                <?php }?>
             </div>
         </div>
         </volist>
