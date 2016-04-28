@@ -645,6 +645,7 @@ class UserModel extends Model{
 					b.title_jp,
 					b.price_zh,
 					b.price_jp,
+					b.summary_zh, 
 					CONCAT('".C('API_WEBSITE')."', c.path) AS path,
 					CONCAT('".C('API_WEBSITE')."', REPLACE(c.path, '.', '_100_100.')) AS thumb 
 				FROM ch_products_copy AS a 

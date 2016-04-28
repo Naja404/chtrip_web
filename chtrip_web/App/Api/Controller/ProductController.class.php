@@ -589,9 +589,9 @@ class ProductController extends ApiBasicController {
      * @param int $salerId 商户id
      */
     private function _getAlbumWithShop($salerId = 0){
-        
+
         $where = array(
-                'A.saler_id' => array('IN', $salerId),
+                'A.saler_id' => array('LIKE', "%".$salerId."%"),
             );
 
         $join = tname('product_image')." AS B ON B.gid = A.gid ";
@@ -801,7 +801,7 @@ class ProductController extends ApiBasicController {
                 'googlemap'   => sprintf("comgooglemaps://?q=%s&center=%s,%s&views=traffic&zoom=15", $data['address'], $data['lat'], $data['lng']),
                 'share_url'   => sprintf("%s/Product/showShopDetail/sid/%s.html?type=app", C('API_WEBSITE'), $data['saler_id']),
                 'normal'      => array_merge($normal),
-                'album'       => $data['album'],
+                'album'       => count($data['album']) <= 0 ? array() : $data['album'],
             );
 
         return $returnData;

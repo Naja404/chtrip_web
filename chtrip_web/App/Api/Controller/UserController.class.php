@@ -710,6 +710,29 @@ class UserController extends ApiBasicController {
     }
 
     /**
+     * 获取 收藏列表
+     */
+    public function getFavoriteList(){
+
+        $ssid = I('request.ssid');
+
+        $wantGo = $this->userModel->getWantList($ssid);
+
+        $wantBuy = $this->userModel->getBuyList($ssid);
+
+        $album = $this->userModel->getAlbumList($ssid);
+
+        $returnRes = array(
+                'want_go'  => count($wantGo) <= 0 ? array() : $wantGo,
+                'want_buy' => count($wantBuy) <= 0 ? array() : $wantBuy,
+                'album'    => count($album) <= 0 ? array() : $album,
+            );
+
+        json_msg($returnRes);
+
+    }
+
+    /**
      * 添加 我想去
      * @param int $sid
      */

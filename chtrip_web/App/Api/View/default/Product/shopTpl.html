@@ -7,7 +7,7 @@
 	<div style="position: relative;">
 		<img src="{$data.pic_url}" width="100%" />
 		<?php if(!isset($_REQUEST['type'])){?>
-		<img class="want-icon" src="/Public/html/images/wantGo.png" onclick="wantGo('{$ssid}', '{$data.saler_id}')" style="position:absolute;top:20px;">
+		<img class="want-icon" src="/Public/html/images/wantGo.png" onclick="wantGo('<?php echo $ssid;?>', '<?php echo $data['saler_id'];?>')" style="position:absolute;top:20px;">
 		<?php }?>
 	</div>
 </p>
