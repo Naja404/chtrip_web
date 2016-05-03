@@ -313,7 +313,14 @@ class ProductModel extends Model{
 	 */
 	 public function getAlbumList($queryData = array()) {
 
-	 	$sql = "SELECT a.id AS aid, a.title, a.title_btn, a.address_title, b.name AS type_name, c.path, (a.end_time - UNIX_TIMESTAMP(NOW()) ) AS activityTime  FROM ch_album AS a
+	 	$sql = "SELECT a.id AS aid, 
+	 				   a.title, 
+	 				   a.title_btn, 
+	 				   a.address_title, 
+	 				   b.name AS type_name, 
+	 				   c.path, (a.end_time - UNIX_TIMESTAMP(NOW()) ) AS activityTime, 
+	 				   a.content 
+	 				     FROM ch_album AS a
 						LEFT JOIN ch_album_type AS b ON b.id = a.type
 						LEFT JOIN ch_product_image AS c ON c.gid = a.gid WHERE a.status = 1 ORDER BY a.sort DESC, a.recommend DESC LIMIT %s";
 	 	

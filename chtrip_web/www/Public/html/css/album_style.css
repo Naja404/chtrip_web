@@ -293,3 +293,36 @@ img {
 	right:20px;
 	top:-120px;
 }
+.proBuy {
+  width: 99%;
+  border: 1px solid #ADAEAF;
+  position: relative;
+  display: flex;
+}
+.proBuyImg{
+  position: relative;
+  width: 33%;
+  margin: 1px 10px;
+  display: inline;
+}
+.proBuyImg img {
+	margin-bottom: 0px;
+}
+.proBuyBTN > .title {
+	position: absolute;
+	top: 0.5rem;
+}
+.proBuyBTN > .button {
+/*	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	font-size: 1.6rem;
+    margin-right: 5px;
+    background-color: #ff3424;
+    padding: 0 5px;
+    border-radius: 1.6rem;
+    color: #fff;*/
+	position: absolute;
+	bottom: -0.5rem;
+	right: 1rem;
+}

@@ -139,6 +139,11 @@ class ProductController extends ApiBasicController {
 
             $v['colorNum'] = (string)($i);
             $v['activityTime'] = $this->_setActivityTime($v['activityTime']);
+
+            // 判断 情报、购物 2016-5-3
+            $v['pro_type'] = $this->_checkAlbumType($v['content']);
+            unset($v['content']);
+            
             $queryArr[] = $v;
 
             if ($i == 4) $i = 0;
@@ -837,5 +842,32 @@ class ProductController extends ApiBasicController {
         }
 
         return $data;
+    }
+
+    /**
+     * 检测专辑类型
+     * @param string $content 专辑内容
+     * @return 0.无 1.购物 2.情报
+     */
+    public function _checkAlbumType($content = false){
+
+        $returnRes = "0";
+
+        preg_match_all('/{hasPro:\w+}/', $content, $pregArr);
+
+        if (count($pregArr[0]) <= 0) return $returnRes;
+
+        foreach ($pregArr[0] as $k => $v) {
+
+            preg_match('/\d+/', $v, $pid);
+
+            if (preg_match('/{hasPro:pid_\\d+}/', $v)) {
+                return "1";
+            }else{
+                $returnRes = "2";
+            }
+        }
+
+        return $returnRes;
     }
 }

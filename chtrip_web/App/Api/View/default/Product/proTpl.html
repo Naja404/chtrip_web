@@ -1,4 +1,4 @@
-<p>
+<!-- <p>
 	<span style="font-size:18px;color:#337FE5;">
 		<strong>{$data.title_zh}</strong>
 	</span>
@@ -16,4 +16,47 @@
 	<span style="font-size:16px;">
 		<span style="color:#E53333;"><strong>价格：</strong></span>{$data.price_zh} RMB
 	</span> 
-</p>
+</p> -->
+
+<div class="proBuy">
+	<div class="proBuyImg">
+		<img src="http://api.nijigo.com/Public/uploads/images/20160428/5721d13012b42.jpg">
+	</div>
+	<div class="proBuyBTN">
+		<span class="proBuyBTN title">蜡笔小新连环画 促销装 24本精装 25周年纪念</span>
+		<?php if(!$_REQUEST['type']){?>
+		<span class="proBuyBTN button" id="clickBTN">
+			<img src="/Public/html/images/albumBuyBTN.png" style="width: 8rem;">
+		</span>
+		<?php }?>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	    function setupWebViewJavascriptBridge(callback) {
+	        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+	        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+	        window.WVJBCallbacks = [callback];
+	        var WVJBIframe = document.createElement('iframe');
+	        WVJBIframe.style.display = 'none';
+	        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+	        document.documentElement.appendChild(WVJBIframe);
+	        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+	    }
+
+		setupWebViewJavascriptBridge(function(bridge) {
+
+		    bridge.registerHandler('toProductDetail', function(data, responseCallback){
+		    	var responseData = {'status':'1'}
+		    	responseCallback(responseData)
+		    })
+
+		    var callbackBTN = document.getElementById('clickBTN')
+
+		    callbackBTN.onclick = function(e){
+		    	e.preventDefault()
+		    	bridge.callHandler('toProductDetail', {'pid':'1810', 'rest':'3', 'title_zh': '明治The Chocolate深烤可可巧克力', 'stock_label': '加入购物车', 'price_zh': '￥14.80'}, function(response){})
+		    }
+		})
+</script>
