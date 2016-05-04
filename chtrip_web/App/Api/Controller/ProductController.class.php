@@ -703,6 +703,17 @@ class ProductController extends ApiBasicController {
         if (preg_match('/{hasPro:pid_\\d+}/', $pidStr)) {
             $queryRes = $this->productModel->getProductDetail($pid[0]);
             $htmlFile = 'Product/proTpl';
+
+            $objcData = array(
+                    'pid'         => $queryRes['pid'],
+                    'rest'        => '1',
+                    'title_zh'    => $queryRes['title_zh'],
+                    'stock_label' => '加入购物车',
+                    'price_zh'    => '￥'.$queryRes['price_zh'],
+                );
+
+            $this->assign('objcData', json_encode($objcData));
+
         }else{
             $queryRes = $this->productModel->getShopDetail($pid[0]);
 

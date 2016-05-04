@@ -20,10 +20,10 @@
 
 <div class="proBuy">
 	<div class="proBuyImg">
-		<img src="http://api.nijigo.com/Public/uploads/images/20160428/5721d13012b42.jpg">
+		<img src="<?php echo $data['path'][0];?>">
 	</div>
 	<div class="proBuyBTN">
-		<span class="proBuyBTN title">蜡笔小新连环画 促销装 24本精装 25周年纪念</span>
+		<span class="proBuyBTN title"><?php echo $data['title_zh']?></span>
 		<?php if(!$_REQUEST['type']){?>
 		<span class="proBuyBTN button" id="clickBTN">
 			<img src="/Public/html/images/albumBuyBTN.png" style="width: 8rem;">
@@ -56,7 +56,7 @@
 
 		    callbackBTN.onclick = function(e){
 		    	e.preventDefault()
-		    	bridge.callHandler('toProductDetail', {'pid':'1810', 'rest':'3', 'title_zh': '明治The Chocolate深烤可可巧克力', 'stock_label': '加入购物车', 'price_zh': '￥14.80'}, function(response){})
+		    	bridge.callHandler('toProductDetail', <?php echo $objcData;?>, function(response){})
 		    }
 		})
 </script>
