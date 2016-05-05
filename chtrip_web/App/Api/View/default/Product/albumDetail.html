@@ -36,6 +36,37 @@
 			<center><img src="/Public/html/nijigo/img/app_download_wx.png" style="width:50%"></center>
 		</div>
 		<?php }?>
+
+		<script type="text/javascript">
+
+			    function setupWebViewJavascriptBridge(callback) {
+			        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+			        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+			        window.WVJBCallbacks = [callback];
+			        var WVJBIframe = document.createElement('iframe');
+			        WVJBIframe.style.display = 'none';
+			        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+			        document.documentElement.appendChild(WVJBIframe);
+			        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+			    }
+
+				setupWebViewJavascriptBridge(function(bridge) {
+
+				    bridge.registerHandler('toProductDetail', function(data, responseCallback){
+				    	var responseData = {'status':'1'}
+				    	responseCallback(responseData)
+				    })
+				    <?php foreach ($albumProArr as $k => $v) {?>
+					    var callbackBTN<?php echo $v['k']?> = document.getElementById('clickBTN<?php echo $v['k']?>')
+
+					    callbackBTN<?php echo $v['k']?>.onclick = function(e){
+					    	e.preventDefault()
+					    	bridge.callHandler('toProductDetail', <?php echo json_encode($v);?>, function(response){})
+					    }
+				    <?php }?>
+
+				})
+		</script>
 		<script type="text/javascript">
 			function wantBuy(uid, pid){
 				$.ajax({

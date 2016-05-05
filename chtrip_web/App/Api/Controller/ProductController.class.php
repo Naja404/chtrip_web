@@ -12,6 +12,8 @@ class ProductController extends ApiBasicController {
      */
     public $productModel;
 
+    public $albumProArr = array();
+
     /**
      * 请求地址的UIR
      */
@@ -34,6 +36,7 @@ class ProductController extends ApiBasicController {
         $this->albumModel = D('Album');
 
         $this->reqURI = md5($_SERVER['REQUEST_URI']);
+
     }
 
     /**
@@ -190,6 +193,8 @@ class ProductController extends ApiBasicController {
         }
 
         $detailRes['title'] = str_replace('*', '', $detailRes['title']);
+
+        $this->assign('albumProArr', $this->albumProArr);
 
         $this->assign('detail', $detailRes);
 
@@ -686,7 +691,7 @@ class ProductController extends ApiBasicController {
         if (count($pregArr[0]) <= 0) return $content;
 
         foreach ($pregArr[0] as $k => $v) {
-            $tmpHtml = $this->_checkProType($v);
+            $tmpHtml = $this->_checkProType($v, $k);
             $content = str_replace($v, $tmpHtml, $content);
         }
 
@@ -696,8 +701,9 @@ class ProductController extends ApiBasicController {
      /**
       * 返回类型
       * @param string $pidStr
+      * @param int $k 序号
       */
-    private function _checkProType($pidStr = false){
+    private function _checkProType($pidStr = false, $k = 0){
         preg_match('/\d+/', $pidStr, $pid);
 
         if (preg_match('/{hasPro:pid_\\d+}/', $pidStr)) {
@@ -705,6 +711,7 @@ class ProductController extends ApiBasicController {
             $htmlFile = 'Product/proTpl';
 
             $objcData = array(
+                    'k'           => $k,
                     'pid'         => $queryRes['pid'],
                     'rest'        => '1',
                     'title_zh'    => $queryRes['title_zh'],
@@ -712,7 +719,7 @@ class ProductController extends ApiBasicController {
                     'price_zh'    => '￥'.$queryRes['price_zh'],
                 );
 
-            $this->assign('objcData', json_encode($objcData));
+            $this->albumProArr[] = $objcData;
 
         }else{
             $queryRes = $this->productModel->getShopDetail($pid[0]);
@@ -723,6 +730,7 @@ class ProductController extends ApiBasicController {
             $htmlFile = 'Product/shopTpl';
         }
 
+        $this->assign('kNum', $k);
         $this->assign('ssid', I('request.ssid'));
         $this->assign('data', $queryRes);
 

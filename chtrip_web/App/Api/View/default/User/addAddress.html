@@ -102,52 +102,7 @@
 	<!-- <button disabled="true" id="subBTN" >保存收货地址</button> -->
 	<script type="text/javascript">
 		var validateStat = false;
-
-		function connectWebViewJavascriptBridge(callback) {
-			if (window.WebViewJavascriptBridge) {
-				callback(WebViewJavascriptBridge)
-			} else {
-				document.addEventListener('WebViewJavascriptBridgeReady', function() {
-					callback(WebViewJavascriptBridge)
-				}, false)
-			}
-		}
-
-		connectWebViewJavascriptBridge(function(bridge) {
-
-		    /* Init your app here */
-
-		    bridge.init(function(message, responseCallback) {
-		    	var defaultData = {"status":"1", "msg":"请填写完整数据"};
-		    	if (message == "subAddress"){
-		    		if (validateStat) {
-						$.ajax({
-							type:"POST",
-							url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'type' => 'add'))}",
-							data:$("#addForm").serialize(),
-							success:function(data){
-								responseCallback(data);
-							}
-						})
-		    		}else{
-		    			responseCallback(defaultData);
-		    		}
-		    	}else{
-		    		responseCallback(defaultData);
-		    	}
-		    })
-		})
-
-		function setBTN(validate){
-			validateStat = validate;
-			// if (validate == true){
-			// 	$("#subBTN").attr("disabled", false);
-			// 	$("#subBTN").css("background-color", "green");
-			// }else{
-			// 	$("#subBTN").attr("disabled", true);
-			// 	$("#subBTN").css("background-color", "gray");
-			// }
-		}
+		var defaultData = {"status":"1", "msg":"请填写完整数据"};
 
 		$(document).ready(function(){
 
@@ -212,6 +167,83 @@
 
 
 		});
+
+	    function setupWebViewJavascriptBridge(callback) {
+	        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+	        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+	        window.WVJBCallbacks = [callback];
+	        var WVJBIframe = document.createElement('iframe');
+	        WVJBIframe.style.display = 'none';
+	        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+	        document.documentElement.appendChild(WVJBIframe);
+	        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+	    }
+
+	    setupWebViewJavascriptBridge(function(bridge) {
+
+			bridge.registerHandler('subAddress', function(data, responseCallback) {
+		    		if (validateStat) {
+						$.ajax({
+							type:"POST",
+							url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'type' => 'add'))}",
+							data:$("#addForm").serialize(),
+							success:function(data){
+								responseCallback(data)
+							}
+						})
+		    		}else{
+		    			responseCallback(defaultData)
+		    		}
+			})
+	    
+		})
+
+		function connectWebViewJavascriptBridge(callback) {
+			if (window.WebViewJavascriptBridge) {
+				callback(WebViewJavascriptBridge)
+			} else {
+				document.addEventListener('WebViewJavascriptBridgeReady', function() {
+					callback(WebViewJavascriptBridge)
+				}, false)
+			}
+		}
+
+		connectWebViewJavascriptBridge(function(bridge) {
+
+		    /* Init your app here */
+
+		    bridge.init(function(message, responseCallback) {
+
+		    	if (message == "subAddress"){
+		    		if (validateStat) {
+						$.ajax({
+							type:"POST",
+							url:"{:U('User/addAddress', array('ssid' => I('request.ssid'), 'type' => 'add'))}",
+							data:$("#addForm").serialize(),
+							success:function(data){
+								responseCallback(data);
+							}
+						})
+		    		}else{
+		    			responseCallback(defaultData);
+		    		}
+		    	}else{
+		    		responseCallback(defaultData);
+		    	}
+		    })
+		})
+
+		function setBTN(validate){
+			validateStat = validate;
+			// if (validate == true){
+			// 	$("#subBTN").attr("disabled", false);
+			// 	$("#subBTN").css("background-color", "green");
+			// }else{
+			// 	$("#subBTN").attr("disabled", true);
+			// 	$("#subBTN").css("background-color", "gray");
+			// }
+		}
+
 	</script>
 </body>
 </html>
