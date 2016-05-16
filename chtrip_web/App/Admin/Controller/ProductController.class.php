@@ -37,7 +37,10 @@ class ProductController extends AdminBasicController {
      * @param type item
      */
     public function cateList(){
-        $count = $this->cateModel->getCateTotal();
+        
+        $where = $this->_getCateWhere();
+
+        $count = $this->cateModel->getCateTotal($where);
         
         $page = new \Think\Page($count, C('PAGE_LIMIT'));
 
@@ -45,6 +48,7 @@ class ProductController extends AdminBasicController {
 
         $data = array(
                     'page' => $p.','.C('PAGE_LIMIT'),
+                    'where' => $where,
             );
         $this->_assignText();
         $this->assign('page_show', $page->showAdmin());
@@ -290,6 +294,20 @@ class ProductController extends AdminBasicController {
         }
 
         echo json_encode($ajaxRes);exit;
+    }
+
+    /**
+     * 获取品牌/分类列表
+     */
+    private function _getCateWhere(){
+
+        $reqData = I('request.');
+
+        $where = array();
+
+        if (isset($reqData['type']) && in_array($reqData['type'], array(1, 2))) $where['type'] = intval($reqData['type']);
+
+        return $where;
     }
 
     /**

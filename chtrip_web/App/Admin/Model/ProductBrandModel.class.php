@@ -9,9 +9,10 @@ class ProductBrandModel extends Model{
 
 	/**
 	 * 品牌、分类总数
+	 * @param array $where 查询条件
 	 */
-	public function getCateTotal(){
-		return $this->count();
+	public function getCateTotal($where = array()){
+		return $this->where($where)->count();
 	}
 
 	/**
@@ -20,7 +21,7 @@ class ProductBrandModel extends Model{
 	 */
 	public function getCateList($queryData = array()){
 
-		return $this->page($queryData['page'])->order('id DESC')->select();
+		return $this->where($queryData['where'])->page($queryData['page'])->order('id DESC')->select();
 
 	}
 

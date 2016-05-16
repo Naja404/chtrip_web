@@ -32,6 +32,13 @@
 		            </div>
 		            
 		            <div class="control-group">
+		              <label class="control-label">排序</label>
+		              <div class="controls">
+		              		<input type="tel" name="sort" value="{$detail.sort}" maxlength="3" placeholder="数值越大越靠前">
+		              </div>
+		            </div>
+
+		            <div class="control-group">
 		              <label class="control-label">是否显示在APP上</label>
 		              <div class="controls">
 		              		<input type="checkbox" name="app_display" <?php echo $detail['app_display'] == 1 ? 'checked' : '';?> >
