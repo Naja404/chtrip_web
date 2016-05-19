@@ -79,7 +79,11 @@ return array(
         ),
 
     'FETCH_CLASS' => array(
-            'www_enjoytokyo_jp' => 'Enjoytokyo',
+            'www_enjoytokyo_jp'    => 'Enjoytokyo',
+            'app_xiaotaojiang_com' => 'XiaoTaoJiang',
+            'm_bolome_com'         => 'Bolome',
+            'm_maiyamall_com'      => 'MaiyaMall',
+            'm_wandougongzhu_cn'   => 'WanDouGongZhu',
         ),
 
     'PREVIEW_ALBUM' => 'http://local-api.atniwo.com/Product/showAlbum?aid=%s',

@@ -1,13 +1,28 @@
-                          <div class="widget-content nopadding">
-                            {$title}
-                            <table class="table table-bordered table-striped">
-                              <tbody>
-                                <volist name="data" id="item">
-                                <tr class="odd gradeX">
-                                  <th>{$item.k}</th>
-                                  <td>{$item.v}</td>
-                                </tr>
-                                </volist>
-                              </tbody>
-                            </table>
-                          </div>
+                          <empty name="title">
+                            <div class="widget-content nopadding">
+                              <table class="table table-bordered table-striped">
+                                <tbody>
+                                  <volist name="data" id="item">
+                                  <tr class="odd gradeX">
+                                    <th><a href="{$item}" target="_blank">{$item}</a></th>
+                                    <td><img src="{$item}" style="width:200px;"></td>
+                                  </tr>
+                                  </volist>
+                                </tbody>
+                              </table>
+                            </div>
+                          <else />
+                            <div class="widget-content nopadding">
+                              {$title}
+                              <table class="table table-bordered table-striped">
+                                <tbody>
+                                  <volist name="data" id="item">
+                                  <tr class="odd gradeX">
+                                    <th>{$item.k}</th>
+                                    <td>{$item.v}</td>
+                                  </tr>
+                                  </volist>
+                                </tbody>
+                              </table>
+                            </div>
+                          </empty>

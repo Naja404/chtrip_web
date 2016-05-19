@@ -33,16 +33,53 @@ class ExcelController extends AdminBasicController {
         if (IS_AJAX) {
             $this->_initSnoopy();
 
-            $htmlRes = $this->snoopy->fetch(I('request.url'));
+            $newStatus = $this->_initParam(I('request.url'));
+            
+            $reqUrl = I('request.url');
+            
+            switch ($newStatus) {
+                case 'XiaoTaoJiang':
+                    // http://app.xiaotaojiang.com/ui/products/sDcyVQy
+                    // http://app.xiaotaojiang.com/ws/products/sDcyVQy?collect=1
+                    
+                    $productId = str_replace('http://app.xiaotaojiang.com/ui/products/', '', $reqUrl);
 
-            $this->_initParam(I('request.url'));
+                    $reqUrl = sprintf("http://app.xiaotaojiang.com/ws/products/%s?collect=1", $productId);
 
-            $returnRes = $this->fetch->fetch($htmlRes->results, 'getShop');
+                    break;
+                case 'Bolome':
+                    //https://m.bolome.com/#/product/143617597562435
+                    // https://a.bolo.me/v2/catalogs/143617597562435
 
-            $ajaxRes = array(
-                    'status' => '0',
-                    'html'   => $this->_setFetchHtml($returnRes),
-                );
+                    $this->snoopy->rawheaders['tourId'] = "EBADDCEC-D689-49D9-89E7-9865DA2E7200";
+
+                    $productId = str_replace('https://m.bolome.com/#/product/', '', $reqUrl);
+
+                    $reqUrl = sprintf("https://a.bolo.me/v2/catalogs/%s", $productId);
+
+                    break;
+                default:
+                    $reqUrl = I('request.url');
+                    break;
+            }
+
+            $htmlRes = $this->snoopy->fetch($reqUrl);
+
+            if ($newStatus === false) {
+                $ajaxRes = array(
+                        'status' => '1',
+                        'msg'    => '暂无该URL地址数据',
+                    );
+            }else{
+                $returnRes = $this->fetch->fetch($htmlRes->results, 'getShop');
+
+                $hasTitle = $newStatus == 'Enjoytokyo' ? true : false;
+
+                $ajaxRes = array(
+                        'status' => '0',
+                        'html'   => $this->_setFetchHtml($returnRes, $hasTitle),
+                    );
+            }
 
             $this->ajaxReturn($ajaxRes);
         }
@@ -285,20 +322,30 @@ class ExcelController extends AdminBasicController {
 
         $Domain = get_domain($Domain);
 
+        $className = C('FETCH_CLASS.'.$Domain);
+
+        if (empty($className)) return false;
+
         import('Extend.FetchHTML');
 
-        $this->fetch = new \FetchHTML(C('FETCH_CLASS.'.$Domain));
+        $this->fetch = new \FetchHTML($className);
 
+        return $className;
     }
 
     /**
      * 设置输出模板
      * @param array $data 数据内容
+     * @param bool $hasTitle 
      */
-    private function _setFetchHtml($data = array()){
+    private function _setFetchHtml($data = array(), $hasTitle = true){
         
-        $this->assign('title', $data['title']);
-        $this->assign('data', $data['data']);
+        if ($hasTitle) {
+            $this->assign('title', $data['title']);
+            $this->assign('data', $data['data']);
+        }else{
+            $this->assign('data', $data);
+        }
         
         return $this->fetch('Excel/fetchHtml');
     }

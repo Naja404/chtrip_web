@@ -19,6 +19,13 @@
 		              <label class="control-label">网页地址</label>
 		              <div class="controls">
 		              	<input type="url" placeholder="请输入网页地址" name="url"><a onclick="subUrl();">&nbsp;获取</a>
+		              	<br>
+		              	注：暂只支持商品详情页的图片
+		              	<br>以下为各App手机站
+		              	<br>小桃酱：<a href="http://app.xiaotaojiang.com/ui/" target="_blank">http://app.xiaotaojiang.com/ui/</a>
+		              	<br>麦芽城：<a href="http://m.maiyamall.com/" target="_blank">http://m.maiyamall.com/</a>
+		              	<br>菠萝蜜：<a href="https://m.bolome.com/#/" target="_blank">https://m.bolome.com/#/</a>
+		              	<br>豌豆公主：<a href="https://m.wandougongzhu.cn/" target="_blank">https://m.wandougongzhu.cn/</a>
 		              </div>
 		            </div>
 
@@ -50,6 +57,8 @@
 				success:function(data){
 					if (data.status == '0') {
 						$('.form-actions').html(data.html);
+					}else{
+						alert(data.msg);
 					}
 				},complete:function(XMLHttpRequest){
 					$(".loading").hide();
